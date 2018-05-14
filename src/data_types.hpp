@@ -31,29 +31,41 @@
 // OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
 
-#include <iostream>
+#pragma once
 
-//#include <seqan/rna_io.h>
-#include "parameters.hpp"
+/*!\file data_types.hpp
+ * \brief This file contains data structures and macros for LaRA.
+ */
 
-//extern "C" {
-//    #include <ViennaRNA/data_structures.h>
-//    #include <ViennaRNA/params.h>
-//    #include <ViennaRNA/utils.h>
-//    #include <ViennaRNA/eval.h>
-//    #include <ViennaRNA/fold.h>
-//    #include <ViennaRNA/part_func.h>
-//    #include <ViennaRNA/PS_dot.h>
-//}
+#include <seqan/score.h>
 
-int main (int argc, char const ** argv)
+/*!
+ * \brief define verbosity levels
+ */
+#define _V(_opt, _str) { if (_opt.verbose > 0) std::cerr << _str << std::endl; }
+#define _VV(_opt, _str) { if (_opt.verbose > 1) std::cerr << _str << std::endl; }
+#define _VVV(_opt, _str) { if (_opt.verbose > 2) std::cerr << _str << std::endl; }
+
+namespace lara
 {
-    lara::Parameters options;
-    int res = lara::setParameters(options, argc, argv);
-    if (res != 2) return res;
 
-    std::cout << "This is an initial set-up for Lara2. See development branch on github for current implementation "
-                 "status." << std::endl << argv[0];
-    std::cout << res << std::endl;
-    std::cout << std::endl;
-}
+enum ScoringMode
+{
+    LOGARITHMIC,
+    SCALE,
+    ORIGINAL,
+    RIBOSUM
+};
+
+enum TCoffeeMode
+{
+    PROPORTIONAL,
+    SWITCH,
+    ALLINTER,
+    FIXEDINTER
+};
+
+typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5, seqan::Default>> RnaScoreMatrix;
+
+} // namespace lara
+
