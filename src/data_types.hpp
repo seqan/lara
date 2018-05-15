@@ -65,6 +65,13 @@ enum TCoffeeMode
     FIXEDINTER
 };
 
+enum Status
+{
+    EXIT_OK,
+    EXIT_ERROR,
+    CONTINUE
+};
+
 typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5, seqan::Default>> RnaScoreMatrix;
 
 } // namespace lara

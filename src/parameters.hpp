@@ -101,7 +101,7 @@ struct Parameters
     unsigned                 verbose{0u};
 };
 
-inline int setParameters(Parameters & params, int argc, char const **argv)
+inline Status setParameters(Parameters & params, int argc, char const **argv)
 {
     using namespace seqan;
     ArgumentParser parser;
@@ -227,7 +227,7 @@ inline int setParameters(Parameters & params, int argc, char const **argv)
 
     ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
     if (parseResult != ArgumentParser::PARSE_OK)
-        return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? 1 : 0;
+        return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
 
     getOptionValue(params.verbose, parser, "verbose");
     getOptionValue(params.affineLinearDgs, parser, "affineLinearDgs");
@@ -252,7 +252,7 @@ inline int setParameters(Parameters & params, int argc, char const **argv)
 
     getOptionValue(params.inFile, parser, "inFile");
     if (empty(params.inFile))
-        return 1;
+        return Status::EXIT_ERROR;
 
     unsigned numDotplots = getOptionValueCount(parser, "dotplots");
     params.dotplotFile.resize(numDotplots);
@@ -277,10 +277,35 @@ inline int setParameters(Parameters & params, int argc, char const **argv)
             erase(tmpDir, length(tmpDir) - 10u, length(tmpDir));
         }
         params.tmpDir = tmpDir;
-        _V(params, "The absolute path where to create the tmpDir is " << tmpDir);
+        _VV(params, "The absolute path where to create the tmpDir is " << tmpDir);
     }
 
-    return 2;
+    // set score matrix
+    params.laraScoreMatrix.data_gap_extend = params.laraGapExtend;
+    params.laraScoreMatrix.data_gap_open   = params.laraGapOpen;
+    if (empty(params.laraScoreMatrixName))
+    {
+        _VV(params, "Predefined RIBOSUM matrix will be used");
+        setDefaultScoreMatrix(params.laraScoreMatrix, Ribosum65N());
+    }
+    else if (loadScoreMatrix(params.laraScoreMatrix, toCString(params.laraScoreMatrixName)))
+    {
+        _VV(params, "Provided scoring matrix will be used " << params.laraScoreMatrixName);
+    }
+    else
+    {
+        std::cerr << "Matrix file could not be opened: " << params.laraScoreMatrixName
+                  << "). Predefined RIBOSUM matrix will be used." << std::endl;
+        setDefaultScoreMatrix(params.laraScoreMatrix, Ribosum65N());
+    }
+
+    // scale the matrix
+    params.laraScoreMatrix.data_gap_extend /= params.sequenceScale;
+    params.laraScoreMatrix.data_gap_open /= params.sequenceScale;
+    for (double & matrixEntry : params.laraScoreMatrix.data_tab)
+        matrixEntry /= params.sequenceScale;
+
+    return Status::CONTINUE;
 }
 
 } // namespace lara

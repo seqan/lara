@@ -49,11 +49,11 @@
 int main (int argc, char const ** argv)
 {
     lara::Parameters options;
-    int res = lara::setParameters(options, argc, argv);
-    if (res != 2) return res;
+    lara::Status status = lara::setParameters(options, argc, argv);
+    if (status != lara::Status::CONTINUE)
+        return static_cast<int>(status);
 
     std::cout << "This is an initial set-up for Lara2. See development branch on github for current implementation "
                  "status." << std::endl << argv[0];
-    std::cout << res << std::endl;
     std::cout << std::endl;
 }
