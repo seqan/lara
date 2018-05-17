@@ -34,6 +34,7 @@
 #include <iostream>
 
 //#include <seqan/rna_io.h>
+#include "data_types.hpp"
 #include "parameters.hpp"
 
 //extern "C" {
@@ -48,12 +49,8 @@
 
 int main (int argc, char const ** argv)
 {
-    lara::Parameters options;
-    lara::Status status = lara::setParameters(options, argc, argv);
-    if (status != lara::Status::CONTINUE)
-        return static_cast<int>(status);
-
-    std::cout << "This is an initial set-up for Lara2. See development branch on github for current implementation "
-                 "status." << std::endl << argv[0];
-    std::cout << std::endl;
+    // Parse arguments and options.
+    lara::Parameters params(argc, argv);
+    if (params.status != lara::Status::CONTINUE)
+        return static_cast<int>(params.status);
 }

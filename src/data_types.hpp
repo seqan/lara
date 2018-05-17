@@ -42,9 +42,9 @@
 /*!
  * \brief define verbosity levels
  */
-#define _V(_opt, _str) { if (_opt.verbose > 0) std::cerr << _str << std::endl; }
-#define _VV(_opt, _str) { if (_opt.verbose > 1) std::cerr << _str << std::endl; }
-#define _VVV(_opt, _str) { if (_opt.verbose > 2) std::cerr << _str << std::endl; }
+#define _V(_opt, _str) { if ((_opt).verbose > 0) std::cerr << _str << std::endl; }
+#define _VV(_opt, _str) { if ((_opt).verbose > 1) std::cerr << _str << std::endl; }
+#define _VVV(_opt, _str) { if ((_opt).verbose > 2) std::cerr << _str << std::endl; }
 
 namespace lara
 {
@@ -72,7 +72,7 @@ enum Status
     CONTINUE
 };
 
-typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5, seqan::Default>> RnaScoreMatrix;
+typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
 
 } // namespace lara
 

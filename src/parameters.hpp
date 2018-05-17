@@ -38,14 +38,25 @@
  */
 
 #include <seqan/arg_parse.h>
+#include <seqan/score.h>
 
 #include "data_types.hpp"
+#include "rna_score_matrices.hpp"
 
 namespace lara
 {
 
-struct Parameters
+template<typename TSequenceValue, typename TTag>
+inline void setRnaScoreMatrix(seqan::Score<double, seqan::ScoreMatrix<TSequenceValue>> & matrix, TTag)
 {
+    double const * tab = RnaScoringMatrixData_<double, TSequenceValue, TTag>::getData();
+    seqan::arrayCopy(tab, tab + RnaScoringMatrixData_<double, TSequenceValue, TTag>::TAB_SIZE,
+                     matrix.data_tab);
+}
+
+class Parameters
+{
+public:
     // Name of input file
     seqan::CharString        inFile{};
     // Name of input fileRef
@@ -99,214 +110,219 @@ struct Parameters
     unsigned                 tcoffeLibMode{TCoffeeMode::SWITCH};
     // verbosity level (0-3)
     unsigned                 verbose{0u};
-};
+    Status                   status;
 
-inline Status setParameters(Parameters & params, int argc, char const **argv)
-{
-    using namespace seqan;
-    ArgumentParser parser;
-
-    setAppName(parser, "LaRA");
-    setShortDescription(parser, "Lagrangian Relaxed structural Alignment");
-    setCategory(parser, "RNA structural alignment algorithm");
-    setVersion(parser, "2.0");
-    setDate(parser, "2018");
-    //setDateAndVersion(parser);
-    //setDescription(parser);
-
-    addUsageLine(parser, "./lara <\\fI-i inFile\\fP> [\\fI-w outFile\\fP] [\\fI -parameters\\fP]");
-
-    addOption(parser, ArgParseOption("v", "verbose",
-                                     "0: no additional outputs, 1: global statistics, "
-                                     "2: extensive statistics for each batch of reads, 3: Debug output. (1)",
-                                     ArgParseArgument::INTEGER, "INT"));
-
-    // Input options
-    addSection(parser, "Input Options");
-
-    addOption(parser, ArgParseOption("i", "inFile",
-                                     "Path to the input file",
-                                     ArgParseArgument::INPUT_FILE, "IN"));
-
-    addOption(parser, ArgParseOption("ir", "inFileRef",
-                                     "Path to the reference input file",
-                                     ArgParseArgument::INPUT_FILE, "IN"));
-
-    addOption(parser, ArgParseOption("d", "dotplots",
-                                     "Use dotplot files (.ps) as bpp input",
-                                     ArgParseArgument::INPUT_FILE, "IN", true));
-
-    // Output options
-    addSection(parser, "Output Options");
-
-    addOption(parser, ArgParseOption("w", "outFile",
-                                     "Path to the output file (default: stdout)",
-                                     ArgParseArgument::OUTPUT_FILE, "OUT"));
-
-    addOption(parser, ArgParseOption("td", "tmpDir",
-                                     "A temporary directory where to save intermediate files. (input file directory)",
-                                     ArgParseOption::STRING));
-
-    addOption(parser, ArgParseOption("tcl", "tcoffeeLocation",
-                                     "location of T-COFFEE.",
-                                     ArgParseOption::STRING));
-
-    addOption(parser, ArgParseOption("tcm", "tcoffeLibMode",
-                                     "method used to create the T-Coffe library either 0: PROPORTIONAL, 1: SWITCH, "
-                                     "2: ALLINTER, 3: FIXEDINTER. (0)",
-                                     ArgParseArgument::INTEGER, "INT"));
-
-    // Alignment options
-    addSection(parser, "LaRA Alignment Options");
-
-    addOption(parser, ArgParseOption("g", "affineLinearDgs",
-                                     "Chose the gap scheme affine(0) linear(1) or dynamic(2) "
-                                     "to be used in the alignment. (affine(0)). ",
-                                     ArgParseArgument::INTEGER, "INT"));
-
-    addOption(parser, ArgParseOption("a", "local",
-                                     "Perform local alignment. (False)"));
-
-    addOption(parser, ArgParseOption("tb", "thrBppm",
-                                     "(Parameter used during the RNAfold execution to select the minimum energy to be "
-                                     "considered (1e-15)",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("iter", "iterations",
-                                     "number of iterations. ",
-                                     ArgParseArgument::INTEGER, "INT"));
-
-    addOption(parser, ArgParseOption("nditer", "nonDecreasingIterations",
-                                     "number of non-decreasing iterations. (50)",
-                                     ArgParseArgument::INTEGER, "INT"));
-
-    addOption(parser, ArgParseOption("ep", "epsilon",
-                                     "value to be considered for the equality of upper and lower bounds difference",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("my", "stepSizeScaling",
-                                     "necessary for computing appropriate step sizes.",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("lsm", "laraScoreMatrixName",
-                                     "scoring matrix name that should be used for scoring alignment edges in the "
-                                     "actual problem",
-                                     ArgParseOption::STRING));
-
-    addOption(parser, ArgParseOption("ggo", "generatorGapOpen",
-                                     "Gap open costs for generating the alignment edges.",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("gge", "generatorGapExtend",
-                                     "Gap extend costs for generating the alignment edges.",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("lgo", "laraGapOpen",
-                                     "Gap open costs for generating the alignment edges",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("lge", "laraGapExtend",
-                                     "Gap extend costs for generating the alignment edges",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("ssc", "sequenceScale",
-                                     "scaling factor for the scores of the alignment edges",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("stsc", "structureScoring",
-                                     "scoring mode, either LOGARITHMIC (0), SCALE (1), ORIGINAL (2), RIBOSUM (3). (0)",
-                                     ArgParseArgument::INTEGER, "INT"));
-
-    addOption(parser, ArgParseOption("fsw", "fixedStructWeight",
-                                     "define the weight of _half_ an interaction match for fixed structures",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    addOption(parser, ArgParseOption("scal", "scalingFactor",
-                                     "if structurescoring=SCALING then we have to give a scaling factor",
-                                     ArgParseArgument::DOUBLE, "DOUBLE"));
-
-    ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
-    if (parseResult != ArgumentParser::PARSE_OK)
-        return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
-
-    getOptionValue(params.verbose, parser, "verbose");
-    getOptionValue(params.affineLinearDgs, parser, "affineLinearDgs");
-    getOptionValue(params.alignLocally, parser, "local");
-    getOptionValue(params.thrBppm, parser, "thrBppm");
-    getOptionValue(params.iterations, parser, "iterations");
-    getOptionValue(params.nonDecreasingIterations, parser, "nonDecreasingIterations");
-    getOptionValue(params.epsilon, parser, "epsilon");
-    getOptionValue(params.stepSizeScaling, parser, "stepSizeScaling");
-    getOptionValue(params.laraScoreMatrixName, parser, "laraScoreMatrixName");
-    getOptionValue(params.generatorGapOpen, parser, "generatorGapOpen");
-    getOptionValue(params.generatorGapExtend, parser, "generatorGapExtend");
-    getOptionValue(params.laraGapOpen, parser, "laraGapOpen");
-    getOptionValue(params.laraGapExtend, parser, "laraGapExtend");
-    getOptionValue(params.sequenceScale, parser, "sequenceScale");
-    getOptionValue(params.structureScoring, parser, "structureScoring");
-    getOptionValue(params.fixedStructWeight, parser, "fixedStructWeight");
-    getOptionValue(params.scalingFactor, parser, "scalingFactor");
-    getOptionValue(params.tcoffeeLocation, parser, "tcoffeeLocation");
-    getOptionValue(params.tcoffeLibMode, parser, "tcoffeLibMode");
-    getOptionValue(params.inFileRef, parser, "inFileRef");
-
-    getOptionValue(params.inFile, parser, "inFile");
-    if (empty(params.inFile))
-        return Status::EXIT_ERROR;
-
-    unsigned numDotplots = getOptionValueCount(parser, "dotplots");
-    params.dotplotFile.resize(numDotplots);
-    for (unsigned idx = 0; idx < numDotplots; ++idx)
+    Parameters(int argc, char const ** argv)
     {
-        getOptionValue(params.dotplotFile[idx], parser, "dotplots", idx);
+        status = setParameters(argc, argv);
     }
 
-    getOptionValue(params.outFile, parser, "outFile");
-    if (isSet(parser, "outFile"))
+private:
+    inline Status setParameters(int argc, char const ** argv)
     {
-        _V(params, "The specified output file is " << params.outFile);
-    }
-    else
-    {
-        CharString tmpDir;
-        getOptionValue(tmpDir, parser, "tmpDir");
-        if (!isSet(parser, "tmpDir"))
+        using namespace seqan;
+        ArgumentParser parser;
+
+        setAppName(parser, "LaRA");
+        setShortDescription(parser, "Lagrangian Relaxed structural Alignment");
+        setVersion(parser, "2.0");
+        setDate(parser, "May 2018");
+        addDescription(parser, "RNA structural alignment algorithm.");
+
+        addUsageLine(parser, "./lara -i \\fIinFile\\fP [\\fIparameters\\fP]");
+
+        addOption(parser, ArgParseOption("v", "verbose",
+                                         "0: no additional outputs, 1: global statistics, "
+                                         "2: extensive statistics for each batch of reads, 3: Debug output. (1)",
+                                         ArgParseArgument::INTEGER, "INT"));
+
+        // Input options
+        addSection(parser, "Input Options");
+
+        addOption(parser, ArgParseOption("i", "inFile",
+                                         "Path to the input file",
+                                         ArgParseArgument::INPUT_FILE, "IN"));
+
+        addOption(parser, ArgParseOption("ir", "inFileRef",
+                                         "Path to the reference input file",
+                                         ArgParseArgument::INPUT_FILE, "IN"));
+
+        addOption(parser, ArgParseOption("d", "dotplots",
+                                         "Use dotplot files (.ps) as bpp input",
+                                         ArgParseArgument::INPUT_FILE, "IN", true));
+
+        // Output options
+        addSection(parser, "Output Options");
+
+        addOption(parser, ArgParseOption("w", "outFile",
+                                         "Path to the output file (default: stdout)",
+                                         ArgParseArgument::OUTPUT_FILE, "OUT"));
+
+        addOption(parser, ArgParseOption("td", "tmpDir",
+                                         "A temporary directory where to save intermediate files. (input file directory)",
+                                         ArgParseOption::STRING));
+
+        addOption(parser, ArgParseOption("tcl", "tcoffeeLocation",
+                                         "location of T-COFFEE.",
+                                         ArgParseOption::STRING));
+
+        addOption(parser, ArgParseOption("tcm", "tcoffeLibMode",
+                                         "method used to create the T-Coffe library either 0: PROPORTIONAL, 1: SWITCH, "
+                                         "2: ALLINTER, 3: FIXEDINTER. (0)",
+                                         ArgParseArgument::INTEGER, "INT"));
+
+        // Alignment options
+        addSection(parser, "LaRA Alignment Options");
+
+        addOption(parser, ArgParseOption("g", "affineLinearDgs",
+                                         "Chose the gap scheme affine(0) linear(1) or dynamic(2) "
+                                         "to be used in the alignment. (affine(0)). ",
+                                         ArgParseArgument::INTEGER, "INT"));
+
+        addOption(parser, ArgParseOption("a", "local",
+                                         "Perform local alignment. (False)"));
+
+        addOption(parser, ArgParseOption("tb", "thrBppm",
+                                         "(Parameter used during the RNAfold execution to select the minimum energy to be "
+                                         "considered (1e-15)",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("iter", "iterations",
+                                         "number of iterations. ",
+                                         ArgParseArgument::INTEGER, "INT"));
+
+        addOption(parser, ArgParseOption("nditer", "nonDecreasingIterations",
+                                         "number of non-decreasing iterations. (50)",
+                                         ArgParseArgument::INTEGER, "INT"));
+
+        addOption(parser, ArgParseOption("ep", "epsilon",
+                                         "value to be considered for the equality of upper and lower bounds difference",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("my", "stepSizeScaling",
+                                         "necessary for computing appropriate step sizes.",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("lsm", "laraScoreMatrixName",
+                                         "scoring matrix name that should be used for scoring alignment edges in the "
+                                         "actual problem",
+                                         ArgParseOption::STRING));
+
+        addOption(parser, ArgParseOption("ggo", "generatorGapOpen",
+                                         "Gap open costs for generating the alignment edges.",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("gge", "generatorGapExtend",
+                                         "Gap extend costs for generating the alignment edges.",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("lgo", "laraGapOpen",
+                                         "Gap open costs for generating the alignment edges",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("lge", "laraGapExtend",
+                                         "Gap extend costs for generating the alignment edges",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("ssc", "sequenceScale",
+                                         "scaling factor for the scores of the alignment edges",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("stsc", "structureScoring",
+                                         "scoring mode, either LOGARITHMIC (0), SCALE (1), ORIGINAL (2), RIBOSUM (3). (0)",
+                                         ArgParseArgument::INTEGER, "INT"));
+
+        addOption(parser, ArgParseOption("fsw", "fixedStructWeight",
+                                         "define the weight of _half_ an interaction match for fixed structures",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("scal", "scalingFactor",
+                                         "if structurescoring=SCALING then we have to give a scaling factor",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
+        if (parseResult != ArgumentParser::PARSE_OK)
+            return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
+
+        getOptionValue(verbose, parser, "verbose");
+        getOptionValue(affineLinearDgs, parser, "affineLinearDgs");
+        getOptionValue(alignLocally, parser, "local");
+        getOptionValue(thrBppm, parser, "thrBppm");
+        getOptionValue(iterations, parser, "iterations");
+        getOptionValue(nonDecreasingIterations, parser, "nonDecreasingIterations");
+        getOptionValue(epsilon, parser, "epsilon");
+        getOptionValue(stepSizeScaling, parser, "stepSizeScaling");
+        getOptionValue(laraScoreMatrixName, parser, "laraScoreMatrixName");
+        getOptionValue(generatorGapOpen, parser, "generatorGapOpen");
+        getOptionValue(generatorGapExtend, parser, "generatorGapExtend");
+        getOptionValue(laraGapOpen, parser, "laraGapOpen");
+        getOptionValue(laraGapExtend, parser, "laraGapExtend");
+        getOptionValue(sequenceScale, parser, "sequenceScale");
+        getOptionValue(structureScoring, parser, "structureScoring");
+        getOptionValue(fixedStructWeight, parser, "fixedStructWeight");
+        getOptionValue(scalingFactor, parser, "scalingFactor");
+        getOptionValue(tcoffeeLocation, parser, "tcoffeeLocation");
+        getOptionValue(tcoffeLibMode, parser, "tcoffeLibMode");
+        getOptionValue(inFileRef, parser, "inFileRef");
+
+        getOptionValue(inFile, parser, "inFile");
+        if (empty(inFile))
+            return Status::EXIT_ERROR;
+
+        unsigned numDotplots = getOptionValueCount(parser, "dotplots");
+        dotplotFile.resize(numDotplots);
+        for (unsigned idx = 0; idx < numDotplots; ++idx)
         {
-            tmpDir = SEQAN_TEMP_FILENAME();
-            // remove "/test_file" suffix
-            erase(tmpDir, length(tmpDir) - 10u, length(tmpDir));
+            getOptionValue(dotplotFile[idx], parser, "dotplots", idx);
         }
-        params.tmpDir = tmpDir;
-        _VV(params, "The absolute path where to create the tmpDir is " << tmpDir);
-    }
 
-    // set score matrix
-    params.laraScoreMatrix.data_gap_extend = params.laraGapExtend;
-    params.laraScoreMatrix.data_gap_open   = params.laraGapOpen;
-    if (empty(params.laraScoreMatrixName))
-    {
-        _VV(params, "Predefined RIBOSUM matrix will be used");
-        setDefaultScoreMatrix(params.laraScoreMatrix, Ribosum65N());
-    }
-    else if (loadScoreMatrix(params.laraScoreMatrix, toCString(params.laraScoreMatrixName)))
-    {
-        _VV(params, "Provided scoring matrix will be used " << params.laraScoreMatrixName);
-    }
-    else
-    {
-        std::cerr << "Matrix file could not be opened: " << params.laraScoreMatrixName
-                  << "). Predefined RIBOSUM matrix will be used." << std::endl;
-        setDefaultScoreMatrix(params.laraScoreMatrix, Ribosum65N());
-    }
+        getOptionValue(outFile, parser, "outFile");
+        if (isSet(parser, "outFile"))
+        {
+            _V(*this, "The specified output file is " << outFile);
+        }
+        else
+        {
+            CharString tmpDir;
+            getOptionValue(tmpDir, parser, "tmpDir");
+            if (!isSet(parser, "tmpDir"))
+            {
+                tmpDir = SEQAN_TEMP_FILENAME();
+                // remove "/test_file" suffix
+                erase(tmpDir, length(tmpDir) - 10u, length(tmpDir));
+            }
+            tmpDir = tmpDir;
+            _VV(*this, "The absolute path where to create the tmpDir is " << tmpDir);
+        }
 
-    // scale the matrix
-    params.laraScoreMatrix.data_gap_extend /= params.sequenceScale;
-    params.laraScoreMatrix.data_gap_open /= params.sequenceScale;
-    for (double & matrixEntry : params.laraScoreMatrix.data_tab)
-        matrixEntry /= params.sequenceScale;
+        // set score matrix
+        laraScoreMatrix.data_gap_extend = laraGapExtend;
+        laraScoreMatrix.data_gap_open   = laraGapOpen;
+        if (empty(laraScoreMatrixName))
+        {
+            _VV(*this, "Predefined RIBOSUM matrix will be used");
+            setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
+        }
+        else if (loadScoreMatrix(laraScoreMatrix, toCString(laraScoreMatrixName)))
+        {
+            _VV(*this, "Provided scoring matrix will be used " << laraScoreMatrixName);
+        }
+        else
+        {
+            std::cerr << "Matrix file could not be opened: " << laraScoreMatrixName
+                      << "). Predefined RIBOSUM matrix will be used." << std::endl;
+            setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
+        }
 
-    return Status::CONTINUE;
-}
+        // scale the matrix
+        laraScoreMatrix.data_gap_extend /= sequenceScale;
+        laraScoreMatrix.data_gap_open /= sequenceScale;
+        for (double & matrixEntry : laraScoreMatrix.data_tab)
+            matrixEntry /= sequenceScale;
+
+        return Status::CONTINUE;
+    }
+};
 
 } // namespace lara
 
