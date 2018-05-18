@@ -37,10 +37,13 @@
  * \brief This file contains data structures and macros for LaRA.
  */
 
+#include <iostream>
+
+#include <seqan/rna_io.h>
 #include <seqan/score.h>
 
 /*!
- * \brief define verbosity levels
+ * \brief Define verbosity levels.
  */
 #define _V(_opt, _str) { if ((_opt).verbose > 0) std::cerr << _str << std::endl; }
 #define _VV(_opt, _str) { if ((_opt).verbose > 1) std::cerr << _str << std::endl; }
@@ -72,6 +75,7 @@ enum Status
     CONTINUE
 };
 
+//! \brief Score Matrix type used in LaRA.
 typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
 
 } // namespace lara

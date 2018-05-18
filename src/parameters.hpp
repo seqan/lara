@@ -300,17 +300,17 @@ private:
         laraScoreMatrix.data_gap_open   = laraGapOpen;
         if (empty(laraScoreMatrixName))
         {
-            _VV(*this, "Predefined RIBOSUM matrix will be used");
+            _VV(*this, "Predefined Ribosum65 matrix will be used.");
             setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
         }
         else if (loadScoreMatrix(laraScoreMatrix, toCString(laraScoreMatrixName)))
         {
-            _VV(*this, "Provided scoring matrix will be used " << laraScoreMatrixName);
+            _VV(*this, "Provided scoring matrix will be used: " << laraScoreMatrixName);
         }
         else
         {
             std::cerr << "Matrix file could not be opened: " << laraScoreMatrixName
-                      << "). Predefined RIBOSUM matrix will be used." << std::endl;
+                      << "). Predefined Ribosum65 matrix will be used." << std::endl;
             setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
         }
 

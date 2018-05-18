@@ -31,26 +31,18 @@
 // OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
 
-#include <iostream>
-
-//#include <seqan/rna_io.h>
 #include "data_types.hpp"
+#include "io.hpp"
 #include "parameters.hpp"
-
-//extern "C" {
-//    #include <ViennaRNA/data_structures.h>
-//    #include <ViennaRNA/params.h>
-//    #include <ViennaRNA/utils.h>
-//    #include <ViennaRNA/eval.h>
-//    #include <ViennaRNA/fold.h>
-//    #include <ViennaRNA/part_func.h>
-//    #include <ViennaRNA/PS_dot.h>
-//}
 
 int main (int argc, char const ** argv)
 {
     // Parse arguments and options.
     lara::Parameters params(argc, argv);
     if (params.status != lara::Status::CONTINUE)
-        return static_cast<int>(params.status);
+        return params.status == lara::Status::EXIT_OK ? 0 : 1;
+
+    // Read input files and prepare structured sequences.
+    lara::InputStorage store(params);
+    _VV(params, store);
 }
