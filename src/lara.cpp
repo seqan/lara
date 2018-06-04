@@ -34,6 +34,7 @@
 #include "data_types.hpp"
 #include "io.hpp"
 #include "parameters.hpp"
+#include "subgradient_solver.hpp"
 
 int main (int argc, char const ** argv)
 {

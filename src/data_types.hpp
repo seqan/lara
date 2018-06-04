@@ -38,6 +38,7 @@
  */
 
 #include <iostream>
+#include <limits>
 
 #include <seqan/rna_io.h>
 #include <seqan/score.h>
@@ -74,6 +75,9 @@ enum Status
     EXIT_ERROR,
     CONTINUE
 };
+
+double const negInfinity = std::numeric_limits<double>::lowest();
+double const posInfinity = std::numeric_limits<double>::max();
 
 //! \brief Score Matrix type used in LaRA.
 typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;

@@ -70,6 +70,7 @@ public:
 
         if (params.dotplotFile.size() == first.records.size() + second.records.size())
         {
+            // Load base pair probabilities from dot plot file.
             unsigned fileIdx;
             for (fileIdx = 0u; fileIdx < first.records.size(); ++fileIdx)
                 extractBppFromDotplot(first.records[fileIdx], params.dotplotFile[fileIdx]);

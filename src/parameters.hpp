@@ -74,13 +74,13 @@ public:
     // Parameter used during the RNAfold execution to select the minimum energy to be considered
     double                   thrBppm{1e-15}; // old Lara: 0.1
     // number of iterations
-    unsigned                 iterations{500u};
+    unsigned                 numIterations{500u};
     // number of non-decreasing iterations
-    unsigned                 nonDecreasingIterations{50u};
+    unsigned                 numNondecreasingIterations{50u};
     // value to be considered for the equality of upper and lower bounds difference
     double                   epsilon{0.0001};
     // my, necessary for computing appropriate step sizes
-    double                   stepSizeScaling{1.0};
+    double                   stepSizeFactor{1.0};
     // scoring matrix name that should be used for scoring alignment edges in the actual problem
     seqan::CharString        laraScoreMatrixName{};
     //    Score<double, ScoreMatrix<Rna5, Default> > laraScoreMatrix;
@@ -191,7 +191,7 @@ private:
                                          "number of iterations. ",
                                          ArgParseArgument::INTEGER, "INT"));
 
-        addOption(parser, ArgParseOption("nditer", "nonDecreasingIterations",
+        addOption(parser, ArgParseOption("nditer", "numNondecreasingIterations",
                                          "number of non-decreasing iterations. (50)",
                                          ArgParseArgument::INTEGER, "INT"));
 
@@ -199,7 +199,7 @@ private:
                                          "value to be considered for the equality of upper and lower bounds difference",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("my", "stepSizeScaling",
+        addOption(parser, ArgParseOption("my", "stepSizeFactor",
                                          "necessary for computing appropriate step sizes.",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
@@ -248,10 +248,10 @@ private:
         getOptionValue(affineLinearDgs, parser, "affineLinearDgs");
         getOptionValue(alignLocally, parser, "local");
         getOptionValue(thrBppm, parser, "thrBppm");
-        getOptionValue(iterations, parser, "iterations");
-        getOptionValue(nonDecreasingIterations, parser, "nonDecreasingIterations");
+        getOptionValue(numIterations, parser, "iterations");
+        getOptionValue(numNondecreasingIterations, parser, "numNondecreasingIterations");
         getOptionValue(epsilon, parser, "epsilon");
-        getOptionValue(stepSizeScaling, parser, "stepSizeScaling");
+        getOptionValue(stepSizeFactor, parser, "stepSizeFactor");
         getOptionValue(laraScoreMatrixName, parser, "laraScoreMatrixName");
         getOptionValue(generatorGapOpen, parser, "generatorGapOpen");
         getOptionValue(generatorGapExtend, parser, "generatorGapExtend");
