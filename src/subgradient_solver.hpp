@@ -70,7 +70,9 @@ private:
     double bestUpperBound;
 
 public:
-    SubgradientSolver(std::pair<size_t, size_t> const dim, Parameters const & params)
+
+    explicit
+    SubgradientSolver(Parameters const & params)
     {
 //        stepSize = 0.0;
         stepSizeFactor = params.stepSizeFactor;
@@ -78,25 +80,39 @@ public:
 //        maxNondecreasingIterations = params.numNondecreasingIterations;
         iterationIdx = 0ul;
 
+        currentLowerBound = negInfinity;
+        currentUpperBound = posInfinity;
+        bestLowerBound    = negInfinity;
+        bestUpperBound    = posInfinity;
+    }
+
+    inline
+    void initialize(std::pair<size_t, size_t> const dim)
+    {
         primal.resize(dim.first);
         dual.resize(dim.second);
         multiplierLowerBound.resize(dim.second, negInfinity);
         multiplierUpperBound.resize(dim.second, posInfinity);
-
-        currentLowerBound = negInfinity;
-        currentUpperBound = posInfinity;
-        bestLowerBound = negInfinity;
-        bestUpperBound = posInfinity;
     }
 
-    double calcStepsize()
-    {
-        return 1.0 / (iterationIdx + 1.0);
-    }
+//    double calcStepsize()
+//    {
+//        return 1.0 / (iterationIdx + 1.0);
+//    }
 
     double calcStepsize(double upper, double lower, size_t numSubgradients)
     {
         return stepSizeFactor * (upper - lower) / numSubgradients;
+    }
+
+    double getLowerBound()
+    {
+        return bestLowerBound;
+    }
+
+    double getUpperBound()
+    {
+        return bestUpperBound;
     }
 
     Status solve(bool verbose, double epsilon, size_t maxNondecreasingIterations)
@@ -180,7 +196,7 @@ public:
             }
             if (!changed)
             {
-                std::cout << "Error: StepSizeFactor below precision." << std::endl;
+                std::cerr << "Error: StepSizeFactor below precision." << std::endl;
                 return Status::EXIT_ERROR;
             }
 
@@ -206,10 +222,10 @@ public:
     }
 };
 
-std::ostream & operator<<(std::ostream & stream, SubgradientSolver const & /* solver */)
-{
-    return stream;
-}
+//std::ostream & operator<<(std::ostream & stream, SubgradientSolver const & /* solver */)
+//{
+//    return stream;
+//}
 
 } // namespace lara
 

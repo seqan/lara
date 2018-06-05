@@ -46,4 +46,16 @@ int main (int argc, char const ** argv)
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
     _VV(params, store);
+
+    lara::SubgradientSolver solver(params);
+
+    for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
+    {
+        for (size_t idxB = idxA + 1ul; idxB < store.size(); ++idxB)
+        {
+            _VV(params, "SEQUENCE " << idxA << " WITH " << idxB);
+        }
+    }
+
+//    lara::Status status = solver.solve(params.verbose >= 2, params.epsilon, params.numNondecreasingIterations);
 }

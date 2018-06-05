@@ -59,23 +59,20 @@ extern "C" {
 namespace lara
 {
 
-class InputStorage : public std::pair<seqan::RnaStructContents, seqan::RnaStructContents>
+class InputStorage : public std::vector<seqan::RnaRecord>
 {
 public:
     explicit InputStorage(Parameters const & params)
     {
-        readRnaFile(first, params.inFile);
-        readRnaFile(second, params.inFileRef);
-        _VV(params, "Successfully read " << first.records.size() + second.records.size() << " records.");
+        readRnaFile(params.inFile);
+        readRnaFile(params.inFileRef);
+        _VV(params, "Successfully read " << size() << " records.");
 
-        if (params.dotplotFile.size() == first.records.size() + second.records.size())
+        if (params.dotplotFile.size() == size())
         {
             // Load base pair probabilities from dot plot file.
-            unsigned fileIdx;
-            for (fileIdx = 0u; fileIdx < first.records.size(); ++fileIdx)
-                extractBppFromDotplot(first.records[fileIdx], params.dotplotFile[fileIdx]);
-            for (seqan::RnaRecord & record : second.records)
-                extractBppFromDotplot(record, params.dotplotFile[fileIdx++]);
+            for (size_t fileIdx = 0u; fileIdx < size(); ++fileIdx)
+                extractBppFromDotplot(at(fileIdx), params.dotplotFile[fileIdx]);
             _VV(params, "Successfully extracted base pair probabilities from given dotplot files.");
         }
         else
@@ -83,9 +80,7 @@ public:
             // If not present, compute the weighted interaction edges using ViennaRNA functions.
             bool const logScoring = params.structureScoring == ScoringMode::LOGARITHMIC;
             bool usedVienna = false;
-            for (seqan::RnaRecord & record : first.records)
-                computeStructure(record, usedVienna, logScoring);
-            for (seqan::RnaRecord & record : second.records)
+            for (seqan::RnaRecord & record : *this)
                 computeStructure(record, usedVienna, logScoring);
             if (usedVienna)
                 _VV(params, "Computed missing base pair probabilities with ViennaRNA library.");
@@ -93,42 +88,47 @@ public:
     }
 
 private:
-    void readRnaFile(seqan::RnaStructContents & fileContent, seqan::CharString filename)
+    void readRnaFile(seqan::CharString filename)
     {
-        using namespace seqan;
-
-        if (empty(filename))
+        if (seqan::empty(filename))
             return;
 
-        RnaStructFileIn rnaStructFile;
-        if (open(rnaStructFile, toCString(filename), OPEN_RDONLY))
+        seqan::RnaStructFileIn rnaStructFile;
+        if (seqan::open(rnaStructFile, toCString(filename), seqan::OPEN_RDONLY))
         {
-            readRecords(fileContent, rnaStructFile, std::numeric_limits<unsigned>::max());
-            close(rnaStructFile);
+            seqan::RnaHeader header;                   // dummy, just for Ebpseq files
+            seqan::readHeader(header, rnaStructFile);
+            seqan::RnaRecord rec;
+            while (!seqan::atEnd(rnaStructFile))
+            {
+                seqan::readRecord(rec, rnaStructFile);
+                push_back(rec);
+            }
+            seqan::close(rnaStructFile);
         }
         else
         {
             // Read the file.
-            SeqFileIn seqFileIn(toCString(filename));
-            StringSet<CharString>  ids;
-            StringSet<IupacString> seqs;
-            StringSet<CharString>  quals;
-            readRecords(ids, seqs, quals, seqFileIn);
-            close(seqFileIn);
+            seqan::SeqFileIn seqFileIn(toCString(filename));
+            seqan::StringSet<seqan::CharString>  ids;
+            seqan::StringSet<seqan::IupacString> seqs;
+            seqan::StringSet<seqan::CharString>  quals;
+            seqan::readRecords(ids, seqs, quals, seqFileIn);
+            seqan::close(seqFileIn);
 
             // Fill the data structures: identifier and sequence.
-            resize(fileContent.records, length(ids));
-            SEQAN_ASSERT_EQ(length(ids), length(seqs));
-            for (typename Size<StringSet<CharString>>::Type idx = 0u; idx < length(ids); ++idx)
+            reserve(size() + seqan::length(ids));
+            SEQAN_ASSERT_EQ(seqan::length(ids), seqan::length(seqs));
+            for (size_t idx = 0ul; idx < seqan::length(ids); ++idx)
             {
-                fileContent.records[idx].name     = ids[idx];
-                fileContent.records[idx].sequence = convert<Rna5String>(seqs[idx]);
-            }
-            // For FastQ files: add quality annotation.
-            if (length(quals) == length(ids))
-            {
-                for (typename Size<StringSet<CharString>>::Type idx = 0u; idx < length(ids); ++idx)
-                    fileContent.records[idx].quality = quals[idx];
+                seqan::RnaRecord rec{};
+                rec.name     = ids[idx];
+                rec.sequence = seqan::convert<seqan::Rna5String>(seqs[idx]);
+
+                // For FastQ files: add quality annotation.
+                if (seqan::length(quals) == seqan::length(ids))
+                    rec.quality = quals[idx];
+                push_back(rec);
             }
         }
     }
@@ -216,20 +216,12 @@ private:
     }
 };
 
-std::ostream & operator<<(std::ostream & stream, InputStorage const & store)
+std::ostream & operator<<(std::ostream & stream, InputStorage & store)
 {
     using namespace seqan;
-    if (length(store.first.records) != 0)
+    for (seqan::RnaRecord const & rec : store)
     {
-        for (RnaRecord const & rec : store.first.records)
-        {
-            writeRecord(stream, rec, DotBracket());
-        }
-    }
-    if (length(store.second.records) != 0)
-    {
-        for (RnaRecord const & rec : store.second.records)
-            writeRecord(stream, rec, DotBracket());
+        writeRecord(stream, rec, DotBracket());
     }
     return stream;
 }
