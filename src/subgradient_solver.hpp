@@ -54,9 +54,11 @@ class SubgradientSolver
 {
 private:
 //    double stepSize;
+    double epsilon;
     double stepSizeFactor;
+    unsigned verbose;
     size_t numIterations;
-//    size_t maxNondecreasingIterations;
+    size_t maxNondecreasingIterations;
     size_t iterationIdx;
 
     std::vector<double> primal;
@@ -70,29 +72,25 @@ private:
     double bestUpperBound;
 
 public:
-
-    explicit
-    SubgradientSolver(Parameters const & params)
-    {
-//        stepSize = 0.0;
-        stepSizeFactor = params.stepSizeFactor;
-        numIterations = params.numIterations;
-//        maxNondecreasingIterations = params.numNondecreasingIterations;
-        iterationIdx = 0ul;
-
-        currentLowerBound = negInfinity;
-        currentUpperBound = posInfinity;
-        bestLowerBound    = negInfinity;
-        bestUpperBound    = posInfinity;
-    }
-
-    inline
-    void initialize(std::pair<size_t, size_t> const dim)
+    void initialize(PosPair const dim, Parameters const & params)
     {
         primal.resize(dim.first);
         dual.resize(dim.second);
         multiplierLowerBound.resize(dim.second, negInfinity);
         multiplierUpperBound.resize(dim.second, posInfinity);
+
+        currentLowerBound = negInfinity;
+        currentUpperBound = posInfinity;
+        bestLowerBound    = negInfinity;
+        bestUpperBound    = posInfinity;
+
+        //        stepSize = 0.0;
+        epsilon        = params.epsilon;
+        stepSizeFactor = params.stepSizeFactor;
+        verbose        = params.verbose;
+        numIterations  = params.numIterations;
+        maxNondecreasingIterations = params.numNondecreasingIterations;
+        iterationIdx   = 0ul;
     }
 
 //    double calcStepsize()
@@ -115,7 +113,7 @@ public:
         return bestUpperBound;
     }
 
-    Status solve(bool verbose, double epsilon, size_t maxNondecreasingIterations)
+    Status solve(Lagrange & lagrange)
     {
         size_t nondecreasingRounds = 0ul;
 
@@ -128,17 +126,15 @@ public:
         std::vector<double> primalVector;
         primalVector.resize(primal.size());
 
-        std::vector<double> primalFeasibleSolution;
-        primalFeasibleSolution.resize(primal.size());
-
         for (iterationIdx = 0ul; iterationIdx < numIterations; ++iterationIdx)
         {
-            if (verbose)
-                std::cerr << "(" << iterationIdx << ")\tbest: " << bestUpperBound << "\t/" << bestLowerBound << "\t";
+            if (verbose >= 2)
+                std::cerr << "(" << iterationIdx << ")\tbest: " << bestUpperBound << "\t/" << bestLowerBound << std::endl;
 
-            // TODO lagrangeEvaluateProblem
+            lagrange.evaluate(dual, dualIndices, currentUpperBound, currentLowerBound, subgradient, subgradientIndices,
+                              primalVector);
 
-            if (verbose)
+            if (verbose >= 2)
                 std::cerr << "current: " << currentUpperBound << "/\t" << currentLowerBound
                           << "\t(" << subgradientIndices.size() << ")\t";
 
@@ -153,11 +149,11 @@ public:
             {
                 bestLowerBound      = currentLowerBound;
                 nondecreasingRounds = 0ul;
-                if (verbose)
+                if (verbose >= 2)
                     std::cerr << "(*)";
 
             }
-            if (verbose)
+            if (verbose >= 2)
                 std::cerr << std::endl;
 
             if (bestUpperBound - bestLowerBound < epsilon)
@@ -165,7 +161,7 @@ public:
 
             if (subgradientIndices.empty() && currentUpperBound - currentLowerBound > epsilon)
             {
-                std::cout << "Error: The bounds differ, although there are no subgradients." << std::endl;
+                std::cerr << "Error: The bounds differ, although there are no subgradients." << std::endl;
                 return Status::EXIT_ERROR;
             }
 
@@ -176,7 +172,7 @@ public:
             }
 
             double stepSize = calcStepsize(bestUpperBound, bestLowerBound, subgradientIndices.size());
-            if (verbose)
+            if (verbose >= 2)
                 std::cerr << "stepsize = " << stepSize << std::endl;
 
             bool changed = false;
@@ -200,13 +196,13 @@ public:
                 return Status::EXIT_ERROR;
             }
 
-            if (verbose)
+            if (verbose >= 2)
             {
-                std::cout << "subgradient.size  = " << subgradient.size() << std::endl;
-                std::cout << "primalVector.size = " << primalVector.size() << std::endl;
-                std::cout << "primalfeasibleSolution.size = " << primalFeasibleSolution.size() << std::endl;
-                std::cout << "multiplierLowerBound.size = " << multiplierLowerBound.size() << std::endl;
-                std::cout << "multiplierUpperBound.size = " << multiplierUpperBound.size() << std::endl;
+                std::cerr << "iteration " << iterationIdx << std::endl;
+                std::cerr << "subgradient.size  = " << subgradient.size() << std::endl;
+                std::cerr << "primalVector.size = " << primalVector.size() << std::endl;
+                std::cerr << "multiplierLowerBound.size = " << multiplierLowerBound.size() << std::endl;
+                std::cerr << "multiplierUpperBound.size = " << multiplierUpperBound.size() << std::endl;
             }
 
             dualIndices = subgradientIndices;

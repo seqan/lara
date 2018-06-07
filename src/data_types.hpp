@@ -39,6 +39,7 @@
 
 #include <iostream>
 #include <limits>
+#include <set>
 
 #include <seqan/rna_io.h>
 #include <seqan/score.h>
@@ -81,6 +82,13 @@ double const posInfinity = std::numeric_limits<double>::max();
 
 //! \brief Score Matrix type used in LaRA.
 typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
+
+//! \brief Pair of positions (usually in first and second sequence)
+typedef std::pair<size_t, size_t>                         PosPair;
+typedef std::pair<size_t, double>                         Contact;
+typedef std::set<std::pair<double, size_t>>               PriorityQueue;
+typedef seqan::Align<seqan::Rna5String, seqan::ArrayGaps> Alignment;
+typedef seqan::Row<Alignment>::Type                       AlignmentRow;
 
 } // namespace lara
 

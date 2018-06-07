@@ -33,6 +33,7 @@
 
 #include "data_types.hpp"
 #include "io.hpp"
+#include "lagrange.hpp"
 #include "parameters.hpp"
 #include "subgradient_solver.hpp"
 
@@ -47,13 +48,21 @@ int main (int argc, char const ** argv)
     lara::InputStorage store(params);
     _VV(params, store);
 
-    lara::SubgradientSolver solver(params);
+    lara::SubgradientSolver solver;
 
     for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
     {
         for (size_t idxB = idxA + 1ul; idxB < store.size(); ++idxB)
         {
             _VV(params, "SEQUENCE " << idxA << " WITH " << idxB);
+            lara::Lagrange lagrange(store[idxA], store[idxB], params);
+            lagrange.start();
+            solver.initialize(lagrange.getDimension(), params);
+            lara::Status status = solver.solve(lagrange);
+            if (status == lara::Status::EXIT_ERROR)
+                return 1;
+            //TODO handle Status EXIT_OK: Stop calculation
+//            std::cerr << lagrange << std::endl;
         }
     }
 

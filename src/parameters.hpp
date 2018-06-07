@@ -315,10 +315,10 @@ private:
         }
 
         // scale the matrix
-        laraScoreMatrix.data_gap_extend /= sequenceScale;
-        laraScoreMatrix.data_gap_open /= sequenceScale;
+        laraScoreMatrix.data_gap_extend *= sequenceScale;
+        laraScoreMatrix.data_gap_open *= sequenceScale;
         for (double & matrixEntry : laraScoreMatrix.data_tab)
-            matrixEntry /= sequenceScale;
+            matrixEntry *= sequenceScale;
 
         return Status::CONTINUE;
     }
