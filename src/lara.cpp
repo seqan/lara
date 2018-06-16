@@ -61,10 +61,7 @@ int main (int argc, char const ** argv)
             lara::Status status = solver.solve(lagrange);
             if (status == lara::Status::EXIT_ERROR)
                 return 1;
-            //TODO handle Status EXIT_OK: Stop calculation
-//            std::cerr << lagrange << std::endl;
+            lara::printAlignment(params.outFile, lagrange.getAlignment());
         }
     }
-
-//    lara::Status status = solver.solve(params.verbose >= 2, params.epsilon, params.numNondecreasingIterations);
 }

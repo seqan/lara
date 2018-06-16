@@ -226,5 +226,35 @@ std::ostream & operator<<(std::ostream & stream, InputStorage & store)
     return stream;
 }
 
+inline
+void printAlignment(std::ostream & stream, Alignment const & alignment)
+{
+    stream << ">sequence1" << std::endl << seqan::row(alignment, 0) << std::endl;
+    stream << ">sequence2" << std::endl << seqan::row(alignment, 1) << std::endl;
+}
+
+inline
+void printAlignment(seqan::CharString & filename, Alignment const & alignment)
+{
+    if (seqan::empty(filename))
+    {
+        printAlignment(std::cout, alignment);
+    }
+    else
+    {
+        std::ofstream fastaFile;
+        fastaFile.open(seqan::toCString(filename), std::ios::out);
+        if (fastaFile.is_open())
+        {
+            printAlignment(fastaFile, alignment);
+            fastaFile.close();
+        }
+        else
+        {
+            std::cerr << "Unable to open the specified output file for writing: " << filename << std::endl;
+        }
+    }
+}
+
 } // namespace lara
 

@@ -67,18 +67,6 @@ struct SequenceEntryForScore<Score<double, RnaStructureScore>, TSequence>
     typedef ConsensusScoreSequenceEntry<TSequence> Type;
 };
 
-//template<>
-//struct Spec<Score<double, RnaStructureScore>>
-//{
-//    typedef RnaStructureScore Type;
-//};
-//
-//template<>
-//struct Value<Score<double, RnaStructureScore>>
-//{
-//    typedef double Type;
-//};
-
 template <typename TSeq1, typename TSeq2>
 inline
 double score(Score<double, RnaStructureScore> const & sc,

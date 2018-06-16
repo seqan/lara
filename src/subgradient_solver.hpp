@@ -53,7 +53,6 @@ namespace lara
 class SubgradientSolver
 {
 private:
-//    double stepSize;
     double epsilon;
     double stepSizeFactor;
     unsigned verbose;
@@ -93,11 +92,6 @@ public:
         iterationIdx   = 0ul;
     }
 
-//    double calcStepsize()
-//    {
-//        return 1.0 / (iterationIdx + 1.0);
-//    }
-
     double calcStepsize(double upper, double lower, size_t numSubgradients)
     {
         return stepSizeFactor * (upper - lower) / numSubgradients;
@@ -123,19 +117,13 @@ public:
         std::vector<double> subgradient;
         subgradient.resize(dual.size());
 
-        std::vector<double> primalVector;
-        primalVector.resize(primal.size());
-
         for (iterationIdx = 0ul; iterationIdx < numIterations; ++iterationIdx)
         {
-            if (verbose >= 2)
-                std::cerr << "(" << iterationIdx << ")\tbest: " << bestUpperBound << "\t/" << bestLowerBound << std::endl;
+            lagrange.evaluate(dual, dualIndices, currentUpperBound, currentLowerBound, subgradient, subgradientIndices);
 
-            lagrange.evaluate(dual, dualIndices, currentUpperBound, currentLowerBound, subgradient, subgradientIndices,
-                              primalVector);
-
-            if (verbose >= 2)
-                std::cerr << "current: " << currentUpperBound << "/\t" << currentLowerBound
+            if (verbose >= 1)
+                std::cerr << "(" << iterationIdx << ") \tbest: " << bestUpperBound << "\t/" << bestLowerBound << "\t"
+                          << "current: " << currentUpperBound << "/\t" << currentLowerBound
                           << "\t(" << subgradientIndices.size() << ")\t";
 
             // compare upper and lower bound
@@ -149,11 +137,11 @@ public:
             {
                 bestLowerBound      = currentLowerBound;
                 nondecreasingRounds = 0ul;
-                if (verbose >= 2)
+                if (verbose >= 1)
                     std::cerr << "(*)";
 
             }
-            if (verbose >= 2)
+            if (verbose >= 1)
                 std::cerr << std::endl;
 
             if (bestUpperBound - bestLowerBound < epsilon)
@@ -200,12 +188,11 @@ public:
             {
                 std::cerr << "iteration " << iterationIdx << std::endl;
                 std::cerr << "subgradient.size  = " << subgradient.size() << std::endl;
-                std::cerr << "primalVector.size = " << primalVector.size() << std::endl;
                 std::cerr << "multiplierLowerBound.size = " << multiplierLowerBound.size() << std::endl;
                 std::cerr << "multiplierUpperBound.size = " << multiplierUpperBound.size() << std::endl;
             }
 
-            dualIndices = subgradientIndices;
+            dualIndices = std::list<size_t>(subgradientIndices);
             subgradientIndices.clear();
 
             for (size_t dualIdx : dualIndices)
@@ -217,11 +204,6 @@ public:
         return iterationIdx < numIterations ? Status::EXIT_OK : Status::CONTINUE;
     }
 };
-
-//std::ostream & operator<<(std::ostream & stream, SubgradientSolver const & /* solver */)
-//{
-//    return stream;
-//}
 
 } // namespace lara
 
