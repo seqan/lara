@@ -43,10 +43,12 @@
 #include <utility>
 #include <vector>
 
+#ifdef LEMON_FOUND
 #include <lemon/smart_graph.h>
 #include <lemon/list_graph.h>
 #include <lemon/matching.h>
 #include <lemon/concepts/graph.h>
+#endif
 
 #include <seqan/align.h>
 #include <seqan/basic.h>
@@ -245,6 +247,7 @@ private:
         return gapScore;
     }
 
+#ifdef LEMON_FOUND
     double computeMatching(std::map<size_t, size_t> & contacts,
                            std::vector<size_t> const & currentAlignment,
                            std::vector<bool> const & inSolution)
@@ -305,6 +308,7 @@ private:
         _VV(params, "\nlower bound: seq " << score << " + str " << lemonweight);
         return score + lemonweight;
     }
+#endif
 
 public:
     Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params) : params(_params)
@@ -606,7 +610,13 @@ public:
         if (doMatching)
         {
             _VV(params, "start matching");
+#ifdef LEMON_FOUND
             lowerBound = computeMatching(contacts, currentStructuralAlignment, inSolution);
+#else
+            std::cerr << "Cannot compute a matching without the Lemon library. Please install Lemon and try again."
+                      << std::endl;
+            exit(1);
+#endif
         }
         else
         {

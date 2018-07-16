@@ -125,8 +125,8 @@ private:
 
         setAppName(parser, "LaRA");
         setShortDescription(parser, "Lagrangian Relaxed structural Alignment");
-        setVersion(parser, "2.0");
-        setDate(parser, "May 2018");
+        setVersion(parser, "2.0.0");
+        setDate(parser, "July 2018");
         addDescription(parser, "RNA structural alignment algorithm.");
 
         addUsageLine(parser, "./lara -i \\fIinFile\\fP [\\fIparameters\\fP]");

@@ -49,12 +49,14 @@
 
 #include "parameters.hpp"
 
+#ifdef VIENNA_RNA_FOUND
 extern "C" {
     #include <ViennaRNA/utils.h>
     #include <ViennaRNA/fold_vars.h>
     #include <ViennaRNA/fold.h>
     #include <ViennaRNA/part_func.h>
 }
+#endif
 
 namespace lara
 {
@@ -172,6 +174,12 @@ private:
     {
         if (!seqan::empty(rnaRecord.bppMatrGraphs))
             return;
+
+#ifndef VIENNA_RNA_FOUND
+        std::cerr << "Cannot compute a structure without the ViennaRNA library. Please install ViennaRNA and try again."
+                  << std::endl;
+        exit(1);
+#endif
 
         usedVienna = true;
         size_t const length = seqan::length(rnaRecord.sequence);

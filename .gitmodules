@@ -2,3 +2,7 @@
 	path = include/seqan
 	url = https://github.com/seqan/seqan.git
 	branch = master
+[submodule "include/lemon"]
+	path = include/lemon
+	url = https://github.com/seqan/lemon.git
+	branch = master

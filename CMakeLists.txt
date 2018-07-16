@@ -33,7 +33,7 @@ endif ()
 message ("${ColourBold}Dependency detection${ColourReset}")
 
 # SeqAn
-set (MINIMUM_SEQAN_VERSION "2.4.1")
+set (MINIMUM_SEQAN_VERSION "2.4.0")
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/seqan/include/seqan/version.h")
     set (CMAKE_INCLUDE_PATH
@@ -49,6 +49,17 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/seqan/include/seqan/version.h")
     message (    "   This will be preferred over system global headers.")
 endif ()
 find_package(SeqAn  QUIET REQUIRED CONFIG)
+
+# LEMON
+find_path(LEMON_INCLUDE_PATH NAMES lemon/smart_graph.h HINTS ${CMAKE_CURRENT_SOURCE_DIR}/include/lemon/include)
+if (LEMON_INCLUDE_PATH)
+    set (CMAKE_INCLUDE_PATH ${LEMON_INCLUDE_PATH} ${CMAKE_INCLUDE_PATH})
+    add_definitions(-DLEMON_FOUND)
+    set (LEMON_FOUND "TRUE")
+else()
+    message (STATUS "Cannot find header files of the LEMON library, which is required to compute matchings.")
+    set (LEMON_FOUND "FALSE")
+endif ()
 
 #ViennaRNA
 find_library(RNA libRNA.a PATHS)
@@ -66,10 +77,12 @@ find_package(BZip2  QUIET)
 
 message(STATUS "These dependencies where found:")
 message(   "     SEQAN      ${SEQAN_FOUND}      ${SEQAN_VERSION_STRING}")
-message(   "     OPENMP     ${OPENMP_FOUND}      ${OpenMP_CXX_FLAGS}")
 message(   "     ZLIB       ${ZLIB_FOUND}      ${ZLIB_VERSION_STRING}")
 message(   "     BZIP2      ${BZIP2_FOUND}      ${BZIP2_VERSION_STRING}")
+message(   "     OPENMP     ${OPENMP_FOUND}      ${OpenMP_CXX_FLAGS}")
 message(   "     ViennaRNA  ${VIENNA_FOUND}      ${RNA}")
+message(   "     Lemon      ${LEMON_FOUND}      ${LEMON_INCLUDE_PATH}")
+
 
 # Warn if OpenMP was not found.
 if (NOT OPENMP_FOUND)
@@ -171,7 +184,7 @@ endif ()
 set (SEQAN_DEFINITIONS ${SEQAN_DEFINITIONS} -DSEQAN_GLOBAL_EXCEPTION_HANDLER=1)
 
 # Add include directories.
-include_directories (${SEQAN_INCLUDE_DIRS})
+include_directories (${SEQAN_INCLUDE_DIRS} ${LEMON_INCLUDE_PATH})
 
 # Add definitions set by find_package (SeqAn).
 add_definitions (${SEQAN_DEFINITIONS})
