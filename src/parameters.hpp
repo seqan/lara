@@ -87,8 +87,7 @@ public:
     RnaScoreMatrix           laraScoreMatrix;
     //    TScoringSchemeRib laraScoreMatrixRib;
     // Gap open and extend costs for generating the alignment edges
-    double                   generatorGapOpen{-6.0};
-    double                   generatorGapExtend{-2.0};
+    double                   suboptimalDiff{40.0};
     // Gap open and extend costs for generating the alignment edges
     double                   laraGapOpen{-6.0};
     double                   laraGapExtend{-2.0};
@@ -208,12 +207,10 @@ private:
                                          "actual problem",
                                          ArgParseOption::STRING));
 
-        addOption(parser, ArgParseOption("ggo", "generatorGapOpen",
-                                         "Gap open costs for generating the alignment edges.",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
-
-        addOption(parser, ArgParseOption("gge", "generatorGapExtend",
-                                         "Gap extend costs for generating the alignment edges.",
+        addOption(parser, ArgParseOption("s", "suboptimalDiff",
+                                         "Parameter for filtering alignment edges. Only those are created, whose prefix"
+                                         " score + suffix score in the DP matrix is at most suboptimalDiff below the "
+                                         "optimal score.",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
         addOption(parser, ArgParseOption("lgo", "laraGapOpen",
@@ -253,8 +250,7 @@ private:
         getOptionValue(epsilon, parser, "epsilon");
         getOptionValue(stepSizeFactor, parser, "stepSizeFactor");
         getOptionValue(laraScoreMatrixName, parser, "laraScoreMatrixName");
-        getOptionValue(generatorGapOpen, parser, "generatorGapOpen");
-        getOptionValue(generatorGapExtend, parser, "generatorGapExtend");
+        getOptionValue(suboptimalDiff, parser, "suboptimalDiff");
         getOptionValue(laraGapOpen, parser, "laraGapOpen");
         getOptionValue(laraGapExtend, parser, "laraGapExtend");
         getOptionValue(sequenceScale, parser, "sequenceScale");

@@ -57,6 +57,7 @@
 #include <seqan/score.h>
 
 #include "data_types.hpp"
+#include "edge_filter.hpp"
 #include "score.hpp"
 
 namespace lara
@@ -117,8 +118,6 @@ private:
     // the best (lowest) upper bound found so far
     double bestUpperBoundScore;
 
-    std::vector<std::pair<seqan::Rna5, seqan::Rna5>> alignmentEdges;
-    std::vector<size_t> activeEdges;
     std::vector<size_t> sourceNode;
     std::vector<size_t> targetNode;
     std::map<PosPair, size_t> getEdgeIdx;
@@ -310,14 +309,15 @@ private:
     }
 #endif
 
+
+
 public:
     Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params) : params(_params)
     {
         _VV(params, recordA.sequence << std::endl << recordB.sequence);
-        PosPair seqLen{seqan::length(recordA.sequence), seqan::length(recordB.sequence)};
-
         sequenceA = seqan::Rna5String{recordA.sequence};
         sequenceB = seqan::Rna5String{recordB.sequence};
+        PosPair seqLen{seqan::length(sequenceA), seqan::length(sequenceB)};
 
         layer.resize(seqLen.first + seqLen.second);
         offset.resize(seqLen.first + seqLen.second);
@@ -362,21 +362,9 @@ public:
         }
         _VV(params, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")");
 
-        // skip edge filter for now
-        size_t numEdges = seqLen.first * seqLen.second;
-        std::vector<PosPair> edges;
-        edges.reserve(numEdges);
-        for (size_t idxA = 0ul; idxA < seqLen.first; ++idxA)
-        {
-            for (size_t idxB = 0ul; idxB < seqLen.second; ++idxB)
-            {
-                edges.emplace_back(idxA, idxB);
-            }
-        }
-        _VV(params, "Created " << edges.size() << " = " << numEdges << " edges.");
+        generateEdges(getEdgeIdx, sequenceA, sequenceB, params.laraScoreMatrix, params.suboptimalDiff);
+        size_t numEdges = getEdgeIdx.size();
 
-        alignmentEdges.reserve(numEdges);
-        activeEdges.reserve(numEdges);
         sourceNode.reserve(numEdges);
         targetNode.reserve(numEdges);
         primal.resize(numEdges, 0.0);
@@ -387,14 +375,10 @@ public:
         priorityQ.resize(numEdges);
         dualToPairedEdges.reserve(numEdges);
 
-        size_t edgeIdx = 0ul;
-        for (PosPair & edge : edges)
+        for (std::pair<PosPair, size_t> const & edge : getEdgeIdx)
         {
-            alignmentEdges.emplace_back(recordA.sequence[edge.first], recordB.sequence[edge.second]);
-            activeEdges.push_back(edgeIdx);
-            sourceNode.push_back(edge.first);
-            targetNode.push_back(edge.second);
-            getEdgeIdx[edge] = edgeIdx++;
+            sourceNode.push_back(edge.first.first);
+            targetNode.push_back(edge.first.second);
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
     }
@@ -403,7 +387,7 @@ public:
     {
         size_t dualIdx = 0ul;
         size_t numPartners = 0ul;
-        for (size_t edgeIdx : activeEdges)
+        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
         {
             size_t headNode = sourceNode[edgeIdx];
             size_t tailNode = targetNode[edgeIdx];
@@ -413,8 +397,8 @@ public:
             extractContacts(tailContact, bppGraphs.second, tailNode);
 
             double alignScore = seqan::score(params.laraScoreMatrix,
-                                             alignmentEdges[edgeIdx].first,
-                                             alignmentEdges[edgeIdx].second);
+                                             sequenceA[sourceNode[edgeIdx]],
+                                             sequenceB[targetNode[edgeIdx]]);
 
             possiblePartners[edgeIdx].emplace_back(edgeIdx, alignScore);
             structureScore[std::make_pair(edgeIdx, edgeIdx)] = negInfinity;
@@ -463,9 +447,9 @@ public:
             doMatching = doMatching || (possiblePartners[edgeIdx].size() > 2);
             numPartners += possiblePartners[edgeIdx].size();
         }
-        _VV(params, "Average number of partner edges = " << 1.0 * numPartners / activeEdges.size());
+        _VV(params, "Average number of partner edges = " << 1.0 * numPartners / sourceNode.size());
         dimension.second = dualIdx;
-        dimension.first = activeEdges.size();
+        dimension.first = sourceNode.size();
     }
 
     void evaluate(std::vector<double> & dual,
@@ -481,12 +465,6 @@ public:
             adaptPriorityQ(pair, sequencesScore[pair.first] + structureScore[pair] + dual[dualIdx]);
             assert(!priorityQ.empty());
             auto maxElement = priorityQ[pair.first].begin();
-            if (pair.first == 1444ul)
-            {
-                _VV(params, "new maxProfitEdge[1444] " << maxElement->second << "  score " << -maxElement->first
-                                                      << "      before " << maxProfitEdge[pair.first]
-                                                      << " " << maxProfit[pair.first]);
-            }
             maxProfit[pair.first] = -maxElement->first;     // negative priority value (maximum weight)
             maxProfitEdge[pair.first] = maxElement->second; // information
         }
@@ -494,7 +472,7 @@ public:
         // filling the matrix, we're updating the values afterwards, otherwise
         // we had to evaluate _maxProfitScores after every update of either the
         // l or m edge
-        for (size_t edgeIdx : activeEdges)
+        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
         {
             maxProfitScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
         }
@@ -532,7 +510,7 @@ public:
 
         std::vector<size_t> currentStructuralAlignment;
         std::vector<bool> inSolution;
-        inSolution.resize(alignmentEdges.size(), false);
+        inSolution.resize(sourceNode.size(), false);
         double scoreseq = gapScore;
 
         for (PosPair line : lines)
@@ -560,7 +538,7 @@ public:
         // store the subgradient values
         if (dualValue < bestUpperBoundScore)
         {
-            for (size_t edgeIdx : activeEdges)
+            for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
             {
                 bestUpperBoundScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
                 bestLagrangianMultipliers = dual;
@@ -654,12 +632,6 @@ public:
                                       << maxPE << "; " << sourceNode[maxPE] << "," << targetNode[maxPE] << "] score "
                                       << maxProfit[idx] << " inSolution " << inSolution[maxPE] << " rec "
                                       << (maxProfitEdge[maxPE] == idx) << " mwm " << (contacts[idx] == maxPE));
-        }
-        for (Contact & elem : possiblePartners[1444])
-        {
-            _VV(params, "partner of 1444 is " << elem.first << " (score " << elem.second << ")   "
-                      << structureScore[std::make_pair(1444ul, elem.first)] << "  "
-                      << structureScore[std::make_pair(elem.first, 1444ul)]);
         }
 
         // we have to substract the gapcosts, otherwise the lower bound might be higher than the upper bound
