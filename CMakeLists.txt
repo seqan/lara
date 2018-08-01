@@ -8,29 +8,62 @@ set(ColourBold  "${Esc}[1m")
 set(ColourReset "${Esc}[m")
 set(ColourRed   "${Esc}[31m")
 
+# ----------------------------------------------------------------------------
+# Compiler detection
+# ----------------------------------------------------------------------------
+message ("${ColourBold}Compiler detection${ColourReset}")
+
 # change version after every release
 project(lara
         VERSION 2.0.0
-        DESCRIPTION "LaRA -- Lagrangian Relaxed structural Alignment"
         LANGUAGES CXX)
+set(PROJECT_DESCRIPTION "LaRA: Lagrangian Relaxed structural Alignment")
 set (LARA_SOURCE_FILES src/lara.cpp)
 add_executable (lara ${LARA_SOURCE_FILES})
 
-# ----------------------------------------------------------------------------
 # Make "Release" the default cmake build type
-# ----------------------------------------------------------------------------
-
 if (NOT CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE Release CACHE STRING
          "Choose the type of build, options are: Debug Release RelWithDebInfo"
          FORCE)
 endif ()
 
+# Compiler specifics: Clang
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -ftemplate-depth-1024")
+
+    # do not warn for variable length arrays
+    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -Wno-vla-extension")
+endif ()
+
+# Compiler specifics: GCC
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    # do not warn for variable length arrays
+    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -Wno-vla")
+
+    # parallelize parts of build even for one translation unit
+    if (NOT DEFINED LARA_COMPILE_THREADS)
+        include(ProcessorCount)
+        ProcessorCount(LARA_COMPILE_THREADS)
+    endif ()
+    if (LARA_COMPILE_THREADS GREATER 1)
+        set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto=${LARA_COMPILE_THREADS}")
+    endif()
+
+    # strip binaries to make them smaller
+    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
+endif ()
+
+# Compiler specifics: All but Intel
+if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+    # -Wextra not met by current SeqAn on intel
+    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -Wextra")
+endif ()
+
 # ----------------------------------------------------------------------------
 # Dependency detection
 # ----------------------------------------------------------------------------
-
-message ("${ColourBold}Dependency detection${ColourReset}")
+message ("\n${ColourBold}Dependency detection${ColourReset}")
 
 # SeqAn
 set (MINIMUM_SEQAN_VERSION "2.4.0")
@@ -45,10 +78,8 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/seqan/include/seqan/version.h")
     set (CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_SOURCE_DIR}/include/seqan/util/cmake
         ${CMAKE_MODULE_PATH})
-    message (STATUS "Found a local SeqAn library provided with the LaRA source code.")
-    message (    "   This will be preferred over system global headers.")
 endif ()
-find_package(SeqAn  QUIET REQUIRED CONFIG)
+find_package(SeqAn REQUIRED CONFIG)
 
 # LEMON
 find_path(LEMON_INCLUDE_PATH NAMES lemon/smart_graph.h HINTS ${CMAKE_CURRENT_SOURCE_DIR}/include/lemon/include)
@@ -62,7 +93,7 @@ else()
 endif ()
 
 #ViennaRNA
-find_library(RNA libRNA.a PATHS)
+find_library(RNA libRNA.a)
 if (RNA)
     add_definitions(-DVIENNA_RNA_FOUND)
     set (VIENNA_FOUND "TRUE")
@@ -82,7 +113,6 @@ message(   "     BZIP2      ${BZIP2_FOUND}      ${BZIP2_VERSION_STRING}")
 message(   "     OPENMP     ${OPENMP_FOUND}      ${OpenMP_CXX_FLAGS}")
 message(   "     ViennaRNA  ${VIENNA_FOUND}      ${RNA}")
 message(   "     Lemon      ${LEMON_FOUND}      ${LEMON_INCLUDE_PATH}")
-
 
 # Warn if OpenMP was not found.
 if (NOT OPENMP_FOUND)
@@ -129,52 +159,13 @@ if (SEQAN_VERSION_STRING VERSION_LESS "2.3.2")
     add_definitions (-DSEQAN_DISABLE_VERSION_CHECK="YES")
 endif ()
 
-target_link_libraries (lara ${SEQAN_LIBRARIES} ${RNA})
-message(STATUS "The requirements where met.")
-
-# ----------------------------------------------------------------------------
-# SeqAn App version
-# ----------------------------------------------------------------------------
-
 set (SEQAN_APP_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set (SEQAN_APP_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set (SEQAN_APP_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set (SEQAN_APP_VERSION "${PROJECT_VERSION}")
 
-# ----------------------------------------------------------------------------
-# Compiler specifics
-# ----------------------------------------------------------------------------
-
-message ("\n${ColourBold}Compiler Detection${ColourReset}")
-
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -ftemplate-depth-1024")
-
-    # do not warn for variable length arrays
-    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -Wno-vla-extension")
-endif ()
-
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    # do not warn for variable length arrays
-    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -Wno-vla")
-
-    # parallelize parts of build even for one translation unit
-    if (NOT DEFINED LARA_COMPILE_THREADS)
-        include(ProcessorCount)
-        ProcessorCount(LARA_COMPILE_THREADS)
-    endif ()
-    if (LARA_COMPILE_THREADS GREATER 1)
-        set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto=${LARA_COMPILE_THREADS}")
-    endif()
-
-    # strip binaries to make them smaller
-    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
-endif ()
-
-if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-    # -Wextra not met by current SeqAn on intel
-    set (SEQAN_CXX_FLAGS "${SEQAN_CXX_FLAGS} -Wextra")
-endif ()
+target_link_libraries (lara ${SEQAN_LIBRARIES} ${RNA})
+message(STATUS "The requirements where met.")
 
 # ----------------------------------------------------------------------------
 # Build Setup
@@ -217,7 +208,7 @@ endif ()
 
 # Information
 set (CPACK_PACKAGE_NAME "lara")
-set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "LaRA -- Lagrangian Relaxed structural Alignment")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "LaRA: Lagrangian Relaxed structural Alignment")
 set (CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.rst")
 set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set (CPACK_PACKAGE_VENDOR "Jörg Winkler <j.winkler@fu-berlin.de>")

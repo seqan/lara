@@ -277,8 +277,8 @@ private:
                 if (res == computed.end() && inSolution[contact.first] && line != contact.first)
                 {
                     PosPair revInteraction = std::make_pair(contact.first, line);
-                    _VV(params, "addEdge " << line << " " << contact.first << " (" << structureScore[interaction] +
-                                                                                      structureScore[revInteraction] << ")");
+                    _VVV(params, "addEdge " << line << " " << contact.first << " ("
+                                            << structureScore[interaction] + structureScore[revInteraction] << ")");
                     auto newEdge = lemonG.addEdge(nodes[line], nodes[contact.first]);
                     weight[newEdge] = structureScore[interaction] + structureScore[revInteraction];
                     interactions[newEdge] = interaction;
@@ -297,11 +297,11 @@ private:
             {
                 contacts[inter.first] = inter.second;
                 contacts[inter.second] = inter.first;
-                _VV(params, "lemon matches  " << inter.first << " " << inter.second << " " << weight[edgeIt]);
+                _VVV(params, "lemon matches  " << inter.first << " " << inter.second << " " << weight[edgeIt]);
             }
             else
             {
-                _VV(params, "lemon excludes " << inter.first << " " << inter.second << " " << weight[edgeIt]);
+                _VVV(params, "lemon excludes " << inter.first << " " << inter.second << " " << weight[edgeIt]);
             }
         }
         _VV(params, "\nlower bound: seq " << score << " + str " << lemonweight);
@@ -375,7 +375,7 @@ public:
         priorityQ.resize(numEdges);
         dualToPairedEdges.reserve(numEdges);
 
-        for (std::pair<PosPair, size_t> const & edge : getEdgeIdx)
+        for (std::pair<PosPair const, size_t> const & edge : getEdgeIdx)
         {
             sourceNode.push_back(edge.first.first);
             targetNode.push_back(edge.first.second);
@@ -485,7 +485,7 @@ public:
                 std::cerr << "[ ";
                 for (double sc : row)
                 {
-                    std::cerr << std::setw(10) << sc << "\t";
+                    std::cerr << std::setw(14) << sc << " ";
                 }
                 std::cerr << "]" << std::endl;
             }

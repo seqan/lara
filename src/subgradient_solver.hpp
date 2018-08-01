@@ -58,25 +58,18 @@ private:
     unsigned verbose;
     size_t numIterations;
     size_t maxNondecreasingIterations;
+
     size_t iterationIdx;
-
-    std::vector<double> primal;
     std::vector<double> dual;
-    std::vector<double> multiplierLowerBound;
-    std::vector<double> multiplierUpperBound;
-
     double currentLowerBound;
     double currentUpperBound;
     double bestLowerBound;
     double bestUpperBound;
 
 public:
-    void initialize(PosPair const dim, Parameters const & params)
+    SubgradientSolver(PosPair const dim, Parameters const & params)
     {
-        primal.resize(dim.first);
         dual.resize(dim.second);
-        multiplierLowerBound.resize(dim.second, negInfinity);
-        multiplierUpperBound.resize(dim.second, posInfinity);
 
         currentLowerBound = negInfinity;
         currentUpperBound = posInfinity;
@@ -145,7 +138,10 @@ public:
                 std::cerr << std::endl;
 
             if (bestUpperBound - bestLowerBound < epsilon)
+            {
+                assert(bestUpperBound + epsilon > bestLowerBound);
                 return Status::EXIT_OK;
+            }
 
             if (subgradientIndices.empty() && currentUpperBound - currentLowerBound > epsilon)
             {
@@ -163,34 +159,8 @@ public:
             if (verbose >= 2)
                 std::cerr << "stepsize = " << stepSize << std::endl;
 
-            bool changed = false;
             for (size_t idx : subgradientIndices)
-            {
-                double oldValue = dual[idx];
-                double newValue = dual[idx] - stepSize * subgradient[idx];
-                if (newValue < multiplierLowerBound[idx])
-                    dual[idx] = multiplierLowerBound[idx];
-                else if (newValue > multiplierUpperBound[idx])
-                    dual[idx] = multiplierUpperBound[idx];
-                else
-                    dual[idx] = newValue;
-
-                if (dual[idx] != oldValue)
-                    changed = true;
-            }
-            if (!changed)
-            {
-                std::cerr << "Error: StepSizeFactor below precision." << std::endl;
-                return Status::EXIT_ERROR;
-            }
-
-            if (verbose >= 2)
-            {
-                std::cerr << "iteration " << iterationIdx << std::endl;
-                std::cerr << "subgradient.size  = " << subgradient.size() << std::endl;
-                std::cerr << "multiplierLowerBound.size = " << multiplierLowerBound.size() << std::endl;
-                std::cerr << "multiplierUpperBound.size = " << multiplierUpperBound.size() << std::endl;
-            }
+                dual[idx] -= stepSize * subgradient[idx];
 
             dualIndices = std::list<size_t>(subgradientIndices);
             subgradientIndices.clear();
