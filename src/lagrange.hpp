@@ -621,8 +621,8 @@ public:
                     }
                 }
             }
-            double lowerBound2 = seqPart + structPart;
-            _VV(params, "without matching: " << seqPart << " + " << structPart << " = " << lowerBound2);
+            lowerBound = seqPart + structPart;
+            _VV(params, "without matching: " << seqPart << " + " << structPart << " = " << lowerBound);
         }
 
         for (size_t idx : currentStructuralAlignment)
