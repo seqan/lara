@@ -49,6 +49,7 @@ int main (int argc, char const ** argv)
     size_t const problem_size = store.size() * (store.size() - 1) / 2;
     _VV(params, "Attempting to solve " << problem_size << " structural alignments.");
     _VV(params, store);
+    lara::OutputTCoffeeLibrary tcLib(store);
 
     for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
     {
@@ -62,7 +63,10 @@ int main (int argc, char const ** argv)
             lara::Status status = solver.solve(lagrange);
             if (status == lara::Status::EXIT_ERROR)
                 return 1;
-            lara::printAlignment(params.outFile, lagrange.getAlignment());
+
+//            lara::printAlignment(params.outFile, lagrange.getAlignment(), store[idxA].name, store[idxB].name);
+            tcLib.addAlignment(lagrange, idxA, idxB);
         }
     }
+    std::cout << tcLib;
 }

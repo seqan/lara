@@ -47,6 +47,7 @@
 #include <seqan/seq_io.h>
 #include <seqan/sequence.h>
 
+#include "lagrange.hpp"
 #include "parameters.hpp"
 
 #ifdef VIENNA_RNA_FOUND
@@ -234,19 +235,51 @@ std::ostream & operator<<(std::ostream & stream, InputStorage & store)
     return stream;
 }
 
-inline
-void printAlignment(std::ostream & stream, Alignment const & alignment)
+class OutputTCoffeeLibrary
 {
-    stream << ">sequence1" << std::endl << seqan::row(alignment, 0) << std::endl;
-    stream << ">sequence2" << std::endl << seqan::row(alignment, 1) << std::endl;
+private:
+    std::ostringstream sstream;
+    size_t const numSequences;
+
+public:
+    OutputTCoffeeLibrary(InputStorage const & data) : numSequences(data.size())
+    {
+        sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
+        sstream << numSequences << std::endl;
+        for (seqan::RnaRecord const & rec : data)
+        {
+            sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
+        }
+    }
+
+    void addAlignment(Lagrange const & lagrange, size_t seqIndexA, size_t seqIndexB)
+    {
+        sstream << "# " << (seqIndexA + 1) << " " << (seqIndexB + 1) << std::endl;
+        for (auto const & elem : lagrange.getStructureLines())
+            sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << (std::get<2>(elem) ? 1000 : 500) << std::endl;
+    }
+
+    friend std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library);
+};
+
+std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)
+{
+    return stream << library.sstream.str() << "! SEQ_1_TO_N" << std::endl;
 }
 
 inline
-void printAlignment(seqan::CharString & filename, Alignment const & alignment)
+void printAlignment(std::ostream & stream, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
+{
+    stream << ">" << nameA << std::endl << seqan::row(alignment, 0) << std::endl;
+    stream << ">" << nameB << std::endl << seqan::row(alignment, 1) << std::endl;
+}
+
+inline
+void printAlignment(seqan::CharString & filename, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
 {
     if (seqan::empty(filename))
     {
-        printAlignment(std::cout, alignment);
+        printAlignment(std::cout, alignment, nameA, nameB);
     }
     else
     {
@@ -254,7 +287,7 @@ void printAlignment(seqan::CharString & filename, Alignment const & alignment)
         fastaFile.open(seqan::toCString(filename), std::ios::out);
         if (fastaFile.is_open())
         {
-            printAlignment(fastaFile, alignment);
+            printAlignment(fastaFile, alignment, nameA, nameB);
             fastaFile.close();
         }
         else

@@ -58,6 +58,7 @@
 
 #include "data_types.hpp"
 #include "edge_filter.hpp"
+#include "parameters.hpp"
 #include "score.hpp"
 
 namespace lara
@@ -96,6 +97,7 @@ private:
 
     std::vector<size_t> bestStructuralAlignment;
     std::map<size_t, size_t> edgeMatching;
+    std::vector<PosPair> lines;
 
     // number of iterations performed so far
     size_t numIterations;
@@ -169,7 +171,7 @@ private:
     }
 
     // return gap cost
-    double evaluateLines(std::vector<PosPair> & lines, AlignmentRow const & rowA, AlignmentRow const & rowB)
+    double evaluateLines(AlignmentRow const & rowA, AlignmentRow const & rowB)
     {
         typedef typename seqan::Iterator<seqan::Gaps<seqan::Rna5String, seqan::ArrayGaps> const>::Type GapsIterator;
 
@@ -185,6 +187,7 @@ private:
 
         // Keep track of the sequence positions for lines.
         PosPair sourcePos(0ul, 0ul);
+        lines.clear();
 
         // Sum up gap score.
         double gapScore = 0.0;
@@ -498,7 +501,6 @@ public:
         seqan::resize(seqan::rows(alignment), 2);
         AlignmentRow & rowA = seqan::row(alignment, 0);
         AlignmentRow & rowB = seqan::row(alignment, 1);
-        std::vector<PosPair> lines{};
         _VV(params, "sequence length " << length(sequenceA) << " " << length(sequenceB));
 
         seqan::assignSource(rowA, sequenceA);
@@ -506,7 +508,7 @@ public:
 
         // perform the alignment
         double optScore = seqan::globalAlignment(alignment, scoreAdaptor, seqan::AffineGaps());
-        double gapScore = evaluateLines(lines, rowA, rowB);
+        double gapScore = evaluateLines(rowA, rowB);
 
         std::vector<size_t> currentStructuralAlignment;
         std::vector<bool> inSolution;
@@ -658,6 +660,16 @@ public:
     Alignment & getAlignment()
     {
         return bestAlignment;
+    }
+
+    std::vector<std::tuple<size_t, size_t, bool>> getStructureLines() const
+    {
+        std::vector<std::tuple<size_t, size_t, bool>> structureLines{};
+        for (size_t idx : bestStructuralAlignment)
+        {
+            structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1, (idx != edgeMatching.at(idx)));
+        }
+        return structureLines;
     }
 };
 
