@@ -235,37 +235,7 @@ std::ostream & operator<<(std::ostream & stream, InputStorage & store)
     return stream;
 }
 
-class OutputTCoffeeLibrary
-{
-private:
-    std::ostringstream sstream;
-    size_t const numSequences;
-
-public:
-    OutputTCoffeeLibrary(InputStorage const & data) : numSequences(data.size())
-    {
-        sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
-        sstream << numSequences << std::endl;
-        for (seqan::RnaRecord const & rec : data)
-        {
-            sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
-        }
-    }
-
-    void addAlignment(Lagrange const & lagrange, size_t seqIndexA, size_t seqIndexB)
-    {
-        sstream << "# " << (seqIndexA + 1) << " " << (seqIndexB + 1) << std::endl;
-        for (auto const & elem : lagrange.getStructureLines())
-            sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << (std::get<2>(elem) ? 1000 : 500) << std::endl;
-    }
-
-    friend std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library);
-};
-
-std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)
-{
-    return stream << library.sstream.str() << "! SEQ_1_TO_N" << std::endl;
-}
+// FASTA output
 
 inline
 void printAlignment(std::ostream & stream, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
@@ -295,6 +265,72 @@ void printAlignment(seqan::CharString & filename, Alignment const & alignment, s
             std::cerr << "Unable to open the specified output file for writing: " << filename << std::endl;
         }
     }
+}
+
+// T-COFFEE output
+
+class OutputTCoffeeLibrary
+{
+private:
+    std::ostringstream sstream;
+    size_t const numSequences;
+
+public:
+    explicit OutputTCoffeeLibrary(InputStorage const & data) : numSequences(data.size())
+    {
+        if (numSequences > 2)
+        {
+            sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
+            sstream << numSequences << std::endl;
+            for (seqan::RnaRecord const & rec : data)
+            {
+                sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
+            }
+        }
+    }
+
+    void addAlignment(Lagrange const & lagrange, size_t seqIndexA, size_t seqIndexB)
+    {
+        if (numSequences > 2)
+        {
+            sstream << "# " << (seqIndexA + 1) << " " << (seqIndexB + 1) << std::endl;
+            for (auto const & elem : lagrange.getStructureLines())
+            {
+                sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << (std::get<2>(elem) ? 1000 : 500)
+                        << std::endl;
+            }
+        }
+    }
+
+    friend std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library);
+
+    void print(seqan::CharString & filename)
+    {
+        if (seqan::empty(filename))
+        {
+            std::cout << *this;
+        }
+        else
+        {
+            std::ofstream tcLibFile;
+            tcLibFile.open(seqan::toCString(filename), std::ios::out);
+            if (tcLibFile.is_open())
+            {
+                tcLibFile << *this;
+                tcLibFile.close();
+            }
+            else
+            {
+                std::cerr << "Unable to open the specified output file for writing: " << filename << std::endl;
+            }
+        }
+    }
+
+};
+
+std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)
+{
+    return stream << library.sstream.str() << "! SEQ_1_TO_N" << std::endl;
 }
 
 } // namespace lara

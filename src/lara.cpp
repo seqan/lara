@@ -64,9 +64,12 @@ int main (int argc, char const ** argv)
             if (status == lara::Status::EXIT_ERROR)
                 return 1;
 
-//            lara::printAlignment(params.outFile, lagrange.getAlignment(), store[idxA].name, store[idxB].name);
             tcLib.addAlignment(lagrange, idxA, idxB);
+            if (problem_size == 1ul)
+                lara::printAlignment(params.outFile, lagrange.getAlignment(), store[idxA].name, store[idxB].name);
+
         }
     }
-    std::cout << tcLib;
+    if (problem_size > 1ul)
+        tcLib.print(params.outFile);
 }
