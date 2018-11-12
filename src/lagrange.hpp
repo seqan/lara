@@ -447,6 +447,7 @@ public:
                     }
                 }
             }
+
             doMatching = doMatching || (possiblePartners[edgeIdx].size() > 2);
             numPartners += possiblePartners[edgeIdx].size();
         }

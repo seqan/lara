@@ -37,6 +37,8 @@
  * \brief This file contains LaRA's file handling, i.e. reading input files and writing output.
  */
 
+#include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <ostream>
 #include <sstream>
@@ -69,25 +71,32 @@ public:
     {
         readRnaFile(params.inFile);
         readRnaFile(params.inFileRef);
-        _VV(params, "Successfully read " << size() << " records.");
 
-        if (params.dotplotFile.size() == size())
+        // If not present, compute the weighted interaction edges using ViennaRNA functions.
+        bool const logScoring = params.structureScoring == ScoringMode::LOGARITHMIC;
+        bool usedVienna = false;
+        for (seqan::RnaRecord & record : *this)
+            computeStructure(record, usedVienna, logScoring);
+        if (usedVienna)
+            _VV(params, "Computed missing base pair probabilities with ViennaRNA library.");
+
+        if (!params.dotplotFile.empty())
         {
             // Load base pair probabilities from dot plot file.
-            for (size_t fileIdx = 0u; fileIdx < size(); ++fileIdx)
-                extractBppFromDotplot(at(fileIdx), params.dotplotFile[fileIdx]);
+            for (std::string const & filename : params.dotplotFile)
+            {
+                seqan::RnaRecord rec;
+                extractBppFromDotplot(rec, filename);
+                push_back(rec);
+            }
             _VV(params, "Successfully extracted base pair probabilities from given dotplot files.");
         }
-        else
-        {
-            // If not present, compute the weighted interaction edges using ViennaRNA functions.
-            bool const logScoring = params.structureScoring == ScoringMode::LOGARITHMIC;
-            bool usedVienna = false;
-            for (seqan::RnaRecord & record : *this)
-                computeStructure(record, usedVienna, logScoring);
-            if (usedVienna)
-                _VV(params, "Computed missing base pair probabilities with ViennaRNA library.");
-        }
+
+        if (size() <= 1)
+            throw std::runtime_error("ERROR: The given file(s) must contain at least two sequences.");
+
+        for (seqan::RnaRecord & record : *this)
+            _VVV(params, record.bppMatrGraphs[0].inter);
     }
 
 private:
@@ -136,39 +145,83 @@ private:
         }
     }
 
-    void extractBppFromDotplot(seqan::RnaRecord & rnaRecord, std::string const & dotplotFile)
+    void extractBppFromDotplot(seqan::RnaRecord & rnaRecord, std::string const & filename)
     {
         using namespace seqan;
 
         double const minProb = 0.003; // taken from LISA > Lara
 
-        // add vertices to graph
-        RnaStructureGraph bppMatrGraph;
-        for (size_t idx = 0u; idx < length(rnaRecord.sequence); ++idx)
-            addVertex(bppMatrGraph.inter);
-
         // open dotplot file and read lines
-        std::ifstream file(dotplotFile);
+        std::ifstream file(filename);
         std::string   line;
+        unsigned      iPos, jPos;
+        double        prob;
+
+        if (!file.is_open())
+            throw std::runtime_error("ERROR: Cannot open file " + filename);
+
         while (std::getline(file, line))
         {
-            if (line.find("ubox") == std::string::npos)
-                continue;
-
-            std::istringstream iss(line);
-            unsigned           iPos, jPos;
-            double             prob;
-            if (iss >> iPos >> jPos >> prob) // read values from line
-            {   // create edges for graph
-                SEQAN_ASSERT(iPos > 0 && iPos <= length(rnaRecord.sequence));
-                SEQAN_ASSERT(jPos > 0 && jPos <= length(rnaRecord.sequence));
-                // convert indices from range 1..length to 0..length-1
-                if (prob * prob > minProb) // dot plot contains sqrt(prob)
-                    addEdge(bppMatrGraph.inter, iPos - 1, jPos - 1, log(prob * prob / minProb));
+            if (line.find("/sequence") != std::string::npos)
+            {
+                while (std::getline(file, line) && line.find(')') == std::string::npos)
+                {
+                    line.erase(std::remove_if(line.begin(), line.end(),
+                                              [] (unsigned char x) { return std::isalpha(x) == 0; }),
+                               line.end());
+                    seqan::append(rnaRecord.sequence, line);
+                    std::cerr << line << std::endl;
+                }
+                break;
             }
         }
-        bppMatrGraph.specs = CharString("ViennaRNA dot plot from file " + std::string(dotplotFile));
+        SEQAN_ASSERT(!seqan::empty(rnaRecord.sequence));
+
+        // add vertices to graph
+        RnaStructureGraph bppMatrGraph;
+        RnaStructureGraph fixedGraph;
+        for (size_t idx = 0u; idx < length(rnaRecord.sequence); ++idx)
+        {
+            addVertex(bppMatrGraph.inter);
+            addVertex(fixedGraph.inter);
+        }
+
+        while (std::getline(file, line))
+        {
+            if (line.find("ubox") != std::string::npos)
+            {
+                std::istringstream iss(line);
+                if (iss >> iPos >> jPos >> prob) // read values from line
+                {   // create edges for graph
+                    SEQAN_ASSERT(iPos > 0 && iPos <= length(rnaRecord.sequence));
+                    SEQAN_ASSERT(jPos > 0 && jPos <= length(rnaRecord.sequence));
+                    // convert indices from range 1..length to 0..length-1
+                    if (prob * prob > minProb) // dot plot contains sqrt(prob)
+                        addEdge(bppMatrGraph.inter, iPos - 1, jPos - 1, log(prob * prob / minProb));
+                }
+            }
+            else if (line.find("lbox") != std::string::npos)
+            {
+                std::istringstream iss(line);
+                if (iss >> iPos >> jPos >> prob) // read values from line
+                {   // create edges for graph
+                    SEQAN_ASSERT(iPos > 0 && iPos <= length(rnaRecord.sequence));
+                    SEQAN_ASSERT(jPos > 0 && jPos <= length(rnaRecord.sequence));
+                    // convert indices from range 1..length to 0..length-1
+                    addEdge(fixedGraph.inter, iPos - 1, jPos - 1, 1.0);
+                }
+            }
+        }
+        if (seqan::numEdges(bppMatrGraph.inter) == 0)
+            throw std::runtime_error("WARNING: No structure information found in file " + filename);
+
+        bppMatrGraph.specs = CharString("ViennaRNA dot plot from file " + std::string(filename));
+        fixedGraph.specs   = CharString("ViennaRNA dot plot from file " + std::string(filename));
+
+        std::string name = filename.substr(filename.find_last_of("/\\") + 1);
+        rnaRecord.name = name.substr(0, name.rfind(".ps")).substr(0, name.rfind("_dp"));
         append(rnaRecord.bppMatrGraphs, bppMatrGraph);
+        append(rnaRecord.fixedGraphs, fixedGraph);
     }
 
     void computeStructure(seqan::RnaRecord & rnaRecord, bool & usedVienna, bool logStructureScoring)

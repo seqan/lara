@@ -122,13 +122,14 @@ private:
         using namespace seqan;
         ArgumentParser parser;
 
-        setAppName(parser, "LaRA");
-        setShortDescription(parser, "Lagrangian Relaxed structural Alignment");
+        setAppName(parser, "lara");
+        setShortDescription(parser, "Lagrangian Relaxed Alignment for RNA structures");
         setVersion(parser, "2.0.0");
-        setDate(parser, "July 2018");
+        setDate(parser, "November 2018");
         addDescription(parser, "RNA structural alignment algorithm.");
 
-        addUsageLine(parser, "./lara -i \\fIinFile\\fP [\\fIparameters\\fP]");
+        addUsageLine(parser, " -i \\fIinFile\\fP [\\fIparameters\\fP]");
+        addUsageLine(parser, " -d \\fIdpFile\\fP -d \\fIdpFile\\fP [-d ...] [\\fIparameters\\fP]");
 
         addOption(parser, ArgParseOption("v", "verbose",
                                          "0: no additional outputs, 1: global statistics, "
@@ -147,7 +148,7 @@ private:
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
         addOption(parser, ArgParseOption("d", "dotplots",
-                                         "Use dotplot files (.ps) as bpp input",
+                                         "Use dotplot files from RNAfold (*_dp.ps) as sequence and structure input.",
                                          ArgParseArgument::INPUT_FILE, "IN", true));
 
         // Output options
@@ -262,14 +263,18 @@ private:
         getOptionValue(inFileRef, parser, "inFileRef");
 
         getOptionValue(inFile, parser, "inFile");
-        if (empty(inFile))
-            return Status::EXIT_ERROR;
-
         unsigned numDotplots = getOptionValueCount(parser, "dotplots");
         dotplotFile.resize(numDotplots);
         for (unsigned idx = 0; idx < numDotplots; ++idx)
         {
             getOptionValue(dotplotFile[idx], parser, "dotplots", idx);
+        }
+
+        if (empty(inFile) && dotplotFile.empty())
+        {
+//            std::cerr << "ERROR: You have to specify either -i or -d to pass input files." << std::endl;
+            printShortHelp(parser);
+            return Status::EXIT_ERROR;
         }
 
         getOptionValue(outFile, parser, "outFile");
