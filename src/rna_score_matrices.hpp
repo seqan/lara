@@ -57,7 +57,7 @@ struct Ribosum85_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_60>
 {
     enum
     {
@@ -65,9 +65,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.221242, -1.855964, -1.45774, -1.385899,
@@ -90,7 +90,7 @@ struct Ribosum85_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_60N>
 {
     enum
     {
@@ -98,9 +98,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.221242, -1.855964, -1.45774, -1.385899, -2.476191,
@@ -122,7 +122,7 @@ struct Ribosum85_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -130,9 +130,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.488349, -7.042094, -8.238017, -4.317463, -8.842033, -14.373559, -4.678511,
@@ -199,7 +199,7 @@ struct Ribosum100_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_30>
 {
     enum
     {
@@ -207,9 +207,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.97236, -1.344047, -0.922482, -1.006582,
@@ -232,7 +232,7 @@ struct Ribosum100_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_30N>
 {
     enum
     {
@@ -240,9 +240,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.97236, -1.344047, -0.922482, -1.006582, -1.699386,
@@ -264,7 +264,7 @@ struct Ribosum100_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -272,9 +272,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_30d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.603894, -8.470122, -8.821726, -5.074954, -10.056229, -13.442235, -3.871265,
@@ -342,7 +342,7 @@ struct Ribosum65_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_95>
 {
     enum
     {
@@ -350,9 +350,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.13075, -5.819848, -5.378686, -5.088001,
@@ -375,7 +375,7 @@ struct Ribosum65_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_95N>
 {
     enum
     {
@@ -383,9 +383,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.13075, -5.819848, -5.378686, -5.088001, -5.819848,
@@ -407,7 +407,7 @@ struct Ribosum65_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -415,9 +415,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.174017, -8.519549, -9.160408, -8.470792, -999.0, -999.0, -11.841078, -13.070674,
@@ -485,7 +485,7 @@ struct Ribosum75_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_70>
 {
     enum
     {
@@ -493,9 +493,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.158164, -1.978836, -1.709571, -1.573777,
@@ -518,7 +518,7 @@ struct Ribosum75_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_70N>
 {
     enum
     {
@@ -526,9 +526,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.158164, -1.978836, -1.709571, -1.573777, -2.60815,
@@ -550,7 +550,7 @@ struct Ribosum75_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -558,9 +558,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.353701, -8.203103, -8.569072, -5.128036, -10.169731, -14.242433, -4.607151,
@@ -626,7 +626,7 @@ struct Ribosum95_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_45>
 {
     enum
     {
@@ -634,9 +634,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.967181, -1.340585, -0.922442, -0.984587,
@@ -659,7 +659,7 @@ struct Ribosum95_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_45N>
 {
     enum
     {
@@ -667,9 +667,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.967181, -1.340585, -0.922442, -0.984587, -1.695424,
@@ -691,7 +691,7 @@ struct Ribosum95_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -699,9 +699,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.816417, -8.527947, -9.158909, -4.971985, -9.958796, -13.47557, -3.827892,
@@ -768,7 +768,7 @@ struct Ribosum95_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_85>
 {
     enum
     {
@@ -776,9 +776,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.446723, -3.270342, -2.937813, -2.86001,
@@ -801,7 +801,7 @@ struct Ribosum95_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_85N>
 {
     enum
     {
@@ -809,9 +809,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.446723, -3.270342, -2.937813, -2.86001, -3.78412,
@@ -833,7 +833,7 @@ struct Ribosum95_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -841,9 +841,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.872782, -8.882614, -8.476347, -5.048352, -9.719668, -13.504111, -6.347418,
@@ -913,7 +913,7 @@ struct Ribosum70_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_55>
 {
     enum
     {
@@ -921,9 +921,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.765094, -1.163735, -0.912539, -0.809684,
@@ -946,7 +946,7 @@ struct Ribosum70_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_55N>
 {
     enum
     {
@@ -954,9 +954,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.765094, -1.163735, -0.912539, -0.809684, -1.66682,
@@ -978,7 +978,7 @@ struct Ribosum70_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -986,9 +986,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.029457, -4.152369, -10.027553, -4.279775, -10.353671, -12.770497, -5.111086,
@@ -1055,7 +1055,7 @@ struct Ribosum85_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_50>
 {
     enum
     {
@@ -1063,9 +1063,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.07191, -1.509805, -1.119958, -1.085369,
@@ -1088,7 +1088,7 @@ struct Ribosum85_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_50N>
 {
     enum
     {
@@ -1096,9 +1096,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.07191, -1.509805, -1.119958, -1.085369, -1.995535,
@@ -1120,7 +1120,7 @@ struct Ribosum85_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1128,9 +1128,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.841039, -7.034155, -8.53386, -4.415351, -9.115332, -13.594737, -3.813353,
@@ -1196,7 +1196,7 @@ struct Ribosum65_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_90>
 {
     enum
     {
@@ -1204,9 +1204,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.297716, -4.282201, -3.922838, -3.729706,
@@ -1229,7 +1229,7 @@ struct Ribosum65_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_90N>
 {
     enum
     {
@@ -1237,9 +1237,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.297716, -4.282201, -3.922838, -3.729706, -4.577188,
@@ -1261,7 +1261,7 @@ struct Ribosum65_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1269,9 +1269,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.778896, -7.78623, -7.0765, -5.845257, -10.852435, -999.0, -7.804927, -13.489767,
@@ -1341,7 +1341,7 @@ struct Ribosum70_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_65>
 {
     enum
     {
@@ -1349,9 +1349,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.165976, -1.912321, -1.59372, -1.444559,
@@ -1374,7 +1374,7 @@ struct Ribosum70_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_65N>
 {
     enum
     {
@@ -1382,9 +1382,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.165976, -1.912321, -1.59372, -1.444559, -2.485895,
@@ -1406,7 +1406,7 @@ struct Ribosum70_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1414,9 +1414,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.60689, -6.668109, -8.511924, -4.672228, -9.973746, -14.184753, -5.394399,
@@ -1485,7 +1485,7 @@ struct Ribosum60_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_70>
 {
     enum
     {
@@ -1493,9 +1493,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.31382, -2.23918, -1.839234, -1.801323,
@@ -1518,7 +1518,7 @@ struct Ribosum60_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_70N>
 {
     enum
     {
@@ -1526,9 +1526,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.31382, -2.23918, -1.839234, -1.801323, -2.827656,
@@ -1550,7 +1550,7 @@ struct Ribosum60_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1558,9 +1558,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.718643, -8.199305, -8.062779, -4.753676, -10.045915, -14.300285, -5.256243,
@@ -1629,7 +1629,7 @@ struct Ribosum55_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_75>
 {
     enum
     {
@@ -1637,9 +1637,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.340016, -2.354997, -2.028472, -1.973945,
@@ -1662,7 +1662,7 @@ struct Ribosum55_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_75N>
 {
     enum
     {
@@ -1670,9 +1670,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.340016, -2.354997, -2.028472, -1.973945, -2.884865,
@@ -1694,7 +1694,7 @@ struct Ribosum55_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1702,9 +1702,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.256212, -8.350032, -8.180741, -5.05758, -10.336428, -13.752927, -5.56971,
@@ -1770,7 +1770,7 @@ struct Ribosum90_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_70>
 {
     enum
     {
@@ -1778,9 +1778,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.283819, -2.117789, -1.711246, -1.666788,
@@ -1803,7 +1803,7 @@ struct Ribosum90_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_70N>
 {
     enum
     {
@@ -1811,9 +1811,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.283819, -2.117789, -1.711246, -1.666788, -2.734881,
@@ -1835,7 +1835,7 @@ struct Ribosum90_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1843,9 +1843,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.032955, -8.211363, -8.126086, -4.437303, -9.67589, -13.201339, -4.910572,
@@ -1912,7 +1912,7 @@ struct Ribosum95_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_90>
 {
     enum
     {
@@ -1920,9 +1920,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.47758, -3.926552, -3.548472, -3.433987,
@@ -1945,7 +1945,7 @@ struct Ribosum95_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_90N>
 {
     enum
     {
@@ -1953,9 +1953,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.47758, -3.926552, -3.548472, -3.433987, -4.436786,
@@ -1977,7 +1977,7 @@ struct Ribosum95_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -1985,9 +1985,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.886414, -8.431871, -8.851788, -5.19597, -10.782188, -999.0, -7.196201,
@@ -2056,7 +2056,7 @@ struct Ribosum70_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_95>
 {
     enum
     {
@@ -2064,9 +2064,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.169775, -5.774675, -5.30539, -5.255226,
@@ -2089,7 +2089,7 @@ struct Ribosum70_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_95N>
 {
     enum
     {
@@ -2097,9 +2097,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.169775, -5.774675, -5.30539, -5.255226, -5.863514,
@@ -2121,7 +2121,7 @@ struct Ribosum70_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2129,9 +2129,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.965161, -8.96414, -9.573963, -8.855208, -999.0, -999.0, -12.349546, -13.543069,
@@ -2199,7 +2199,7 @@ struct Ribosum55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55>
 {
     enum
     {
@@ -2207,9 +2207,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.319468, -2.232661, -1.832887, -1.789298,
@@ -2232,7 +2232,7 @@ struct Ribosum55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55N>
 {
     enum
     {
@@ -2240,9 +2240,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.319468, -2.232661, -1.832887, -1.789298, -2.829591,
@@ -2264,7 +2264,7 @@ struct Ribosum55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2272,9 +2272,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.869758, -7.786219, -8.17347, -4.704469, -9.392992, -14.30177, -4.855451,
@@ -2340,7 +2340,7 @@ struct Ribosum45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45>
 {
     enum
     {
@@ -2348,9 +2348,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.973044, -1.345996, -0.923456, -1.006842,
@@ -2373,7 +2373,7 @@ struct Ribosum45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45N>
 {
     enum
     {
@@ -2381,9 +2381,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.973044, -1.345996, -0.923456, -1.006842, -1.702777,
@@ -2405,7 +2405,7 @@ struct Ribosum45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2413,9 +2413,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.714929, -8.181625, -8.044796, -4.748711, -10.028235, -14.292346, -5.248001,
@@ -2483,7 +2483,7 @@ struct Ribosum90_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_55>
 {
     enum
     {
@@ -2491,9 +2491,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.240084, -1.908732, -1.530454, -1.462181,
@@ -2516,7 +2516,7 @@ struct Ribosum90_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_55N>
 {
     enum
     {
@@ -2524,9 +2524,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.240084, -1.908732, -1.530454, -1.462181, -2.503157,
@@ -2548,7 +2548,7 @@ struct Ribosum90_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2556,9 +2556,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.235844, -7.482476, -8.259247, -4.476699, -9.044066, -13.319779, -4.581755,
@@ -2627,7 +2627,7 @@ struct Ribosum65_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_55>
 {
     enum
     {
@@ -2635,9 +2635,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.936238, -1.407067, -1.049676, -1.042434,
@@ -2660,7 +2660,7 @@ struct Ribosum65_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_55N>
 {
     enum
     {
@@ -2668,9 +2668,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.936238, -1.407067, -1.049676, -1.042434, -2.06668,
@@ -2692,7 +2692,7 @@ struct Ribosum65_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2700,9 +2700,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.007571, -4.279027, -9.214215, -4.7812, -10.084665, -12.341303, -4.321893,
@@ -2770,7 +2770,7 @@ struct Ribosum65_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_35>
 {
     enum
     {
@@ -2778,9 +2778,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.4315, -0.818626, -0.528545, -0.483165,
@@ -2803,7 +2803,7 @@ struct Ribosum65_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_35N>
 {
     enum
     {
@@ -2811,9 +2811,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.4315, -0.818626, -0.528545, -0.483165, -1.538799,
@@ -2835,7 +2835,7 @@ struct Ribosum65_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2843,9 +2843,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.392614, -6.40375, -10.837532, -4.073914, -12.138727, -12.11025, -3.897379,
@@ -2913,7 +2913,7 @@ struct Ribosum65_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_45>
 {
     enum
     {
@@ -2921,9 +2921,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.566664, -0.944841, -0.595061, -0.600126,
@@ -2946,7 +2946,7 @@ struct Ribosum65_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_45N>
 {
     enum
     {
@@ -2954,9 +2954,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.566664, -0.944841, -0.595061, -0.600126, -1.615089,
@@ -2978,7 +2978,7 @@ struct Ribosum65_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -2986,9 +2986,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.950241, -6.045689, -10.483146, -4.19409, -11.780467, -11.834373, -4.357584,
@@ -3055,7 +3055,7 @@ struct Ribosum80_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_80>
 {
     enum
     {
@@ -3063,9 +3063,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.300649, -2.808815, -2.553742, -2.495199,
@@ -3088,7 +3088,7 @@ struct Ribosum80_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_80N>
 {
     enum
     {
@@ -3096,9 +3096,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.300649, -2.808815, -2.553742, -2.495199, -3.190544,
@@ -3120,7 +3120,7 @@ struct Ribosum80_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3128,9 +3128,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.835467, -8.350499, -8.309115, -5.225921, -9.694454, -12.051624, -6.205445,
@@ -3197,7 +3197,7 @@ struct Ribosum65_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_80>
 {
     enum
     {
@@ -3205,9 +3205,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.282551, -2.659507, -2.438345, -2.436952,
@@ -3230,7 +3230,7 @@ struct Ribosum65_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_80N>
 {
     enum
     {
@@ -3238,9 +3238,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.282551, -2.659507, -2.438345, -2.436952, -2.998604,
@@ -3262,7 +3262,7 @@ struct Ribosum65_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3270,9 +3270,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.559828, -8.621395, -7.913388, -5.257433, -9.665215, -12.805828, -5.967689,
@@ -3341,7 +3341,7 @@ struct Ribosum100_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_90>
 {
     enum
     {
@@ -3349,9 +3349,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.520024, -4.254469, -3.869261, -3.740621,
@@ -3374,7 +3374,7 @@ struct Ribosum100_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_90N>
 {
     enum
     {
@@ -3382,9 +3382,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.520024, -4.254469, -3.869261, -3.740621, -4.794115,
@@ -3406,7 +3406,7 @@ struct Ribosum100_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3414,9 +3414,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_90d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.571692, -7.620395, -8.131055, -5.69738, -10.647195, -999.0, -7.765939,
@@ -3486,7 +3486,7 @@ struct Ribosum80_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_30>
 {
     enum
     {
@@ -3494,9 +3494,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.750234, -1.055907, -0.72523, -0.692629,
@@ -3519,7 +3519,7 @@ struct Ribosum80_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_30N>
 {
     enum
     {
@@ -3527,9 +3527,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.750234, -1.055907, -0.72523, -0.692629, -1.516723,
@@ -3551,7 +3551,7 @@ struct Ribosum80_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3559,9 +3559,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.604396, -6.502939, -9.404046, -4.450515, -10.192959, -12.956841, -3.611143,
@@ -3627,7 +3627,7 @@ struct Ribosum95_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_55>
 {
     enum
     {
@@ -3635,9 +3635,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.264083, -1.993093, -1.613481, -1.542942,
@@ -3660,7 +3660,7 @@ struct Ribosum95_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_55N>
 {
     enum
     {
@@ -3668,9 +3668,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.264083, -1.993093, -1.613481, -1.542942, -2.575096,
@@ -3692,7 +3692,7 @@ struct Ribosum95_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3700,9 +3700,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.100601, -7.881291, -8.597064, -4.6721, -9.306714, -13.889132, -4.756214,
@@ -3770,7 +3770,7 @@ struct Ribosum95_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_35>
 {
     enum
     {
@@ -3778,9 +3778,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.959632, -1.330667, -0.915272, -0.971655,
@@ -3803,7 +3803,7 @@ struct Ribosum95_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_35N>
 {
     enum
     {
@@ -3811,9 +3811,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.959632, -1.330667, -0.915272, -0.971655, -1.690083,
@@ -3835,7 +3835,7 @@ struct Ribosum95_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3843,9 +3843,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.83338, -8.540497, -9.169644, -4.957916, -9.970372, -13.481089, -3.824603,
@@ -3912,7 +3912,7 @@ struct Ribosum65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65>
 {
     enum
     {
@@ -3920,9 +3920,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.392427, -0.790206, -0.503302, -0.467629,
@@ -3945,7 +3945,7 @@ struct Ribosum65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65N>
 {
     enum
     {
@@ -3953,9 +3953,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.392427, -0.790206, -0.503302, -0.467629, -1.506506,
@@ -3977,7 +3977,7 @@ struct Ribosum65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -3985,9 +3985,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.570305, -8.489737, -7.398375, -5.383325, -10.042229, -14.521646, -6.647742,
@@ -4055,7 +4055,7 @@ struct Ribosum60_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_35>
 {
     enum
     {
@@ -4063,9 +4063,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.383771, -0.88414, -0.504703, -0.489179,
@@ -4088,7 +4088,7 @@ struct Ribosum60_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_35N>
 {
     enum
     {
@@ -4096,9 +4096,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.383771, -0.88414, -0.504703, -0.489179, -1.679552,
@@ -4120,7 +4120,7 @@ struct Ribosum60_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4128,9 +4128,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.983505, -10.360222, -10.781647, -3.692707, -11.951812, -14.951498, -4.939177,
@@ -4196,7 +4196,7 @@ struct Ribosum75_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_90>
 {
     enum
     {
@@ -4204,9 +4204,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.285719, -4.370818, -4.030708, -3.799779,
@@ -4229,7 +4229,7 @@ struct Ribosum75_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_90N>
 {
     enum
     {
@@ -4237,9 +4237,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.285719, -4.370818, -4.030708, -3.799779, -4.686969,
@@ -4261,7 +4261,7 @@ struct Ribosum75_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4269,9 +4269,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.755056, -8.216934, -7.529755, -5.879827, -11.283124, -999.0, -8.227164,
@@ -4341,7 +4341,7 @@ struct Ribosum65_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_65>
 {
     enum
     {
@@ -4349,9 +4349,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.256464, -2.141196, -1.788754, -1.768491,
@@ -4374,7 +4374,7 @@ struct Ribosum65_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_65N>
 {
     enum
     {
@@ -4382,9 +4382,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.256464, -2.141196, -1.788754, -1.768491, -2.649555,
@@ -4406,7 +4406,7 @@ struct Ribosum65_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4414,9 +4414,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.355379, -8.068564, -8.176551, -4.750314, -9.649441, -13.913843, -5.177231,
@@ -4483,7 +4483,7 @@ struct Ribosum45_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_40>
 {
     enum
     {
@@ -4491,9 +4491,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.974198, -1.347543, -0.924445, -1.009027,
@@ -4516,7 +4516,7 @@ struct Ribosum45_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_40N>
 {
     enum
     {
@@ -4524,9 +4524,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.974198, -1.347543, -0.924445, -1.009027, -1.703101,
@@ -4548,7 +4548,7 @@ struct Ribosum45_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4556,9 +4556,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.61078, -8.457749, -8.823087, -5.068171, -10.069269, -13.464551, -3.875202,
@@ -4626,7 +4626,7 @@ struct Ribosum100_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_95>
 {
     enum
     {
@@ -4634,9 +4634,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.543193, -5.480312, -5.044054, -5.030275,
@@ -4659,7 +4659,7 @@ struct Ribosum100_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_95N>
 {
     enum
     {
@@ -4667,9 +4667,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.543193, -5.480312, -5.044054, -5.030275, -5.903891,
@@ -4691,7 +4691,7 @@ struct Ribosum100_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4699,9 +4699,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_95d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.654281, -7.633899, -7.981717, -7.075024, -999.0, -999.0, -11.365118, -12.165559,
@@ -4769,7 +4769,7 @@ struct Ribosum65_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_50>
 {
     enum
     {
@@ -4777,9 +4777,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.710118, -1.07868, -0.734873, -0.738458,
@@ -4802,7 +4802,7 @@ struct Ribosum65_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_50N>
 {
     enum
     {
@@ -4810,9 +4810,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.710118, -1.07868, -0.734873, -0.738458, -1.71774,
@@ -4834,7 +4834,7 @@ struct Ribosum65_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4842,9 +4842,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.18054, -5.357743, -10.173926, -4.521687, -11.124616, -11.460909, -4.238752,
@@ -4911,7 +4911,7 @@ struct Ribosum75_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_50>
 {
     enum
     {
@@ -4919,9 +4919,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.714134, -1.105297, -0.801841, -0.749947,
@@ -4944,7 +4944,7 @@ struct Ribosum75_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_50N>
 {
     enum
     {
@@ -4952,9 +4952,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.714134, -1.105297, -0.801841, -0.749947, -1.595533,
@@ -4976,7 +4976,7 @@ struct Ribosum75_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -4984,9 +4984,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.790779, -5.303692, -10.594901, -4.741533, -9.815315, -12.400361, -3.608183,
@@ -5054,7 +5054,7 @@ struct Ribosum85_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_65>
 {
     enum
     {
@@ -5062,9 +5062,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.247382, -1.960672, -1.531066, -1.492029,
@@ -5087,7 +5087,7 @@ struct Ribosum85_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_65N>
 {
     enum
     {
@@ -5095,9 +5095,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.247382, -1.960672, -1.531066, -1.492029, -2.619014,
@@ -5119,7 +5119,7 @@ struct Ribosum85_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5127,9 +5127,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.460952, -7.693205, -8.154093, -4.277674, -8.864174, -14.705726, -4.771054,
@@ -5196,7 +5196,7 @@ struct Ribosum85_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_75>
 {
     enum
     {
@@ -5204,9 +5204,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.279583, -2.185908, -1.816128, -1.731732,
@@ -5229,7 +5229,7 @@ struct Ribosum85_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_75N>
 {
     enum
     {
@@ -5237,9 +5237,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.279583, -2.185908, -1.816128, -1.731732, -2.715156,
@@ -5261,7 +5261,7 @@ struct Ribosum85_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5269,9 +5269,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.697152, -7.463906, -8.299832, -4.468084, -9.418339, -14.186299, -5.207254,
@@ -5339,7 +5339,7 @@ struct Ribosum45_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_45>
 {
     enum
     {
@@ -5347,9 +5347,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.979813, -1.354418, -0.929967, -1.018977,
@@ -5372,7 +5372,7 @@ struct Ribosum45_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_45N>
 {
     enum
     {
@@ -5380,9 +5380,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.979813, -1.354418, -0.929967, -1.018977, -1.70623,
@@ -5404,7 +5404,7 @@ struct Ribosum45_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5412,9 +5412,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.597843, -8.448198, -8.814229, -5.08226, -10.060371, -13.459775, -3.875472,
@@ -5480,7 +5480,7 @@ struct Ribosum75_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_60>
 {
     enum
     {
@@ -5488,9 +5488,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.845408, -1.29993, -1.086153, -0.937429,
@@ -5513,7 +5513,7 @@ struct Ribosum75_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_60N>
 {
     enum
     {
@@ -5521,9 +5521,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.845408, -1.29993, -1.086153, -0.937429, -1.830999,
@@ -5545,7 +5545,7 @@ struct Ribosum75_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5553,9 +5553,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.015259, -4.924178, -10.150016, -4.692715, -9.220862, -13.386838, -3.830646,
@@ -5623,7 +5623,7 @@ struct Ribosum70_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_75>
 {
     enum
     {
@@ -5631,9 +5631,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.280203, -2.320827, -2.045641, -2.029619,
@@ -5656,7 +5656,7 @@ struct Ribosum70_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_75N>
 {
     enum
     {
@@ -5664,9 +5664,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.280203, -2.320827, -2.045641, -2.029619, -2.732371,
@@ -5688,7 +5688,7 @@ struct Ribosum70_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5696,9 +5696,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.901563, -8.248066, -8.206071, -5.063718, -10.1511, -13.331912, -5.610089,
@@ -5765,7 +5765,7 @@ struct Ribosum90_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_60>
 {
     enum
     {
@@ -5773,9 +5773,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.257063, -1.976785, -1.590831, -1.529605,
@@ -5798,7 +5798,7 @@ struct Ribosum90_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_60N>
 {
     enum
     {
@@ -5806,9 +5806,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.257063, -1.976785, -1.590831, -1.529605, -2.582207,
@@ -5830,7 +5830,7 @@ struct Ribosum90_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5838,9 +5838,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.180504, -7.760792, -8.208174, -4.44182, -9.277856, -13.351302, -4.783192,
@@ -5907,7 +5907,7 @@ struct Ribosum45_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_80>
 {
     enum
     {
@@ -5915,9 +5915,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.35427, -2.705193, -2.445162, -2.422928,
@@ -5940,7 +5940,7 @@ struct Ribosum45_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_80N>
 {
     enum
     {
@@ -5948,9 +5948,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.35427, -2.705193, -2.445162, -2.422928, -3.161729,
@@ -5972,7 +5972,7 @@ struct Ribosum45_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -5980,9 +5980,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.728643, -8.755288, -8.168322, -5.212229, -9.826979, -13.087183, -6.058507,
@@ -6050,7 +6050,7 @@ struct Ribosum100_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_80>
 {
     enum
     {
@@ -6058,9 +6058,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.353471, -2.703177, -2.442752, -2.42213,
@@ -6083,7 +6083,7 @@ struct Ribosum100_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_80N>
 {
     enum
     {
@@ -6091,9 +6091,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.353471, -2.703177, -2.442752, -2.42213, -3.155099,
@@ -6115,7 +6115,7 @@ struct Ribosum100_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6123,9 +6123,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_80d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.723866, -8.764302, -8.159055, -5.218447, -9.813197, -13.065888, -6.045632,
@@ -6193,7 +6193,7 @@ struct Ribosum75_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_65>
 {
     enum
     {
@@ -6201,9 +6201,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.958038, -1.582432, -1.405024, -1.197726,
@@ -6226,7 +6226,7 @@ struct Ribosum75_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_65N>
 {
     enum
     {
@@ -6234,9 +6234,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.958038, -1.582432, -1.405024, -1.197726, -2.36518,
@@ -6258,7 +6258,7 @@ struct Ribosum75_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6266,9 +6266,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.81253, -7.565686, -9.597073, -5.441222, -9.491831, -15.183508, -3.407129,
@@ -6338,7 +6338,7 @@ struct Ribosum90_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_80>
 {
     enum
     {
@@ -6346,9 +6346,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.295463, -2.504355, -2.232513, -2.19583,
@@ -6371,7 +6371,7 @@ struct Ribosum90_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_80N>
 {
     enum
     {
@@ -6379,9 +6379,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.295463, -2.504355, -2.232513, -2.19583, -2.905005,
@@ -6403,7 +6403,7 @@ struct Ribosum90_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6411,9 +6411,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.975971, -9.340387, -8.380273, -4.774979, -9.769467, -11.455178, -5.604071,
@@ -6481,7 +6481,7 @@ struct Ribosum70_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_70>
 {
     enum
     {
@@ -6489,9 +6489,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.269321, -2.19782, -1.852062, -1.835605,
@@ -6514,7 +6514,7 @@ struct Ribosum70_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_70N>
 {
     enum
     {
@@ -6522,9 +6522,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.269321, -2.19782, -1.852062, -1.835605, -2.688775,
@@ -6546,7 +6546,7 @@ struct Ribosum70_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6554,9 +6554,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.270103, -8.044389, -8.134476, -4.793535, -9.950356, -13.828619, -5.292556,
@@ -6624,7 +6624,7 @@ struct Ribosum65_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_40>
 {
     enum
     {
@@ -6632,9 +6632,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.457223, -0.851391, -0.540369, -0.505995,
@@ -6657,7 +6657,7 @@ struct Ribosum65_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_40N>
 {
     enum
     {
@@ -6665,9 +6665,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.457223, -0.851391, -0.540369, -0.505995, -1.561815,
@@ -6689,7 +6689,7 @@ struct Ribosum65_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6697,9 +6697,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.324515, -6.34707, -10.782877, -4.036363, -12.082048, -12.06499, -4.090445,
@@ -6767,7 +6767,7 @@ struct Ribosum65_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_25>
 {
     enum
     {
@@ -6775,9 +6775,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.392605, -0.790414, -0.503501, -0.467605,
@@ -6800,7 +6800,7 @@ struct Ribosum65_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_25N>
 {
     enum
     {
@@ -6808,9 +6808,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.392605, -0.790414, -0.503501, -0.467605, -1.506739,
@@ -6832,7 +6832,7 @@ struct Ribosum65_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6840,9 +6840,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.440319, -6.43275, -10.868632, -4.119415, -12.168313, -11.950009, -3.905748,
@@ -6909,7 +6909,7 @@ struct Ribosum95_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_75>
 {
     enum
     {
@@ -6917,9 +6917,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.319936, -2.310603, -1.980405, -1.9073,
@@ -6942,7 +6942,7 @@ struct Ribosum95_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_75N>
 {
     enum
     {
@@ -6950,9 +6950,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.319936, -2.310603, -1.980405, -1.9073, -2.843751,
@@ -6974,7 +6974,7 @@ struct Ribosum95_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -6982,9 +6982,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.442928, -8.715155, -8.734446, -4.906521, -10.103088, -13.360103, -5.326943,
@@ -7051,7 +7051,7 @@ struct Ribosum75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75>
 {
     enum
     {
@@ -7059,9 +7059,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.29072, -2.334291, -2.054882, -2.027652,
@@ -7084,7 +7084,7 @@ struct Ribosum75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75N>
 {
     enum
     {
@@ -7092,9 +7092,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.29072, -2.334291, -2.054882, -2.027652, -2.765947,
@@ -7116,7 +7116,7 @@ struct Ribosum75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7124,9 +7124,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.68564, -6.120801, -11.007995, -4.480758, -10.593527, -12.629466, -3.498286,
@@ -7192,7 +7192,7 @@ struct Ribosum45_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_75>
 {
     enum
     {
@@ -7200,9 +7200,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.342281, -2.354714, -2.028547, -1.978379,
@@ -7225,7 +7225,7 @@ struct Ribosum45_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_75N>
 {
     enum
     {
@@ -7233,9 +7233,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.342281, -2.354714, -2.028547, -1.978379, -2.885242,
@@ -7257,7 +7257,7 @@ struct Ribosum45_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7265,9 +7265,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.253125, -8.347016, -8.177647, -5.068275, -10.333412, -13.752063, -5.568768,
@@ -7337,7 +7337,7 @@ struct Ribosum75_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_25>
 {
     enum
     {
@@ -7345,9 +7345,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.526075, -0.895653, -0.600491, -0.559602,
@@ -7370,7 +7370,7 @@ struct Ribosum75_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_25N>
 {
     enum
     {
@@ -7378,9 +7378,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.526075, -0.895653, -0.600491, -0.559602, -1.374978,
@@ -7402,7 +7402,7 @@ struct Ribosum75_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7410,9 +7410,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.68564, -6.120801, -11.007995, -4.480758, -10.593527, -12.629466, -3.498286,
@@ -7478,7 +7478,7 @@ struct Ribosum60_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_80>
 {
     enum
     {
@@ -7486,9 +7486,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.32002, -2.736622, -2.475435, -2.459753,
@@ -7511,7 +7511,7 @@ struct Ribosum60_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_80N>
 {
     enum
     {
@@ -7519,9 +7519,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.32002, -2.736622, -2.475435, -2.459753, -3.151351,
@@ -7543,7 +7543,7 @@ struct Ribosum60_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7551,9 +7551,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.80182, -8.843394, -8.258235, -5.244054, -9.915086, -13.127651, -6.100782,
@@ -7621,7 +7621,7 @@ struct Ribosum95_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_65>
 {
     enum
     {
@@ -7629,9 +7629,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.287041, -2.128932, -1.725609, -1.676047,
@@ -7654,7 +7654,7 @@ struct Ribosum95_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_65N>
 {
     enum
     {
@@ -7662,9 +7662,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.287041, -2.128932, -1.725609, -1.676047, -2.741396,
@@ -7686,7 +7686,7 @@ struct Ribosum95_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7694,9 +7694,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.996203, -8.509181, -8.538128, -4.636643, -9.765752, -13.993348, -5.083244,
@@ -7763,7 +7763,7 @@ struct Ribosum90_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_90>
 {
     enum
     {
@@ -7771,9 +7771,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.470121, -4.35949, -3.911999, -3.854849,
@@ -7796,7 +7796,7 @@ struct Ribosum90_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_90N>
 {
     enum
     {
@@ -7804,9 +7804,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.470121, -4.35949, -3.911999, -3.854849, -4.871689,
@@ -7828,7 +7828,7 @@ struct Ribosum90_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7836,9 +7836,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.122622, -8.482101, -8.456973, -5.655468, -10.232575, -999.0, -7.87925,
@@ -7908,7 +7908,7 @@ struct Ribosum80_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_45>
 {
     enum
     {
@@ -7916,9 +7916,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.799264, -1.102819, -0.756598, -0.750373,
@@ -7941,7 +7941,7 @@ struct Ribosum80_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_45N>
 {
     enum
     {
@@ -7949,9 +7949,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.799264, -1.102819, -0.756598, -0.750373, -1.536765,
@@ -7973,7 +7973,7 @@ struct Ribosum80_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -7981,9 +7981,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.484019, -6.412291, -9.312664, -4.523465, -10.101311, -12.964635, -3.636081,
@@ -8052,7 +8052,7 @@ struct Ribosum95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95>
 {
     enum
     {
@@ -8060,9 +8060,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.264083, -1.993093, -1.613481, -1.542942,
@@ -8085,7 +8085,7 @@ struct Ribosum95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95N>
 {
     enum
     {
@@ -8093,9 +8093,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.264083, -1.993093, -1.613481, -1.542942, -2.575096,
@@ -8117,7 +8117,7 @@ struct Ribosum95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8125,9 +8125,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.442928, -8.715155, -8.734446, -4.906521, -10.103088, -13.360103, -5.326943,
@@ -8194,7 +8194,7 @@ struct Ribosum65_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_85>
 {
     enum
     {
@@ -8202,9 +8202,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.362983, -3.411115, -3.117483, -3.048327,
@@ -8227,7 +8227,7 @@ struct Ribosum65_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_85N>
 {
     enum
     {
@@ -8235,9 +8235,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.362983, -3.411115, -3.117483, -3.048327, -3.78496,
@@ -8259,7 +8259,7 @@ struct Ribosum65_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8267,9 +8267,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.570305, -8.489737, -7.398375, -5.383325, -10.042229, -14.521646, -6.647742,
@@ -8337,7 +8337,7 @@ struct Ribosum90_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_65>
 {
     enum
     {
@@ -8345,9 +8345,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.26961, -2.055949, -1.651278, -1.608554,
@@ -8370,7 +8370,7 @@ struct Ribosum90_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_65N>
 {
     enum
     {
@@ -8378,9 +8378,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.26961, -2.055949, -1.651278, -1.608554, -2.6862,
@@ -8402,7 +8402,7 @@ struct Ribosum90_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8410,9 +8410,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.129015, -8.223641, -8.147653, -4.422026, -9.630999, -13.364641, -4.868334,
@@ -8479,7 +8479,7 @@ struct Ribosum60_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_45>
 {
     enum
     {
@@ -8487,9 +8487,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.555338, -1.022031, -0.638619, -0.609606,
@@ -8512,7 +8512,7 @@ struct Ribosum60_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_45N>
 {
     enum
     {
@@ -8520,9 +8520,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.555338, -1.022031, -0.638619, -0.609606, -1.705318,
@@ -8544,7 +8544,7 @@ struct Ribosum60_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8552,9 +8552,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.360169, -9.886956, -10.276344, -4.052277, -11.44063, -14.552642, -4.631272,
@@ -8621,7 +8621,7 @@ struct Ribosum45_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_70>
 {
     enum
     {
@@ -8629,9 +8629,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.320778, -2.232413, -1.832763, -1.791281,
@@ -8654,7 +8654,7 @@ struct Ribosum45_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_70N>
 {
     enum
     {
@@ -8662,9 +8662,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.320778, -2.232413, -1.832763, -1.791281, -2.829806,
@@ -8686,7 +8686,7 @@ struct Ribosum45_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8694,9 +8694,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.714929, -8.181625, -8.044796, -4.748711, -10.028235, -14.292346, -5.248001,
@@ -8764,7 +8764,7 @@ struct Ribosum60_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_50>
 {
     enum
     {
@@ -8772,9 +8772,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.810218, -1.242128, -0.911474, -0.829573,
@@ -8797,7 +8797,7 @@ struct Ribosum60_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_50N>
 {
     enum
     {
@@ -8805,9 +8805,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.810218, -1.242128, -0.911474, -0.829573, -1.863642,
@@ -8829,7 +8829,7 @@ struct Ribosum60_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8837,9 +8837,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.30335, -9.009673, -9.409212, -4.103263, -10.554763, -14.29857, -4.569732,
@@ -8906,7 +8906,7 @@ struct Ribosum70_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_60>
 {
     enum
     {
@@ -8914,9 +8914,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.857485, -1.265446, -1.054775, -0.91692,
@@ -8939,7 +8939,7 @@ struct Ribosum70_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_60N>
 {
     enum
     {
@@ -8947,9 +8947,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.857485, -1.265446, -1.054775, -0.91692, -1.715822,
@@ -8971,7 +8971,7 @@ struct Ribosum70_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -8979,9 +8979,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.773544, -4.200057, -9.616152, -4.115638, -9.921569, -12.735488, -5.487298,
@@ -9049,7 +9049,7 @@ struct Ribosum60_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_40>
 {
     enum
     {
@@ -9057,9 +9057,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.402309, -0.898295, -0.521307, -0.501971,
@@ -9082,7 +9082,7 @@ struct Ribosum60_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_40N>
 {
     enum
     {
@@ -9090,9 +9090,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.402309, -0.898295, -0.521307, -0.501971, -1.681561,
@@ -9114,7 +9114,7 @@ struct Ribosum60_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9122,9 +9122,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.92814, -10.316356, -10.738764, -3.679079, -11.907946, -14.91913, -4.913481,
@@ -9190,7 +9190,7 @@ struct Ribosum100_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_55>
 {
     enum
     {
@@ -9198,9 +9198,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.284979, -2.057678, -1.678106, -1.619362,
@@ -9223,7 +9223,7 @@ struct Ribosum100_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_55N>
 {
     enum
     {
@@ -9231,9 +9231,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.284979, -2.057678, -1.678106, -1.619362, -2.63627,
@@ -9255,7 +9255,7 @@ struct Ribosum100_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9263,9 +9263,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_55d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.85778, -7.795482, -8.16788, -4.716281, -9.375261, -14.274122, -4.86001,
@@ -9331,7 +9331,7 @@ struct Ribosum100_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_50>
 {
     enum
     {
@@ -9339,9 +9339,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.130118, -1.62988, -1.226193, -1.268183,
@@ -9364,7 +9364,7 @@ struct Ribosum100_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_50N>
 {
     enum
     {
@@ -9372,9 +9372,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.130118, -1.62988, -1.226193, -1.268183, -2.056653,
@@ -9396,7 +9396,7 @@ struct Ribosum100_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9404,9 +9404,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_50d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.182248, -8.105162, -8.473133, -4.900448, -9.683515, -13.580916, -4.058006,
@@ -9473,7 +9473,7 @@ struct Ribosum75_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_85>
 {
     enum
     {
@@ -9481,9 +9481,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.358533, -3.46033, -3.160019, -3.083174,
@@ -9506,7 +9506,7 @@ struct Ribosum75_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_85N>
 {
     enum
     {
@@ -9514,9 +9514,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.358533, -3.46033, -3.160019, -3.083174, -3.833758,
@@ -9538,7 +9538,7 @@ struct Ribosum75_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9546,9 +9546,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.600365, -8.773382, -7.691625, -5.34377, -10.02657, -14.805117, -6.917682,
@@ -9617,7 +9617,7 @@ struct Ribosum55_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_50>
 {
     enum
     {
@@ -9625,9 +9625,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.129164, -1.630977, -1.22629, -1.266544,
@@ -9650,7 +9650,7 @@ struct Ribosum55_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_50N>
 {
     enum
     {
@@ -9658,9 +9658,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.129164, -1.630977, -1.22629, -1.266544, -2.059798,
@@ -9682,7 +9682,7 @@ struct Ribosum55_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9690,9 +9690,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.193317, -8.095669, -8.478009, -4.889544, -9.700531, -13.601403, -4.061057,
@@ -9759,7 +9759,7 @@ struct Ribosum75_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_30>
 {
     enum
     {
@@ -9767,9 +9767,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.533683, -0.901722, -0.606461, -0.564188,
@@ -9792,7 +9792,7 @@ struct Ribosum75_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_30N>
 {
     enum
     {
@@ -9800,9 +9800,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.533683, -0.901722, -0.606461, -0.564188, -1.378635,
@@ -9824,7 +9824,7 @@ struct Ribosum75_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9832,9 +9832,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.676489, -6.11519, -11.00203, -4.472441, -10.587916, -12.627396, -3.495895,
@@ -9904,7 +9904,7 @@ struct Ribosum45_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_50>
 {
     enum
     {
@@ -9912,9 +9912,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.129893, -1.630644, -1.225994, -1.266785,
@@ -9937,7 +9937,7 @@ struct Ribosum45_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_50N>
 {
     enum
     {
@@ -9945,9 +9945,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.129893, -1.630644, -1.225994, -1.266785, -2.059935,
@@ -9969,7 +9969,7 @@ struct Ribosum45_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -9977,9 +9977,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.192929, -8.094529, -8.476841, -4.893166, -9.699391, -13.601061, -4.060688,
@@ -10046,7 +10046,7 @@ struct Ribosum60_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_55>
 {
     enum
     {
@@ -10054,9 +10054,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.168687, -1.815158, -1.487608, -1.339857,
@@ -10079,7 +10079,7 @@ struct Ribosum60_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_55N>
 {
     enum
     {
@@ -10087,9 +10087,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.168687, -1.815158, -1.487608, -1.339857, -2.506842,
@@ -10111,7 +10111,7 @@ struct Ribosum60_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10119,9 +10119,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.158123, -8.024885, -8.417676, -4.489449, -9.631659, -14.469915, -5.026874,
@@ -10190,7 +10190,7 @@ struct Ribosum70_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_40>
 {
     enum
     {
@@ -10198,9 +10198,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.514492, -0.850585, -0.595174, -0.545407,
@@ -10223,7 +10223,7 @@ struct Ribosum70_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_40N>
 {
     enum
     {
@@ -10231,9 +10231,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.514492, -0.850585, -0.595174, -0.545407, -1.347913,
@@ -10255,7 +10255,7 @@ struct Ribosum70_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10263,9 +10263,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.61948, -5.636285, -10.731925, -4.074661, -11.704311, -12.429969, -3.845061,
@@ -10334,7 +10334,7 @@ struct Ribosum100_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_40>
 {
     enum
     {
@@ -10342,9 +10342,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.974413, -1.346626, -0.924218, -1.010277,
@@ -10367,7 +10367,7 @@ struct Ribosum100_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_40N>
 {
     enum
     {
@@ -10375,9 +10375,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.974413, -1.346626, -0.924218, -1.010277, -1.700147,
@@ -10399,7 +10399,7 @@ struct Ribosum100_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10407,9 +10407,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_40d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.600567, -8.467939, -8.819485, -5.074901, -10.053981, -13.450757, -3.872748,
@@ -10476,7 +10476,7 @@ struct Ribosum85_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_90>
 {
     enum
     {
@@ -10484,9 +10484,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.447974, -4.481241, -4.034976, -3.89882,
@@ -10509,7 +10509,7 @@ struct Ribosum85_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_90N>
 {
     enum
     {
@@ -10517,9 +10517,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.447974, -4.481241, -4.034976, -3.89882, -5.023982,
@@ -10541,7 +10541,7 @@ struct Ribosum85_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10549,9 +10549,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.251381, -9.630083, -8.740835, -5.821171, -12.503671, -999.0, -8.346343,
@@ -10621,7 +10621,7 @@ struct Ribosum45_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_60>
 {
     enum
     {
@@ -10629,9 +10629,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.297643, -2.115754, -1.730638, -1.676728,
@@ -10654,7 +10654,7 @@ struct Ribosum45_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_60N>
 {
     enum
     {
@@ -10662,9 +10662,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.297643, -2.115754, -1.730638, -1.676728, -2.707465,
@@ -10686,7 +10686,7 @@ struct Ribosum45_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10694,9 +10694,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.822715, -7.978265, -8.13379, -4.682922, -9.614907, -14.35269, -5.070437,
@@ -10764,7 +10764,7 @@ struct Ribosum100
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100>
 {
     enum
     {
@@ -10772,9 +10772,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.130118, -1.62988, -1.226193, -1.268183,
@@ -10797,7 +10797,7 @@ struct Ribosum100N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100N>
 {
     enum
     {
@@ -10805,9 +10805,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.130118, -1.62988, -1.226193, -1.268183, -2.056653,
@@ -10829,7 +10829,7 @@ struct Ribosum100d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10837,9 +10837,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100d>   //TODO Finite(
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.703145, -8.211591, -8.040203, -4.756908, -10.012751, -14.266123, -5.254592,
@@ -10909,7 +10909,7 @@ struct Ribosum100_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_25>
 {
     enum
     {
@@ -10917,9 +10917,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.971671, -1.343217, -0.921788, -1.005464,
@@ -10942,7 +10942,7 @@ struct Ribosum100_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_25N>
 {
     enum
     {
@@ -10950,9 +10950,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.971671, -1.343217, -0.921788, -1.005464, -1.699044,
@@ -10974,7 +10974,7 @@ struct Ribosum100_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -10982,9 +10982,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_25d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.604645, -8.470563, -8.822189, -5.075545, -10.056671, -13.442368, -3.871417,
@@ -11051,7 +11051,7 @@ struct Ribosum80_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_70>
 {
     enum
     {
@@ -11059,9 +11059,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.262329, -1.895944, -1.524145, -1.481838,
@@ -11084,7 +11084,7 @@ struct Ribosum80_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_70N>
 {
     enum
     {
@@ -11092,9 +11092,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.262329, -1.895944, -1.524145, -1.481838, -2.541031,
@@ -11116,7 +11116,7 @@ struct Ribosum80_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11124,9 +11124,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.420787, -7.362206, -8.566139, -4.240807, -10.179466, -14.762892, -4.897783,
@@ -11192,7 +11192,7 @@ struct Ribosum80_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_55>
 {
     enum
     {
@@ -11200,9 +11200,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.054913, -1.482559, -1.163728, -1.059546,
@@ -11225,7 +11225,7 @@ struct Ribosum80_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_55N>
 {
     enum
     {
@@ -11233,9 +11233,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.054913, -1.482559, -1.163728, -1.059546, -2.066975,
@@ -11257,7 +11257,7 @@ struct Ribosum80_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11265,9 +11265,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.566834, -5.577246, -8.603826, -4.555045, -9.310048, -13.872543, -4.307133,
@@ -11335,7 +11335,7 @@ struct Ribosum60_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_75>
 {
     enum
     {
@@ -11343,9 +11343,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.330194, -2.36609, -2.039156, -1.993359,
@@ -11368,7 +11368,7 @@ struct Ribosum60_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_75N>
 {
     enum
     {
@@ -11376,9 +11376,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.330194, -2.36609, -2.039156, -1.993359, -2.881578,
@@ -11400,7 +11400,7 @@ struct Ribosum60_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11408,9 +11408,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.270154, -8.377359, -8.208558, -5.067189, -10.363755, -13.765761, -5.583033,
@@ -11477,7 +11477,7 @@ struct Ribosum95_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_70>
 {
     enum
     {
@@ -11485,9 +11485,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.300482, -2.183858, -1.780767, -1.729147,
@@ -11510,7 +11510,7 @@ struct Ribosum95_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_70N>
 {
     enum
     {
@@ -11518,9 +11518,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.300482, -2.183858, -1.780767, -1.729147, -2.785858,
@@ -11542,7 +11542,7 @@ struct Ribosum95_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11550,9 +11550,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.924377, -8.490803, -8.521412, -4.683341, -9.801212, -13.893618, -5.122439,
@@ -11618,7 +11618,7 @@ struct Ribosum90_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_35>
 {
     enum
     {
@@ -11626,9 +11626,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.940234, -1.299759, -0.891921, -0.929537,
@@ -11651,7 +11651,7 @@ struct Ribosum90_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_35N>
 {
     enum
     {
@@ -11659,9 +11659,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.940234, -1.299759, -0.891921, -0.929537, -1.672387,
@@ -11683,7 +11683,7 @@ struct Ribosum90_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11691,9 +11691,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.974766, -8.15016, -8.793615, -4.70318, -9.72001, -13.071132, -3.773102,
@@ -11757,7 +11757,7 @@ struct Ribosum100_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_60>
 {
     enum
     {
@@ -11765,9 +11765,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.297694, -2.11469, -1.73102, -1.678305,
@@ -11790,7 +11790,7 @@ struct Ribosum100_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_60N>
 {
     enum
     {
@@ -11798,9 +11798,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.297694, -2.11469, -1.73102, -1.678305, -2.702157,
@@ -11822,7 +11822,7 @@ struct Ribosum100_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11830,9 +11830,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_60d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.81159, -7.995766, -8.129031, -4.691241, -9.598926, -14.325802, -5.080143,
@@ -11901,7 +11901,7 @@ struct Ribosum80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80>
 {
     enum
     {
@@ -11909,9 +11909,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.756267, -1.060801, -0.729211, -0.698446,
@@ -11934,7 +11934,7 @@ struct Ribosum80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80N>
 {
     enum
     {
@@ -11942,9 +11942,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.756267, -1.060801, -0.729211, -0.698446, -1.519461,
@@ -11966,7 +11966,7 @@ struct Ribosum80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -11974,9 +11974,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.011202, -9.070048, -8.199319, -5.27865, -10.404626, -11.643571, -7.027312,
@@ -12045,7 +12045,7 @@ struct Ribosum85_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_25>
 {
     enum
     {
@@ -12053,9 +12053,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.883271, -1.225642, -0.835694, -0.826847,
@@ -12078,7 +12078,7 @@ struct Ribosum85_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_25N>
 {
     enum
     {
@@ -12086,9 +12086,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.883271, -1.225642, -0.835694, -0.826847, -1.637349,
@@ -12110,7 +12110,7 @@ struct Ribosum85_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12118,9 +12118,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.341525, -7.483124, -8.649236, -4.566202, -9.554447, -12.855579, -3.692613,
@@ -12186,7 +12186,7 @@ struct Ribosum75_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_75>
 {
     enum
     {
@@ -12194,9 +12194,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.29072, -2.334291, -2.054882, -2.027652,
@@ -12219,7 +12219,7 @@ struct Ribosum75_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_75N>
 {
     enum
     {
@@ -12227,9 +12227,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.29072, -2.334291, -2.054882, -2.027652, -2.765947,
@@ -12251,7 +12251,7 @@ struct Ribosum75_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12259,9 +12259,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.946652, -8.30112, -8.247247, -5.093921, -10.026187, -13.406598, -5.638015,
@@ -12328,7 +12328,7 @@ struct Ribosum60_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_95>
 {
     enum
     {
@@ -12336,9 +12336,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.990286, -5.941408, -5.501211, -5.318322,
@@ -12361,7 +12361,7 @@ struct Ribosum60_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_95N>
 {
     enum
     {
@@ -12369,9 +12369,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.990286, -5.941408, -5.501211, -5.318322, -5.941408,
@@ -12393,7 +12393,7 @@ struct Ribosum60_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12401,9 +12401,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.681443, -9.157538, -9.468097, -9.37659, -999.0, -999.0, -12.142402, -13.693756,
@@ -12471,7 +12471,7 @@ struct Ribosum80_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_50>
 {
     enum
     {
@@ -12479,9 +12479,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.942721, -1.287492, -0.953967, -0.91038,
@@ -12504,7 +12504,7 @@ struct Ribosum80_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_50N>
 {
     enum
     {
@@ -12512,9 +12512,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.942721, -1.287492, -0.953967, -0.91038, -1.793406,
@@ -12536,7 +12536,7 @@ struct Ribosum80_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12544,9 +12544,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.958263, -5.946627, -8.89658, -4.458154, -9.65826, -12.965036, -3.730845,
@@ -12615,7 +12615,7 @@ struct Ribosum60_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_65>
 {
     enum
     {
@@ -12623,9 +12623,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.301152, -2.188663, -1.789078, -1.75067,
@@ -12648,7 +12648,7 @@ struct Ribosum60_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_65N>
 {
     enum
     {
@@ -12656,9 +12656,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.301152, -2.188663, -1.789078, -1.75067, -2.785584,
@@ -12680,7 +12680,7 @@ struct Ribosum60_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12688,9 +12688,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.778114, -8.234368, -8.110696, -4.700939, -10.012735, -14.38593, -5.201321,
@@ -12756,7 +12756,7 @@ struct Ribosum95_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_50>
 {
     enum
     {
@@ -12764,9 +12764,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.123638, -1.623564, -1.226529, -1.234264,
@@ -12789,7 +12789,7 @@ struct Ribosum95_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_50N>
 {
     enum
     {
@@ -12797,9 +12797,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.123638, -1.623564, -1.226529, -1.234264, -2.068896,
@@ -12821,7 +12821,7 @@ struct Ribosum95_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12829,9 +12829,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.398405, -8.160518, -8.861364, -4.807741, -9.58813, -13.608106, -3.975121,
@@ -12899,7 +12899,7 @@ struct Ribosum55_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_65>
 {
     enum
     {
@@ -12907,9 +12907,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.306299, -2.182654, -1.783213, -1.73946,
@@ -12932,7 +12932,7 @@ struct Ribosum55_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_65N>
 {
     enum
     {
@@ -12940,9 +12940,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.306299, -2.182654, -1.783213, -1.73946, -2.787371,
@@ -12964,7 +12964,7 @@ struct Ribosum55_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -12972,9 +12972,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.776769, -8.21966, -8.095747, -4.6918, -9.998027, -14.37905, -5.194201,
@@ -13041,7 +13041,7 @@ struct Ribosum100_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_65>
 {
     enum
     {
@@ -13049,9 +13049,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.307508, -2.181705, -1.783831, -1.743049,
@@ -13074,7 +13074,7 @@ struct Ribosum100_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_65N>
 {
     enum
     {
@@ -13082,9 +13082,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.307508, -2.181705, -1.783831, -1.743049, -2.782624,
@@ -13106,7 +13106,7 @@ struct Ribosum100_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13114,9 +13114,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_65d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.763905, -8.24526, -8.088983, -4.704803, -9.980776, -14.351816, -5.205152,
@@ -13186,7 +13186,7 @@ struct Ribosum55_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_40>
 {
     enum
     {
@@ -13194,9 +13194,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.972624, -1.347858, -0.924574, -1.005783,
@@ -13219,7 +13219,7 @@ struct Ribosum55_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_40N>
 {
     enum
     {
@@ -13227,9 +13227,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.972624, -1.347858, -0.924574, -1.005783, -1.70264,
@@ -13251,7 +13251,7 @@ struct Ribosum55_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13259,9 +13259,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.612703, -8.459749, -8.825131, -5.067083, -10.071268, -13.46508, -3.875776,
@@ -13327,7 +13327,7 @@ struct Ribosum75_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_45>
 {
     enum
     {
@@ -13335,9 +13335,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.606543, -0.96935, -0.649557, -0.632449,
@@ -13360,7 +13360,7 @@ struct Ribosum75_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_45N>
 {
     enum
     {
@@ -13368,9 +13368,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.606543, -0.96935, -0.649557, -0.632449, -1.402574,
@@ -13392,7 +13392,7 @@ struct Ribosum75_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13400,9 +13400,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.457361, -5.941788, -10.829298, -4.631004, -10.41406, -12.609015, -3.552882,
@@ -13469,7 +13469,7 @@ struct Ribosum100_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_35>
 {
     enum
     {
@@ -13477,9 +13477,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.973243, -1.345056, -0.923217, -1.008059,
@@ -13502,7 +13502,7 @@ struct Ribosum100_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_35N>
 {
     enum
     {
@@ -13510,9 +13510,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.973243, -1.345056, -0.923217, -1.008059, -1.699819,
@@ -13534,7 +13534,7 @@ struct Ribosum100_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13542,9 +13542,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_35d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.602836, -8.469565, -8.821086, -5.074235, -10.055606, -13.45174, -3.871153,
@@ -13613,7 +13613,7 @@ struct Ribosum95_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_30>
 {
     enum
     {
@@ -13621,9 +13621,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.958174, -1.329043, -0.914064, -0.969334,
@@ -13646,7 +13646,7 @@ struct Ribosum95_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_30N>
 {
     enum
     {
@@ -13654,9 +13654,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.958174, -1.329043, -0.914064, -0.969334, -1.689368,
@@ -13678,7 +13678,7 @@ struct Ribosum95_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13686,9 +13686,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.835119, -8.541358, -9.170691, -4.959079, -9.971389, -13.464993, -3.824774,
@@ -13755,7 +13755,7 @@ struct Ribosum90_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_75>
 {
     enum
     {
@@ -13763,9 +13763,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.297102, -2.244548, -1.911465, -1.839534,
@@ -13788,7 +13788,7 @@ struct Ribosum90_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_75N>
 {
     enum
     {
@@ -13796,9 +13796,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.297102, -2.244548, -1.911465, -1.839534, -2.780869,
@@ -13820,7 +13820,7 @@ struct Ribosum90_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13828,9 +13828,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.50505, -8.558939, -8.390054, -4.625876, -9.982324, -12.466292, -5.103064,
@@ -13898,7 +13898,7 @@ struct Ribosum65_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_60>
 {
     enum
     {
@@ -13906,9 +13906,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.17498, -1.815564, -1.453916, -1.525742,
@@ -13931,7 +13931,7 @@ struct Ribosum65_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_60N>
 {
     enum
     {
@@ -13939,9 +13939,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.17498, -1.815564, -1.453916, -1.525742, -2.335378,
@@ -13963,7 +13963,7 @@ struct Ribosum65_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -13971,9 +13971,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.366719, -4.638793, -8.458597, -4.821006, -9.632666, -12.767947, -4.649111,
@@ -14043,7 +14043,7 @@ struct Ribosum65_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_30>
 {
     enum
     {
@@ -14051,9 +14051,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.409413, -0.802971, -0.515864, -0.47413,
@@ -14076,7 +14076,7 @@ struct Ribosum65_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_30N>
 {
     enum
     {
@@ -14084,9 +14084,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.409413, -0.802971, -0.515864, -0.47413, -1.5205,
@@ -14108,7 +14108,7 @@ struct Ribosum65_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14116,9 +14116,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -4.42127, -6.420786, -10.855804, -4.100629, -12.156349, -11.945129, -3.900116,
@@ -14183,7 +14183,7 @@ struct Ribosum100_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_70>
 {
     enum
     {
@@ -14191,9 +14191,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.320541, -2.231425, -1.833467, -1.792873,
@@ -14216,7 +14216,7 @@ struct Ribosum100_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_70N>
 {
     enum
     {
@@ -14224,9 +14224,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.320541, -2.231425, -1.833467, -1.792873, -2.824501,
@@ -14248,7 +14248,7 @@ struct Ribosum100_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14256,9 +14256,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_70d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.703145, -8.211591, -8.040203, -4.756908, -10.012751, -14.266123, -5.254592,
@@ -14328,7 +14328,7 @@ struct Ribosum60_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_90>
 {
     enum
     {
@@ -14336,9 +14336,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.268379, -4.512106, -4.052974, -3.895344,
@@ -14361,7 +14361,7 @@ struct Ribosum60_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_90N>
 {
     enum
     {
@@ -14369,9 +14369,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.268379, -4.512106, -4.052974, -3.895344, -4.665557,
@@ -14393,7 +14393,7 @@ struct Ribosum60_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14401,9 +14401,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.098114, -8.216035, -8.752023, -5.643872, -11.281702, -999.0, -8.063647,
@@ -14473,7 +14473,7 @@ struct Ribosum80_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_75>
 {
     enum
     {
@@ -14481,9 +14481,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.287178, -2.141001, -1.804589, -1.739809,
@@ -14506,7 +14506,7 @@ struct Ribosum80_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_75N>
 {
     enum
     {
@@ -14514,9 +14514,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.287178, -2.141001, -1.804589, -1.739809, -2.673247,
@@ -14538,7 +14538,7 @@ struct Ribosum80_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14546,9 +14546,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.493935, -6.588836, -8.500021, -4.18278, -10.042566, -14.091917, -5.234852,
@@ -14617,7 +14617,7 @@ struct Ribosum85_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_55>
 {
     enum
     {
@@ -14625,9 +14625,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.193237, -1.777623, -1.387417, -1.303486,
@@ -14650,7 +14650,7 @@ struct Ribosum85_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_55N>
 {
     enum
     {
@@ -14658,9 +14658,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.193237, -1.777623, -1.387417, -1.303486, -2.384084,
@@ -14682,7 +14682,7 @@ struct Ribosum85_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14690,9 +14690,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.550205, -6.76114, -8.318361, -4.373653, -8.839318, -14.262642, -4.480442,
@@ -14759,7 +14759,7 @@ struct Ribosum75_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_80>
 {
     enum
     {
@@ -14767,9 +14767,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.289088, -2.712111, -2.48495, -2.468329,
@@ -14792,7 +14792,7 @@ struct Ribosum75_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_80N>
 {
     enum
     {
@@ -14800,9 +14800,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.289088, -2.712111, -2.48495, -2.468329, -3.058217,
@@ -14824,7 +14824,7 @@ struct Ribosum75_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14832,9 +14832,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.587752, -8.745399, -8.041608, -5.261993, -9.599949, -12.933034, -6.07126,
@@ -14903,7 +14903,7 @@ struct Ribosum100_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_85>
 {
     enum
     {
@@ -14911,9 +14911,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.480758, -3.443146, -3.100686, -3.043967,
@@ -14936,7 +14936,7 @@ struct Ribosum100_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_85N>
 {
     enum
     {
@@ -14944,9 +14944,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.480758, -3.443146, -3.100686, -3.043967, -3.983523,
@@ -14968,7 +14968,7 @@ struct Ribosum100_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -14976,9 +14976,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_85d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.618052, -8.571946, -7.889539, -5.322935, -10.048095, -14.739071, -6.703356,
@@ -15047,7 +15047,7 @@ struct Ribosum55_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_45>
 {
     enum
     {
@@ -15055,9 +15055,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.979181, -1.354715, -0.930239, -1.01851,
@@ -15080,7 +15080,7 @@ struct Ribosum55_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_45N>
 {
     enum
     {
@@ -15088,9 +15088,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.979181, -1.354715, -0.930239, -1.01851, -1.706072,
@@ -15112,7 +15112,7 @@ struct Ribosum55_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15120,9 +15120,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.598037, -8.449224, -8.815276, -5.079206, -10.061397, -13.460086, -3.875804,
@@ -15189,7 +15189,7 @@ struct Ribosum55_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_25>
 {
     enum
     {
@@ -15197,9 +15197,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.520768, -0.915253, -0.580527, -0.554332,
@@ -15222,7 +15222,7 @@ struct Ribosum55_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_25N>
 {
     enum
     {
@@ -15230,9 +15230,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.520768, -0.915253, -0.580527, -0.554332, -1.455767,
@@ -15254,7 +15254,7 @@ struct Ribosum55_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15262,9 +15262,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.191651, -8.784405, -9.188856, -5.443421, -10.421959, -11.678659, -3.966591,
@@ -15330,7 +15330,7 @@ struct Ribosum80_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_25>
 {
     enum
     {
@@ -15338,9 +15338,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.745607, -1.051871, -0.721439, -0.688374,
@@ -15363,7 +15363,7 @@ struct Ribosum80_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_25N>
 {
     enum
     {
@@ -15371,9 +15371,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.745607, -1.051871, -0.721439, -0.688374, -1.514616,
@@ -15395,7 +15395,7 @@ struct Ribosum80_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15403,9 +15403,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.609728, -6.506098, -9.407384, -4.455473, -10.196117, -12.957827, -3.612281,
@@ -15471,7 +15471,7 @@ struct Ribosum70_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_35>
 {
     enum
     {
@@ -15479,9 +15479,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.499354, -0.833774, -0.587476, -0.530595,
@@ -15504,7 +15504,7 @@ struct Ribosum70_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_35N>
 {
     enum
     {
@@ -15512,9 +15512,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.499354, -0.833774, -0.587476, -0.530595, -1.34196,
@@ -15536,7 +15536,7 @@ struct Ribosum70_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15544,9 +15544,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.661004, -5.669315, -10.764249, -4.096321, -11.73734, -12.454505, -3.759445,
@@ -15613,7 +15613,7 @@ struct Ribosum75_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_95>
 {
     enum
     {
@@ -15621,9 +15621,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.168306, -5.773415, -5.340063, -5.228133,
@@ -15646,7 +15646,7 @@ struct Ribosum75_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_95N>
 {
     enum
     {
@@ -15654,9 +15654,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.168306, -5.773415, -5.340063, -5.228133, -5.852539,
@@ -15678,7 +15678,7 @@ struct Ribosum75_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15686,9 +15686,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.921646, -9.201964, -9.830815, -8.574439, -999.0, -999.0, -12.601708, -13.769003,
@@ -15756,7 +15756,7 @@ struct Ribosum85_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_80>
 {
     enum
     {
@@ -15764,9 +15764,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.290452, -2.49427, -2.182482, -2.118713,
@@ -15789,7 +15789,7 @@ struct Ribosum85_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_80N>
 {
     enum
     {
@@ -15797,9 +15797,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.290452, -2.49427, -2.182482, -2.118713, -2.880684,
@@ -15821,7 +15821,7 @@ struct Ribosum85_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15829,9 +15829,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.175785, -8.615728, -8.446697, -4.801774, -9.513265, -13.227579, -5.893355,
@@ -15899,7 +15899,7 @@ struct Ribosum70_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_90>
 {
     enum
     {
@@ -15907,9 +15907,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.291387, -4.326721, -3.998626, -3.815965,
@@ -15932,7 +15932,7 @@ struct Ribosum70_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_90N>
 {
     enum
     {
@@ -15940,9 +15940,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.291387, -4.326721, -3.998626, -3.815965, -4.619244,
@@ -15964,7 +15964,7 @@ struct Ribosum70_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -15972,9 +15972,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.696448, -8.026325, -7.313967, -5.790706, -11.092543, -999.0, -8.041267,
@@ -16044,7 +16044,7 @@ struct Ribosum90_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_95>
 {
     enum
     {
@@ -16052,9 +16052,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.471488, -5.60453, -5.068456, -5.191515,
@@ -16077,7 +16077,7 @@ struct Ribosum90_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_95N>
 {
     enum
     {
@@ -16085,9 +16085,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.471488, -5.60453, -5.068456, -5.191515, -5.950362,
@@ -16109,7 +16109,7 @@ struct Ribosum90_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16117,9 +16117,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.057823, -9.253768, -9.230676, -6.770948, -999.0, -999.0, -13.806436, -15.01327,
@@ -16187,7 +16187,7 @@ struct Ribosum55_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_85>
 {
     enum
     {
@@ -16195,9 +16195,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.480369, -3.445938, -3.105153, -3.047633,
@@ -16220,7 +16220,7 @@ struct Ribosum55_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_85N>
 {
     enum
     {
@@ -16228,9 +16228,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.480369, -3.445938, -3.105153, -3.047633, -3.989446,
@@ -16252,7 +16252,7 @@ struct Ribosum55_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16260,9 +16260,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.622356, -8.550978, -7.894856, -5.32059, -10.069214, -14.771413, -6.709379,
@@ -16331,7 +16331,7 @@ struct Ribosum95_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_60>
 {
     enum
     {
@@ -16339,9 +16339,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.277641, -2.055953, -1.669247, -1.604949,
@@ -16364,7 +16364,7 @@ struct Ribosum95_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_60N>
 {
     enum
     {
@@ -16372,9 +16372,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.277641, -2.055953, -1.669247, -1.604949, -2.648455,
@@ -16396,7 +16396,7 @@ struct Ribosum95_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16404,9 +16404,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.049125, -8.140916, -8.564523, -4.642317, -9.494304, -13.963556, -4.973187,
@@ -16474,7 +16474,7 @@ struct Ribosum85_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_70>
 {
     enum
     {
@@ -16482,9 +16482,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.272114, -2.043922, -1.602082, -1.564512,
@@ -16507,7 +16507,7 @@ struct Ribosum85_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_70N>
 {
     enum
     {
@@ -16515,9 +16515,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.272114, -2.043922, -1.602082, -1.564512, -2.685465,
@@ -16539,7 +16539,7 @@ struct Ribosum85_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16547,9 +16547,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.355294, -7.557821, -8.126032, -4.251012, -8.835666, -14.52725, -4.820044,
@@ -16618,7 +16618,7 @@ struct Ribosum90_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_40>
 {
     enum
     {
@@ -16626,9 +16626,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.941617, -1.301791, -0.892933, -0.932015,
@@ -16651,7 +16651,7 @@ struct Ribosum90_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_40N>
 {
     enum
     {
@@ -16659,9 +16659,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.941617, -1.301791, -0.892933, -0.932015, -1.672996,
@@ -16683,7 +16683,7 @@ struct Ribosum90_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16691,9 +16691,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.972177, -8.148276, -8.791773, -4.702553, -9.718125, -13.069951, -3.776277,
@@ -16759,7 +16759,7 @@ struct Ribosum55_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_90>
 {
     enum
     {
@@ -16767,9 +16767,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.518821, -4.258616, -3.87536, -3.746276,
@@ -16792,7 +16792,7 @@ struct Ribosum55_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_90N>
 {
     enum
     {
@@ -16800,9 +16800,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.518821, -4.258616, -3.87536, -3.746276, -4.806762,
@@ -16824,7 +16824,7 @@ struct Ribosum55_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16832,9 +16832,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.579412, -7.596043, -8.119109, -5.690701, -10.66171, -999.0, -7.769469,
@@ -16904,7 +16904,7 @@ struct Ribosum65_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_70>
 {
     enum
     {
@@ -16912,9 +16912,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.270949, -2.191211, -1.843683, -1.825692,
@@ -16937,7 +16937,7 @@ struct Ribosum65_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_70N>
 {
     enum
     {
@@ -16945,9 +16945,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.270949, -2.191211, -1.843683, -1.825692, -2.687248,
@@ -16969,7 +16969,7 @@ struct Ribosum65_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -16977,9 +16977,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.295455, -8.037657, -8.11922, -4.795541, -9.941102, -13.830688, -5.281395,
@@ -17048,7 +17048,7 @@ struct Ribosum90_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_85>
 {
     enum
     {
@@ -17056,9 +17056,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.420207, -3.115537, -2.77702, -2.704847,
@@ -17081,7 +17081,7 @@ struct Ribosum90_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_85N>
 {
     enum
     {
@@ -17089,9 +17089,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.420207, -3.115537, -2.77702, -2.704847, -3.576863,
@@ -17113,7 +17113,7 @@ struct Ribosum90_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17121,9 +17121,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.006962, -8.487139, -8.098595, -4.935932, -9.360108, -11.717669, -6.295873,
@@ -17192,7 +17192,7 @@ struct Ribosum90_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_50>
 {
     enum
     {
@@ -17200,9 +17200,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.110323, -1.590594, -1.19926, -1.190794,
@@ -17225,7 +17225,7 @@ struct Ribosum90_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_50N>
 {
     enum
     {
@@ -17233,9 +17233,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.110323, -1.590594, -1.19926, -1.190794, -2.056194,
@@ -17257,7 +17257,7 @@ struct Ribosum90_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17265,9 +17265,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.520245, -7.747752, -8.506962, -4.568047, -9.314582, -13.223935, -3.904117,
@@ -17336,7 +17336,7 @@ struct Ribosum85_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_85>
 {
     enum
     {
@@ -17344,9 +17344,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.453496, -3.588294, -3.192274, -3.106611,
@@ -17369,7 +17369,7 @@ struct Ribosum85_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_85N>
 {
     enum
     {
@@ -17377,9 +17377,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.453496, -3.588294, -3.192274, -3.106611, -4.155538,
@@ -17401,7 +17401,7 @@ struct Ribosum85_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17409,9 +17409,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.177812, -8.956503, -8.682964, -5.562406, -9.901618, -13.031099, -7.330102,
@@ -17481,7 +17481,7 @@ struct Ribosum95_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_95>
 {
     enum
     {
@@ -17489,9 +17489,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.512232, -5.564475, -5.066604, -5.060932,
@@ -17514,7 +17514,7 @@ struct Ribosum95_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_95N>
 {
     enum
     {
@@ -17522,9 +17522,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.512232, -5.564475, -5.066604, -5.060932, -5.911098,
@@ -17546,7 +17546,7 @@ struct Ribosum95_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17554,9 +17554,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.88917, -8.892653, -8.501385, -6.763221, -999.0, -999.0, -12.653784, -13.620582,
@@ -17624,7 +17624,7 @@ struct Ribosum60_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_25>
 {
     enum
     {
@@ -17632,9 +17632,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.283885, -0.793613, -0.439357, -0.456163,
@@ -17657,7 +17657,7 @@ struct Ribosum60_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_25N>
 {
     enum
     {
@@ -17665,9 +17665,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.283885, -0.793613, -0.439357, -0.456163, -1.558382,
@@ -17689,7 +17689,7 @@ struct Ribosum60_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17697,9 +17697,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -5.098423, -10.410262, -10.86065, -3.807574, -12.027087, -13.083378, -4.950185,
@@ -17766,7 +17766,7 @@ struct Ribosum90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90>
 {
     enum
     {
@@ -17774,9 +17774,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.257063, -1.976785, -1.590831, -1.529605,
@@ -17799,7 +17799,7 @@ struct Ribosum90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90N>
 {
     enum
     {
@@ -17807,9 +17807,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.257063, -1.976785, -1.590831, -1.529605, -2.582207,
@@ -17831,7 +17831,7 @@ struct Ribosum90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17839,9 +17839,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.032955, -8.211363, -8.126086, -4.437303, -9.67589, -13.201339, -4.910572,
@@ -17908,7 +17908,7 @@ struct Ribosum60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60>
 {
     enum
     {
@@ -17916,9 +17916,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.283885, -0.793613, -0.439357, -0.456163,
@@ -17941,7 +17941,7 @@ struct Ribosum60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60N>
 {
     enum
     {
@@ -17949,9 +17949,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.283885, -0.793613, -0.439357, -0.456163, -1.558382,
@@ -17973,7 +17973,7 @@ struct Ribosum60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -17981,9 +17981,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -5.098648, -10.4105, -10.860868, -3.807833, -12.027324, -13.083628, -4.950416,
@@ -18050,7 +18050,7 @@ struct Ribosum55_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_35>
 {
     enum
     {
@@ -18058,9 +18058,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.963061, -1.341466, -0.919562, -0.985044,
@@ -18083,7 +18083,7 @@ struct Ribosum55_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_35N>
 {
     enum
     {
@@ -18091,9 +18091,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.963061, -1.341466, -0.919562, -0.985044, -1.699253,
@@ -18115,7 +18115,7 @@ struct Ribosum55_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18123,9 +18123,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.62841, -8.469144, -8.834725, -5.081035, -10.080663, -13.468162, -3.872763,
@@ -18193,7 +18193,7 @@ struct Ribosum85_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_35>
 {
     enum
     {
@@ -18201,9 +18201,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.89486, -1.237553, -0.845194, -0.841531,
@@ -18226,7 +18226,7 @@ struct Ribosum85_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_35N>
 {
     enum
     {
@@ -18234,9 +18234,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.89486, -1.237553, -0.845194, -0.841531, -1.642986,
@@ -18258,7 +18258,7 @@ struct Ribosum85_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18266,9 +18266,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.328111, -7.475519, -8.641105, -4.554755, -9.546605, -12.909776, -3.69072,
@@ -18335,7 +18335,7 @@ struct Ribosum80_90
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_90>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_90>
 {
     enum
     {
@@ -18343,9 +18343,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_90>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.322417, -4.539591, -4.108158, -3.891634,
@@ -18368,7 +18368,7 @@ struct Ribosum80_90N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_90N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_90N>
 {
     enum
     {
@@ -18376,9 +18376,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_90N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.322417, -4.539591, -4.108158, -3.891634, -4.895502,
@@ -18400,7 +18400,7 @@ struct Ribosum80_90d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_90d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18408,9 +18408,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_90d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.29838, -8.934946, -8.24437, -5.403376, -12.001084, -999.0, -8.590608, -14.582499,
@@ -18480,7 +18480,7 @@ struct Ribosum55_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_55>
 {
     enum
     {
@@ -18488,9 +18488,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.28372, -2.0591, -1.677903, -1.616425,
@@ -18513,7 +18513,7 @@ struct Ribosum55_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_55N>
 {
     enum
     {
@@ -18521,9 +18521,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.28372, -2.0591, -1.677903, -1.616425, -2.641842,
@@ -18545,7 +18545,7 @@ struct Ribosum55_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18553,9 +18553,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.869758, -7.786219, -8.17347, -4.704469, -9.392992, -14.30177, -4.855451,
@@ -18621,7 +18621,7 @@ struct Ribosum45_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_55>
 {
     enum
     {
@@ -18629,9 +18629,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.284796, -2.058805, -1.677705, -1.617614,
@@ -18654,7 +18654,7 @@ struct Ribosum45_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_55N>
 {
     enum
     {
@@ -18662,9 +18662,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.284796, -2.058805, -1.677705, -1.617614, -2.642013,
@@ -18686,7 +18686,7 @@ struct Ribosum45_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18694,9 +18694,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.868781, -7.784747, -8.171962, -4.708032, -9.391521, -14.301354, -4.854999,
@@ -18763,7 +18763,7 @@ struct Ribosum100_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_75>
 {
     enum
     {
@@ -18771,9 +18771,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.341569, -2.353651, -2.028491, -1.979119,
@@ -18796,7 +18796,7 @@ struct Ribosum100_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_75N>
 {
     enum
     {
@@ -18804,9 +18804,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.341569, -2.353651, -2.028491, -1.979119, -2.8799,
@@ -18828,7 +18828,7 @@ struct Ribosum100_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18836,9 +18836,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_75d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.244797, -8.379074, -8.167968, -5.074021, -10.322087, -13.732383, -5.561516,
@@ -18906,7 +18906,7 @@ struct Ribosum80_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_40>
 {
     enum
     {
@@ -18914,9 +18914,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.76399, -1.07032, -0.733567, -0.708544,
@@ -18939,7 +18939,7 @@ struct Ribosum80_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_40N>
 {
     enum
     {
@@ -18947,9 +18947,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.76399, -1.07032, -0.733567, -0.708544, -1.522692,
@@ -18971,7 +18971,7 @@ struct Ribosum80_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -18979,9 +18979,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.580115, -6.486111, -9.387212, -4.437522, -10.176005, -13.003474, -3.633356,
@@ -19048,7 +19048,7 @@ struct Ribosum85_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_45>
 {
     enum
     {
@@ -19056,9 +19056,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.914619, -1.260593, -0.86099, -0.870371,
@@ -19081,7 +19081,7 @@ struct Ribosum85_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_45N>
 {
     enum
     {
@@ -19089,9 +19089,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.914619, -1.260593, -0.86099, -0.870371, -1.654344,
@@ -19113,7 +19113,7 @@ struct Ribosum85_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19121,9 +19121,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.281828, -7.440197, -8.612885, -4.58101, -9.512296, -12.897598, -3.697281,
@@ -19188,7 +19188,7 @@ struct Ribosum80_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_95>
 {
     enum
     {
@@ -19196,9 +19196,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.270907, -5.620194, -5.146776, -5.183942,
@@ -19221,7 +19221,7 @@ struct Ribosum80_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_95N>
 {
     enum
     {
@@ -19229,9 +19229,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.270907, -5.620194, -5.146776, -5.183942, -5.845429,
@@ -19253,7 +19253,7 @@ struct Ribosum80_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19261,9 +19261,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.402543, -9.977199, -10.598953, -7.343514, -999.0, -999.0, -13.490969, -14.507452,
@@ -19332,7 +19332,7 @@ struct Ribosum100_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum100_45>
 {
     enum
     {
@@ -19340,9 +19340,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum100_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.979924, -1.353442, -0.929668, -1.020058,
@@ -19365,7 +19365,7 @@ struct Ribosum100_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum100_45N>
 {
     enum
     {
@@ -19373,9 +19373,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum100_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.979924, -1.353442, -0.929668, -1.020058, -1.703337,
@@ -19397,7 +19397,7 @@ struct Ribosum100_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum100_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19405,9 +19405,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum100_45d>   //TODO Fini
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.587899, -8.458592, -8.810812, -5.088089, -10.045289, -13.446125, -3.873207,
@@ -19475,7 +19475,7 @@ struct Ribosum85_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_30>
 {
     enum
     {
@@ -19483,9 +19483,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.888317, -1.231015, -0.840311, -0.833057,
@@ -19508,7 +19508,7 @@ struct Ribosum85_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_30N>
 {
     enum
     {
@@ -19516,9 +19516,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.888317, -1.231015, -0.840311, -0.833057, -1.639816,
@@ -19540,7 +19540,7 @@ struct Ribosum85_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19548,9 +19548,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.336011, -7.479887, -8.645842, -4.561229, -9.55121, -12.85462, -3.691515,
@@ -19616,7 +19616,7 @@ struct Ribosum55_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_60>
 {
     enum
     {
@@ -19624,9 +19624,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.296512, -2.116033, -1.730813, -1.675325,
@@ -19649,7 +19649,7 @@ struct Ribosum55_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_60N>
 {
     enum
     {
@@ -19657,9 +19657,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.296512, -2.116033, -1.730813, -1.675325, -2.707284,
@@ -19681,7 +19681,7 @@ struct Ribosum55_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19689,9 +19689,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.823787, -7.979797, -8.135359, -4.679348, -9.616439, -14.353122, -5.070906,
@@ -19758,7 +19758,7 @@ struct Ribosum95_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_40>
 {
     enum
     {
@@ -19766,9 +19766,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.960646, -1.332215, -0.916043, -0.973528,
@@ -19791,7 +19791,7 @@ struct Ribosum95_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_40N>
 {
     enum
     {
@@ -19799,9 +19799,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.960646, -1.332215, -0.916043, -0.973528, -1.690531,
@@ -19823,7 +19823,7 @@ struct Ribosum95_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19831,9 +19831,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.831487, -8.539117, -9.168296, -4.957916, -9.968992, -13.480223, -3.826973,
@@ -19900,7 +19900,7 @@ struct Ribosum60_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_60>
 {
     enum
     {
@@ -19908,9 +19908,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.288835, -2.120048, -1.735299, -1.674432,
@@ -19933,7 +19933,7 @@ struct Ribosum60_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_60N>
 {
     enum
     {
@@ -19941,9 +19941,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.288835, -2.120048, -1.735299, -1.674432, -2.705092,
@@ -19965,7 +19965,7 @@ struct Ribosum60_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -19973,9 +19973,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.832478, -7.999249, -8.155169, -4.696226, -9.635891, -14.362389, -5.08053,
@@ -20044,7 +20044,7 @@ struct Ribosum75_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_35>
 {
     enum
     {
@@ -20052,9 +20052,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.543593, -0.909112, -0.612637, -0.570457,
@@ -20077,7 +20077,7 @@ struct Ribosum75_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_35N>
 {
     enum
     {
@@ -20085,9 +20085,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.543593, -0.909112, -0.612637, -0.570457, -1.383457,
@@ -20109,7 +20109,7 @@ struct Ribosum75_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20117,9 +20117,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.662961, -6.107186, -10.993546, -4.461319, -10.579715, -12.727663, -3.494045,
@@ -20188,7 +20188,7 @@ struct Ribosum75_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_40>
 {
     enum
     {
@@ -20196,9 +20196,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.555517, -0.923885, -0.618887, -0.582994,
@@ -20221,7 +20221,7 @@ struct Ribosum75_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_40N>
 {
     enum
     {
@@ -20229,9 +20229,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.555517, -0.923885, -0.618887, -0.582994, -1.388508,
@@ -20253,7 +20253,7 @@ struct Ribosum75_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20261,9 +20261,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.632526, -6.083045, -10.970073, -4.449669, -10.555574, -12.709814, -3.541578,
@@ -20329,7 +20329,7 @@ struct Ribosum80_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_35>
 {
     enum
     {
@@ -20337,9 +20337,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.756267, -1.060801, -0.729211, -0.698446,
@@ -20362,7 +20362,7 @@ struct Ribosum80_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_35N>
 {
     enum
     {
@@ -20370,9 +20370,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.756267, -1.060801, -0.729211, -0.698446, -1.519461,
@@ -20394,7 +20394,7 @@ struct Ribosum80_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20402,9 +20402,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.596622, -6.498481, -9.399311, -4.444135, -10.188375, -13.011706, -3.610261,
@@ -20473,7 +20473,7 @@ struct Ribosum70_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_85>
 {
     enum
     {
@@ -20481,9 +20481,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.3504, -3.435831, -3.163311, -3.075563,
@@ -20506,7 +20506,7 @@ struct Ribosum70_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_85N>
 {
     enum
     {
@@ -20514,9 +20514,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.3504, -3.435831, -3.163311, -3.075563, -3.782839,
@@ -20538,7 +20538,7 @@ struct Ribosum70_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20546,9 +20546,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.528703, -8.624881, -7.531244, -5.269331, -10.178217, -14.655632, -6.772966,
@@ -20618,7 +20618,7 @@ struct Ribosum85_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_95>
 {
     enum
     {
@@ -20626,9 +20626,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.419516, -5.685234, -5.176288, -5.176121,
@@ -20651,7 +20651,7 @@ struct Ribosum85_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_95N>
 {
     enum
     {
@@ -20659,9 +20659,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.419516, -5.685234, -5.176288, -5.176121, -6.123837,
@@ -20683,7 +20683,7 @@ struct Ribosum85_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20691,9 +20691,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.350318, -9.957831, -10.231803, -7.172284, -999.0, -999.0, -14.387206, -15.383552,
@@ -20761,7 +20761,7 @@ struct Ribosum80_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_65>
 {
     enum
     {
@@ -20769,9 +20769,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.199042, -1.754873, -1.420126, -1.350969,
@@ -20794,7 +20794,7 @@ struct Ribosum80_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_65N>
 {
     enum
     {
@@ -20802,9 +20802,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.199042, -1.754873, -1.420126, -1.350969, -2.418154,
@@ -20826,7 +20826,7 @@ struct Ribosum80_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20834,9 +20834,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.539432, -7.590322, -8.073846, -4.469009, -10.110594, -15.350293, -4.605988,
@@ -20902,7 +20902,7 @@ struct Ribosum45_65
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_65>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_65>
 {
     enum
     {
@@ -20910,9 +20910,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_65>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.3075, -2.182398, -1.783065, -1.741127,
@@ -20935,7 +20935,7 @@ struct Ribosum45_65N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_65N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_65N>
 {
     enum
     {
@@ -20943,9 +20943,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_65N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.3075, -2.182398, -1.783065, -1.741127, -2.787567,
@@ -20967,7 +20967,7 @@ struct Ribosum45_65d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_65d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -20975,9 +20975,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_65d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.775581, -8.218052, -8.0941, -4.695573, -9.996419, -14.3786, -5.193712,
@@ -21045,7 +21045,7 @@ struct Ribosum70_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_30>
 {
     enum
     {
@@ -21053,9 +21053,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.486746, -0.825564, -0.579774, -0.52374,
@@ -21078,7 +21078,7 @@ struct Ribosum70_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_30N>
 {
     enum
     {
@@ -21086,9 +21086,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.486746, -0.825564, -0.579774, -0.52374, -1.336022,
@@ -21110,7 +21110,7 @@ struct Ribosum70_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21118,9 +21118,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.67903, -5.680084, -10.775687, -4.112531, -11.748309, -12.341592, -3.761649,
@@ -21186,7 +21186,7 @@ struct Ribosum75_55
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_55>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum75_55>
 {
     enum
     {
@@ -21194,9 +21194,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum75_55>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.784495, -1.223872, -0.953071, -0.84117,
@@ -21219,7 +21219,7 @@ struct Ribosum75_55N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_55N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum75_55N>
 {
     enum
     {
@@ -21227,9 +21227,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum75_55N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.784495, -1.223872, -0.953071, -0.84117, -1.756802,
@@ -21251,7 +21251,7 @@ struct Ribosum75_55d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum75_55d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21259,9 +21259,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum75_55d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.248841, -4.77318, -10.370414, -4.748853, -9.292555, -13.330022, -3.81564,
@@ -21326,7 +21326,7 @@ struct Ribosum70_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_80>
 {
     enum
     {
@@ -21334,9 +21334,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.280031, -2.685537, -2.466786, -2.462755,
@@ -21359,7 +21359,7 @@ struct Ribosum70_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_80N>
 {
     enum
     {
@@ -21367,9 +21367,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.280031, -2.685537, -2.466786, -2.462755, -3.016331,
@@ -21391,7 +21391,7 @@ struct Ribosum70_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21399,9 +21399,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.540614, -8.667434, -7.962251, -5.221485, -9.71057, -12.849279, -6.011264,
@@ -21470,7 +21470,7 @@ struct Ribosum90_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_45>
 {
     enum
     {
@@ -21478,9 +21478,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.950575, -1.312756, -0.901275, -0.946423,
@@ -21503,7 +21503,7 @@ struct Ribosum90_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_45N>
 {
     enum
     {
@@ -21511,9 +21511,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.950575, -1.312756, -0.901275, -0.946423, -1.679481,
@@ -21535,7 +21535,7 @@ struct Ribosum90_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21543,9 +21543,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.951267, -8.132573, -8.778791, -4.715861, -9.702383, -13.062905, -3.775797,
@@ -21613,7 +21613,7 @@ struct Ribosum60_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_85>
 {
     enum
     {
@@ -21621,9 +21621,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.384845, -3.539442, -3.185301, -3.147715,
@@ -21646,7 +21646,7 @@ struct Ribosum60_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_85N>
 {
     enum
     {
@@ -21654,9 +21654,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.384845, -3.539442, -3.185301, -3.147715, -3.952724,
@@ -21678,7 +21678,7 @@ struct Ribosum60_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21686,9 +21686,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.825002, -8.789867, -8.138405, -5.359276, -10.308103, -14.882799, -6.825425,
@@ -21756,7 +21756,7 @@ struct Ribosum70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70>
 {
     enum
     {
@@ -21764,9 +21764,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.165976, -1.912321, -1.59372, -1.444559,
@@ -21789,7 +21789,7 @@ struct Ribosum70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70N>
 {
     enum
     {
@@ -21797,9 +21797,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.165976, -1.912321, -1.59372, -1.444559, -2.485895,
@@ -21821,7 +21821,7 @@ struct Ribosum70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21829,9 +21829,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.528703, -8.624881, -7.531244, -5.269331, -10.178217, -14.655632, -6.772966,
@@ -21901,7 +21901,7 @@ struct Ribosum85_40
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_40>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85_40>
 {
     enum
     {
@@ -21909,9 +21909,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85_40>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.897981, -1.241937, -0.847266, -0.846581,
@@ -21934,7 +21934,7 @@ struct Ribosum85_40N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_40N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85_40N>
 {
     enum
     {
@@ -21942,9 +21942,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85_40N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.897981, -1.241937, -0.847266, -0.846581, -1.644401,
@@ -21966,7 +21966,7 @@ struct Ribosum85_40d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85_40d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -21974,9 +21974,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85_40d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.322176, -7.471182, -8.63687, -4.552652, -9.542267, -12.907035, -3.698399,
@@ -22045,7 +22045,7 @@ struct Ribosum45_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_30>
 {
     enum
     {
@@ -22053,9 +22053,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.97217, -1.344996, -0.922728, -1.005383,
@@ -22078,7 +22078,7 @@ struct Ribosum45_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_30N>
 {
     enum
     {
@@ -22086,9 +22086,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.97217, -1.344996, -0.922728, -1.005383, -1.702347,
@@ -22110,7 +22110,7 @@ struct Ribosum45_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22118,9 +22118,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.614066, -8.459906, -8.825299, -5.068194, -10.071488, -13.456166, -3.87375,
@@ -22188,7 +22188,7 @@ struct Ribosum90_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum90_30>
 {
     enum
     {
@@ -22196,9 +22196,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum90_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.93758, -1.296921, -0.889804, -0.925552,
@@ -22221,7 +22221,7 @@ struct Ribosum90_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum90_30N>
 {
     enum
     {
@@ -22229,9 +22229,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum90_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.93758, -1.296921, -0.889804, -0.925552, -1.671104,
@@ -22253,7 +22253,7 @@ struct Ribosum90_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum90_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22261,9 +22261,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum90_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.977945, -8.15184, -8.795526, -4.705614, -9.721865, -13.048848, -3.773426,
@@ -22330,7 +22330,7 @@ struct Ribosum55_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_80>
 {
     enum
     {
@@ -22338,9 +22338,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.349704, -2.703555, -2.444639, -2.409977,
@@ -22363,7 +22363,7 @@ struct Ribosum55_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_80N>
 {
     enum
     {
@@ -22371,9 +22371,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.349704, -2.703555, -2.444639, -2.409977, -3.161319,
@@ -22395,7 +22395,7 @@ struct Ribosum55_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22403,9 +22403,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.734692, -8.761408, -8.174567, -5.223516, -9.833099, -13.08898, -6.060429,
@@ -22473,7 +22473,7 @@ struct Ribosum55_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_30>
 {
     enum
     {
@@ -22481,9 +22481,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.677641, -1.055662, -0.706313, -0.656647,
@@ -22506,7 +22506,7 @@ struct Ribosum55_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_30N>
 {
     enum
     {
@@ -22514,9 +22514,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.677641, -1.055662, -0.706313, -0.656647, -1.546258,
@@ -22538,7 +22538,7 @@ struct Ribosum55_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22546,9 +22546,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.991425, -8.659196, -9.057261, -5.312449, -10.29675, -11.628466, -3.910937,
@@ -22614,7 +22614,7 @@ struct Ribosum65_75
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_75>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum65_75>
 {
     enum
     {
@@ -22622,9 +22622,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum65_75>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.282223, -2.310042, -2.033265, -2.015723,
@@ -22647,7 +22647,7 @@ struct Ribosum65_75N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_75N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65_75N>
 {
     enum
     {
@@ -22655,9 +22655,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum65_75N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.282223, -2.310042, -2.033265, -2.015723, -2.727517,
@@ -22679,7 +22679,7 @@ struct Ribosum65_75d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum65_75d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22687,9 +22687,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum65_75d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.923156, -8.233117, -8.184731, -5.074304, -10.138409, -13.325433, -5.592898,
@@ -22756,7 +22756,7 @@ struct Ribosum95_80
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_80>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum95_80>
 {
     enum
     {
@@ -22764,9 +22764,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum95_80>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.327989, -2.616877, -2.34588, -2.29963,
@@ -22789,7 +22789,7 @@ struct Ribosum95_80N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_80N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum95_80N>
 {
     enum
     {
@@ -22797,9 +22797,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum95_80N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.327989, -2.616877, -2.34588, -2.29963, -3.051112,
@@ -22821,7 +22821,7 @@ struct Ribosum95_80d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum95_80d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22829,9 +22829,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum95_80d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.92978, -9.189811, -8.699787, -4.979298, -9.65116, -12.631563, -5.764365,
@@ -22899,7 +22899,7 @@ struct Ribosum80_85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_85>
 {
     enum
     {
@@ -22907,9 +22907,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.356618, -3.541174, -3.219148, -3.04778,
@@ -22932,7 +22932,7 @@ struct Ribosum80_85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_85N>
 {
     enum
     {
@@ -22940,9 +22940,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.356618, -3.541174, -3.219148, -3.04778, -3.964424,
@@ -22964,7 +22964,7 @@ struct Ribosum80_85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -22972,9 +22972,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_85d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.011202, -9.070048, -8.199319, -5.27865, -10.404626, -11.643571, -7.027312,
@@ -23043,7 +23043,7 @@ struct Ribosum70_45
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_45>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_45>
 {
     enum
     {
@@ -23051,9 +23051,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_45>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.579342, -0.899154, -0.63268, -0.603674,
@@ -23076,7 +23076,7 @@ struct Ribosum70_45N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_45N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_45N>
 {
     enum
     {
@@ -23084,9 +23084,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_45N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.579342, -0.899154, -0.63268, -0.603674, -1.362162,
@@ -23108,7 +23108,7 @@ struct Ribosum70_45d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_45d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23116,9 +23116,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_45d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.379427, -5.443034, -10.538361, -4.215986, -11.511085, -12.291074, -3.903364,
@@ -23186,7 +23186,7 @@ struct Ribosum70_25
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_25>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_25>
 {
     enum
     {
@@ -23194,9 +23194,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_25>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.476984, -0.818761, -0.572233, -0.518638,
@@ -23219,7 +23219,7 @@ struct Ribosum70_25N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_25N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_25N>
 {
     enum
     {
@@ -23227,9 +23227,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_25N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.476984, -0.818761, -0.572233, -0.518638, -1.331519,
@@ -23251,7 +23251,7 @@ struct Ribosum70_25d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_25d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23259,9 +23259,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_25d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -3.691323, -5.687648, -10.783801, -4.124301, -11.755873, -12.344428, -3.76498,
@@ -23327,7 +23327,7 @@ struct Ribosum45_35
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_35>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum45_35>
 {
     enum
     {
@@ -23335,9 +23335,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum45_35>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.973044, -1.345996, -0.923456, -1.006842,
@@ -23360,7 +23360,7 @@ struct Ribosum45_35N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_35N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum45_35N>
 {
     enum
     {
@@ -23368,9 +23368,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum45_35N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.973044, -1.345996, -0.923456, -1.006842, -1.702777,
@@ -23392,7 +23392,7 @@ struct Ribosum45_35d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum45_35d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23400,9 +23400,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum45_35d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.613019, -8.459354, -8.824666, -5.067476, -10.070873, -13.465521, -3.873641,
@@ -23468,7 +23468,7 @@ struct Ribosum70_50
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_50>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum70_50>
 {
     enum
     {
@@ -23476,9 +23476,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum70_50>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.688977, -1.041078, -0.773431, -0.71595,
@@ -23501,7 +23501,7 @@ struct Ribosum70_50N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_50N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum70_50N>
 {
     enum
     {
@@ -23509,9 +23509,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum70_50N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.688977, -1.041078, -0.773431, -0.71595, -1.554064,
@@ -23533,7 +23533,7 @@ struct Ribosum70_50d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum70_50d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23541,9 +23541,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum70_50d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.642484, -4.738011, -10.264517, -4.298291, -10.906011, -12.088517, -4.403214,
@@ -23610,7 +23610,7 @@ struct Ribosum55_95
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_95>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_95>
 {
     enum
     {
@@ -23618,9 +23618,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_95>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.540738, -5.496178, -5.053752, -5.044963,
@@ -23643,7 +23643,7 @@ struct Ribosum55_95N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_95N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_95N>
 {
     enum
     {
@@ -23651,9 +23651,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_95N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.540738, -5.496178, -5.053752, -5.044963, -5.939113,
@@ -23675,7 +23675,7 @@ struct Ribosum55_95d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_95d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23683,9 +23683,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_95d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -0.674921, -7.663487, -7.944474, -7.103436, -999.0, -999.0, -11.432778, -12.234601,
@@ -23752,7 +23752,7 @@ struct Ribosum85
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum85>
 {
     enum
     {
@@ -23760,9 +23760,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum85>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.883271, -1.225642, -0.835694, -0.826847,
@@ -23785,7 +23785,7 @@ struct Ribosum85N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum85N>
 {
     enum
     {
@@ -23793,9 +23793,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum85N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.883271, -1.225642, -0.835694, -0.826847, -1.637349,
@@ -23817,7 +23817,7 @@ struct Ribosum85d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum85d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23825,9 +23825,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum85d>   //TODO Finite(c
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.175785, -8.615728, -8.446697, -4.801774, -9.513265, -13.227579, -5.893355,
@@ -23895,7 +23895,7 @@ struct Ribosum55_70
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_70>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum55_70>
 {
     enum
     {
@@ -23903,9 +23903,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum55_70>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.319468, -2.232661, -1.832887, -1.789298,
@@ -23928,7 +23928,7 @@ struct Ribosum55_70N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_70N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum55_70N>
 {
     enum
     {
@@ -23936,9 +23936,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum55_70N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.319468, -2.232661, -1.832887, -1.789298, -2.829591,
@@ -23960,7 +23960,7 @@ struct Ribosum55_70d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum55_70d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -23968,9 +23968,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum55_70d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -1.716286, -8.18337, -8.046583, -4.744339, -10.02998, -14.292835, -5.248533,
@@ -24038,7 +24038,7 @@ struct Ribosum80_60
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_60>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum80_60>
 {
     enum
     {
@@ -24046,9 +24046,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum80_60>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     2.112826, -1.582043, -1.277252, -1.168913,
@@ -24071,7 +24071,7 @@ struct Ribosum80_60N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_60N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum80_60N>
 {
     enum
     {
@@ -24079,9 +24079,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum80_60N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     2.112826, -1.582043, -1.277252, -1.168913, -2.182643,
@@ -24103,7 +24103,7 @@ struct Ribosum80_60d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum80_60d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -24111,9 +24111,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum80_60d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -2.478732, -5.948466, -8.388616, -4.467841, -9.465565, -14.105258, -4.519232,
@@ -24181,7 +24181,7 @@ struct Ribosum60_30
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_30>
+struct RnaScoringMatrixData_<float, seqan::Rna, Ribosum60_30>
 {
     enum
     {
@@ -24189,9 +24189,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna, Ribosum60_30>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U
                                     1.325404, -0.831565, -0.470414, -0.468901,
@@ -24214,7 +24214,7 @@ struct Ribosum60_30N
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_30N>
+struct RnaScoringMatrixData_<float, seqan::Rna5, Ribosum60_30N>
 {
     enum
     {
@@ -24222,9 +24222,9 @@ struct RnaScoringMatrixData_<double, seqan::Rna5, Ribosum60_30N>
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // A           C           G           U           N
                                     1.325404, -0.831565, -0.470414, -0.468901, -1.607744,
@@ -24246,7 +24246,7 @@ struct Ribosum60_30d
 };
 
 template<>
-struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
+struct RnaScoringMatrixData_<float, seqan::Iupac, Ribosum60_30d>   //TODO Finite(char,SIZE_BLOS_D)  instead of seqan::Iupac type
 {
     enum
     {
@@ -24254,9 +24254,9 @@ struct RnaScoringMatrixData_<double, seqan::Iupac, Ribosum60_30d>   //TODO Finit
         TAB_SIZE   = VALUE_SIZE * VALUE_SIZE
     };
 
-    static inline double const *getData()
+    static inline float const *getData()
     {
-        static double const _data[TAB_SIZE] =
+        static float const _data[TAB_SIZE] =
                                 {
                                     // AA          AC          AG          AU          CA          CC          CG          CU          GA          GC          GG          GU          UA          UC          UG          UU
                                     -5.053707, -10.379997, -10.828238, -3.762507, -11.996821, -13.067563, -4.932908,

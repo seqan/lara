@@ -47,10 +47,10 @@ namespace lara
 {
 
 template<typename TSequenceValue, typename TTag>
-inline void setRnaScoreMatrix(seqan::Score<double, seqan::ScoreMatrix<TSequenceValue>> & matrix, TTag)
+inline void setRnaScoreMatrix(seqan::Score<float, seqan::ScoreMatrix<TSequenceValue>> & matrix, TTag)
 {
-    double const * tab = RnaScoringMatrixData_<double, TSequenceValue, TTag>::getData();
-    seqan::arrayCopy(tab, tab + RnaScoringMatrixData_<double, TSequenceValue, TTag>::TAB_SIZE,
+    float const * tab = RnaScoringMatrixData_<float, TSequenceValue, TTag>::getData();
+    seqan::arrayCopy(tab, tab + RnaScoringMatrixData_<float, TSequenceValue, TTag>::TAB_SIZE,
                      matrix.data_tab);
 }
 
@@ -72,37 +72,37 @@ public:
     // Use the global local or global-Unconstrained algorithm (default: global(0) - local(1) )
     bool                     alignLocally{false};
     // Parameter used during the RNAfold execution to select the minimum energy to be considered
-    double                   thrBppm{1e-15}; // old Lara: 0.1
+    float                    thrBppm{1e-15f}; // old Lara: 0.1
     // number of iterations
     unsigned                 numIterations{500u};
     // number of non-decreasing iterations
     unsigned                 numNondecreasingIterations{50u};
     // value to be considered for the equality of upper and lower bounds difference
-    double                   epsilon{0.0001};
+    float                    epsilon{0.001f};
     // my, necessary for computing appropriate step sizes
-    double                   stepSizeFactor{1.0};
+    float                    stepSizeFactor{1.0f};
     // scoring matrix name that should be used for scoring alignment edges in the actual problem
     seqan::CharString        laraScoreMatrixName{};
-    //    Score<double, ScoreMatrix<Rna5, Default> > laraScoreMatrix;
+    //    Score<float, ScoreMatrix<Rna5, Default> > laraScoreMatrix;
     RnaScoreMatrix           laraScoreMatrix;
     //    TScoringSchemeRib laraScoreMatrixRib;
     // Gap open and extend costs for generating the alignment edges
-    double                   suboptimalDiff{40.0};
+    float                    suboptimalDiff{40.0f};
     // Gap open and extend costs for generating the alignment edges
-    double                   laraGapOpen{-6.0};
-    double                   laraGapExtend{-2.0};
+    float                    laraGapOpen{-6.0f};
+    float                    laraGapExtend{-2.0f};
     // scaling factor for the scores of the alignment edges
     // Specifies the contribution of the sequence scores (specified by the larascore matrix) to the overall structural
     // alignment.
-    double                   sequenceScale{1.0};
+    float                    sequenceScale{1.0f};
     // gap penalty for RSA
-    //    double rsaGapPenalty{3.0};
+    //    float rsaGapPenalty{3.0};
     // scoring mode, either LOGARITHMIC, SCALE, ORIGINAL, RIBOSUM
     unsigned                 structureScoring{ScoringMode::LOGARITHMIC};
     // define the weight of _half_ an interaction match for fixed structures
-    double                   fixedStructWeight{8.0};
+    float                    fixedStructWeight{8.0f};
     // if structureScoring=SCALING then we have to give a scaling factor
-    double                   scalingFactor{1.0};
+    float                    scalingFactor{1.0f};
     // specify the location of T-COFFEE
     seqan::CharString        tcoffeeLocation{"t_coffee/t_coffee_5.05"};
     // specify the method to be used to create the T-Coffe library
@@ -284,15 +284,15 @@ private:
         }
         else
         {
-            CharString tmpDir;
-            getOptionValue(tmpDir, parser, "tmpDir");
+            CharString tmpDirectory;
+            getOptionValue(tmpDirectory, parser, "tmpDir");
             if (!isSet(parser, "tmpDir"))
             {
-                tmpDir = SEQAN_TEMP_FILENAME();
+                tmpDirectory = SEQAN_TEMP_FILENAME();
                 // remove "/test_file" suffix
-                erase(tmpDir, length(tmpDir) - 10u, length(tmpDir));
+                erase(tmpDirectory, length(tmpDirectory) - 10u, length(tmpDirectory));
             }
-            tmpDir = tmpDir;
+            tmpDir = tmpDirectory;
             _VV(*this, "The absolute path where to create the tmpDir is " << tmpDir);
         }
 
@@ -318,7 +318,7 @@ private:
         // scale the matrix
         laraScoreMatrix.data_gap_extend *= sequenceScale;
         laraScoreMatrix.data_gap_open *= sequenceScale;
-        for (double & matrixEntry : laraScoreMatrix.data_tab)
+        for (float & matrixEntry : laraScoreMatrix.data_tab)
             matrixEntry *= sequenceScale;
 
         return Status::CONTINUE;

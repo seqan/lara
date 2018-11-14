@@ -53,18 +53,18 @@ namespace lara
 class SubgradientSolver
 {
 private:
-    double epsilon;
-    double stepSizeFactor;
+    float epsilon;
+    float stepSizeFactor;
     unsigned verbose;
     size_t numIterations;
     size_t maxNondecreasingIterations;
 
     size_t iterationIdx;
-    std::vector<double> dual;
-    double currentLowerBound;
-    double currentUpperBound;
-    double bestLowerBound;
-    double bestUpperBound;
+    std::vector<float> dual;
+    float currentLowerBound;
+    float currentUpperBound;
+    float bestLowerBound;
+    float bestUpperBound;
 
 public:
     SubgradientSolver(PosPair const dim, Parameters const & params)
@@ -85,17 +85,17 @@ public:
         iterationIdx   = 0ul;
     }
 
-    double calcStepsize(double upper, double lower, size_t numSubgradients)
+    float calcStepsize(float upper, float lower, size_t numSubgradients)
     {
         return stepSizeFactor * (upper - lower) / numSubgradients;
     }
 
-    double getLowerBound()
+    float getLowerBound()
     {
         return bestLowerBound;
     }
 
-    double getUpperBound()
+    float getUpperBound()
     {
         return bestUpperBound;
     }
@@ -107,7 +107,7 @@ public:
         std::list<size_t> dualIndices;
         std::list<size_t> subgradientIndices;
 
-        std::vector<double> subgradient;
+        std::vector<float> subgradient;
         subgradient.resize(dual.size());
 
         for (iterationIdx = 0ul; iterationIdx < numIterations; ++iterationIdx)
@@ -137,25 +137,29 @@ public:
             if (verbose >= 1)
                 std::cerr << std::endl;
 
-            if (bestUpperBound - bestLowerBound < epsilon)
-            {
-                assert(bestUpperBound + epsilon > bestLowerBound);
-                return Status::EXIT_OK;
-            }
-
-            if (subgradientIndices.empty() && currentUpperBound - currentLowerBound > epsilon)
+            if (subgradientIndices.empty() && currentUpperBound - currentLowerBound > 0.1f)
             {
                 std::cerr << "Error: The bounds differ, although there are no subgradients." << std::endl;
                 return Status::EXIT_ERROR;
             }
 
+            if (bestUpperBound - bestLowerBound < epsilon)
+            {
+                SEQAN_ASSERT_GT(bestUpperBound + epsilon, bestLowerBound);
+                if (verbose > 0)
+                {
+                    std::cerr << "Found the optimal alignment in iteration " << iterationIdx << "." << std::endl;
+                }
+                return Status::EXIT_OK;
+            }
+
             if (nondecreasingRounds++ >= maxNondecreasingIterations)
             {
-                stepSizeFactor /= 2.0;
+                stepSizeFactor /= 2.0f;
                 nondecreasingRounds = 0;
             }
 
-            double stepSize = calcStepsize(bestUpperBound, bestLowerBound, subgradientIndices.size());
+            float stepSize = calcStepsize(bestUpperBound, bestLowerBound, subgradientIndices.size());
             if (verbose >= 2)
                 std::cerr << "stepsize = " << stepSize << std::endl;
 
@@ -167,7 +171,7 @@ public:
 
             for (size_t dualIdx : dualIndices)
             {
-                subgradient[dualIdx] = 0.0;
+                subgradient[dualIdx] = 0.0f;
             }
         } // end for (iterationIdx = 0..numIterations-1)
 

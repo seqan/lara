@@ -83,17 +83,17 @@ private:
 
     // the arrays hold the alignment scores that are passed onto
     // the pairwiseAlignmentAlgorithm object
-    std::vector<std::vector<double>> maxProfitScores;
+    std::vector<std::vector<float>> maxProfitScores;
 
     // vector holding the maximum profit for each alignment edge
-    std::vector<double> maxProfit;
+    std::vector<float> maxProfit;
 
     // vector holding the index of the maximum profit line
     std::vector<size_t> maxProfitEdge;
 
     // holds the initial maxProfitScores as set in StartUpLagrange()
-    std::vector<double>              bestLagrangianMultipliers;
-    std::vector<std::vector<double>> bestUpperBoundScores;
+    std::vector<float>              bestLagrangianMultipliers;
+    std::vector<std::vector<float>> bestUpperBoundScores;
 
     std::vector<size_t> bestStructuralAlignment;
     std::map<size_t, size_t> edgeMatching;
@@ -106,7 +106,7 @@ private:
     size_t residueCount;
 
     // best upper bound found so far
-    std::vector<double> allUpperBounds;
+    std::vector<float> allUpperBounds;
 
     seqan::Rna5String sequenceA;
     seqan::Rna5String sequenceB;
@@ -114,11 +114,11 @@ private:
     bool doMatching; // True for bpp matrix input
 
     // the best structural alignment score found so far
-    double bestStructuralAlignmentScore;
+    float bestStructuralAlignmentScore;
     Alignment bestAlignment;
 
     // the best (lowest) upper bound found so far
-    double bestUpperBoundScore;
+    float bestUpperBoundScore;
 
     std::vector<size_t> sourceNode;
     std::vector<size_t> targetNode;
@@ -127,14 +127,14 @@ private:
     std::map<PosPair, PriorityQueue::iterator> edgeToPriorityQ;
 
     // primal information used in the branching process
-    std::vector<double> primal;
+    std::vector<float> primal;
 
     std::pair<seqan::RnaStructureGraph, seqan::RnaStructureGraph> bppGraphs;
     std::vector<std::vector<Contact>> possiblePartners;
 
     // scores
-    std::vector<double> sequencesScore;
-    std::map<PosPair, double> structureScore;
+    std::vector<float> sequencesScore;
+    std::map<PosPair, float> structureScore;
 
     // every alignment edge holds a priority queue that handles the possible partner edges
     // - the second argument denotes the index of the alignment edges
@@ -152,7 +152,7 @@ private:
         for (seqan::RnaAdjacencyIterator adjIt(graph.inter, origin); !seqan::atEnd(adjIt); seqan::goNext(adjIt))
         {
             size_t partner = seqan::value(adjIt);
-            double probability = seqan::cargo(seqan::findEdge(graph.inter, origin, partner));
+            float probability = seqan::cargo(seqan::findEdge(graph.inter, origin, partner));
             contacts.emplace_back(partner, probability);
         }
     }
@@ -164,14 +164,14 @@ private:
         return smallerA || smallerB;
     }
 
-    void adaptPriorityQ(PosPair pair, double value)
+    void adaptPriorityQ(PosPair pair, float value)
     {
         priorityQ[pair.first].erase(edgeToPriorityQ[pair]);
         edgeToPriorityQ[pair] = priorityQ[pair.first].emplace(-value, pair.second).first;
     }
 
     // return gap cost
-    double evaluateLines(AlignmentRow const & rowA, AlignmentRow const & rowB)
+    float evaluateLines(AlignmentRow const & rowA, AlignmentRow const & rowB)
     {
         typedef typename seqan::Iterator<seqan::Gaps<seqan::Rna5String, seqan::ArrayGaps> const>::Type GapsIterator;
 
@@ -190,7 +190,7 @@ private:
         lines.clear();
 
         // Sum up gap score.
-        double gapScore = 0.0;
+        float gapScore = 0.0f;
 
         while (it0 != itEnd0 && it1 != itEnd1)
         {
@@ -250,11 +250,11 @@ private:
     }
 
 #ifdef LEMON_FOUND
-    double computeMatching(std::map<size_t, size_t> & contacts,
-                           std::vector<size_t> const & currentAlignment,
-                           std::vector<bool> const & inSolution)
+    float computeMatching(std::map<size_t, size_t> & contacts,
+                          std::vector<size_t> const & currentAlignment,
+                          std::vector<bool> const & inSolution)
     {
-        double score = 0.0;
+        float score = 0.0f;
         contacts.clear();
 
         lemon::SmartGraph lemonG;
@@ -266,7 +266,7 @@ private:
             nodes[line] = lemonG.addNode();
         }
 
-        typedef lemon::SmartGraph::EdgeMap<double> EdgeMap;
+        typedef lemon::SmartGraph::EdgeMap<float> EdgeMap;
         EdgeMap weight(lemonG);
         lemon::SmartGraph::EdgeMap<PosPair> interactions(lemonG);
         std::map<PosPair, bool> computed;
@@ -292,7 +292,7 @@ private:
         }
         lemon::MaxWeightedMatching<lemon::SmartGraph, EdgeMap> mwm(lemonG, weight);
         mwm.run();
-        double lemonweight = mwm.matchingWeight();
+        float lemonweight = mwm.matchingWeight();
         for (lemon::SmartGraph::EdgeIt edgeIt(lemonG); edgeIt!=lemon::INVALID; ++edgeIt)
         {
             PosPair inter = interactions[edgeIt];
@@ -325,11 +325,11 @@ public:
         layer.resize(seqLen.first + seqLen.second);
         offset.resize(seqLen.first + seqLen.second);
         maxProfitScores.resize(seqLen.first);
-        for (std::vector<double> & elem : maxProfitScores)
+        for (std::vector<float> & elem : maxProfitScores)
             elem.resize(seqLen.second, negInfinity);
         bestLagrangianMultipliers.resize(seqLen.first * seqLen.second);
         bestUpperBoundScores.resize(seqLen.first);
-        for (std::vector<double> & elem : bestUpperBoundScores)
+        for (std::vector<float> & elem : bestUpperBoundScores)
             elem.resize(seqLen.second, negInfinity);
 
         // initialize()
@@ -399,9 +399,9 @@ public:
             extractContacts(headContact, bppGraphs.first, headNode);
             extractContacts(tailContact, bppGraphs.second, tailNode);
 
-            double alignScore = seqan::score(params.laraScoreMatrix,
-                                             sequenceA[sourceNode[edgeIdx]],
-                                             sequenceB[targetNode[edgeIdx]]);
+            float alignScore = seqan::score(params.laraScoreMatrix,
+                                            sequenceA[sourceNode[edgeIdx]],
+                                            sequenceB[targetNode[edgeIdx]]);
 
             possiblePartners[edgeIdx].emplace_back(edgeIdx, alignScore);
             structureScore[std::make_pair(edgeIdx, edgeIdx)] = negInfinity;
@@ -421,7 +421,7 @@ public:
                         {
                             size_t partnerIdx = partnerIter->second;
                             PosPair interaction{edgeIdx, partnerIdx};
-                            double structScore = 0.5 * (head.second + tail.second);
+                            float structScore = 0.5f * (head.second + tail.second);
                             possiblePartners[edgeIdx].emplace_back(partnerIdx, structScore);
                             structureScore[interaction] = structScore;
                             sequencesScore[edgeIdx] = alignScore;
@@ -452,15 +452,15 @@ public:
             numPartners += possiblePartners[edgeIdx].size();
         }
         _VV(params, "Average number of partner edges = " << 1.0 * numPartners / sourceNode.size());
-        dimension.second = dualIdx;
-        dimension.first = sourceNode.size();
+        dimension.second = dualIdx; // number of interactions that are observed
+        dimension.first = sourceNode.size(); // number of alignment edges (lines)
     }
 
-    void evaluate(std::vector<double> & dual,
+    void evaluate(std::vector<float> & dual,
                   std::list<size_t> & dualIndices,
-                  double & dualValue,   // upper bound
-                  double & primalValue, // lower bound
-                  std::vector<double> & subgradient,
+                  float & dualValue,   // upper bound
+                  float & primalValue, // lower bound
+                  std::vector<float> & subgradient,
                   std::list<size_t> & subgradientIndices)
     {
         for (size_t dualIdx : dualIndices)
@@ -487,7 +487,7 @@ public:
             for (auto & row : maxProfitScores)
             {
                 std::cerr << "[ ";
-                for (double sc : row)
+                for (float sc : row)
                 {
                     std::cerr << std::setw(14) << sc << " ";
                 }
@@ -495,9 +495,9 @@ public:
             }
         }
 
-        seqan::Score<double, seqan::RnaStructureScore> scoreAdaptor(&maxProfitScores,
-                                                                    params.laraGapOpen,
-                                                                    params.laraGapExtend);
+        seqan::Score<float, seqan::RnaStructureScore> scoreAdaptor(&maxProfitScores,
+                                                                   params.laraGapOpen,
+                                                                   params.laraGapExtend);
         Alignment alignment;
         seqan::resize(seqan::rows(alignment), 2);
         AlignmentRow & rowA = seqan::row(alignment, 0);
@@ -508,18 +508,18 @@ public:
         seqan::assignSource(rowB, sequenceB);
 
         // perform the alignment
-        double optScore = seqan::globalAlignment(alignment, scoreAdaptor, seqan::AffineGaps());
-        double gapScore = evaluateLines(rowA, rowB);
+        float optScore = seqan::globalAlignment(alignment, scoreAdaptor, seqan::AffineGaps());
+        float gapScore = evaluateLines(rowA, rowB);
 
         std::vector<size_t> currentStructuralAlignment;
         std::vector<bool> inSolution;
         inSolution.resize(sourceNode.size(), false);
-        double scoreseq = gapScore;
+        float scoreseq = gapScore;
 
         for (PosPair line : lines)
         {
-            //double sc = seqan::score(scoreAdaptor, line.first, line.second);
-            double sc = maxProfitScores[line.first][line.second];
+            //float sc = seqan::score(scoreAdaptor, line.first, line.second);
+            float sc = maxProfitScores[line.first][line.second];
             scoreseq += sc;
 
             auto edgeIdxIt = getEdgeIdx.find(line);
@@ -586,7 +586,7 @@ public:
             }
         }
 
-        double lowerBound = 0.0;
+        float lowerBound = 0.0f;
         std::map<size_t, size_t> contacts;
         if (doMatching)
         {
@@ -602,8 +602,8 @@ public:
         else
         {
             _VV(params, "no matching");
-            double seqPart = 0.0;
-            double structPart = 0.0;
+            float seqPart = 0.0f;
+            float structPart = 0.0f;
 
             std::map<PosPair, bool> computed;
             for (size_t line : currentStructuralAlignment)

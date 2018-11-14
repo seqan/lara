@@ -50,71 +50,71 @@ namespace seqan
 struct RnaStructureScore;
 
 template <>
-class Score<double, RnaStructureScore>
+class Score<float, RnaStructureScore>
 {
 public:
-    std::vector<std::vector<double>> * matrix;
-    double gapOpen;
-    double gapExtend;
+    std::vector<std::vector<float>> * matrix;
+    float gapOpen;
+    float gapExtend;
 
-    Score(std::vector<std::vector<double>> * _matrix, double _gapOpen, double _gapExtend)
+    Score(std::vector<std::vector<float>> * _matrix, float _gapOpen, float _gapExtend)
         : matrix(_matrix), gapOpen(_gapOpen), gapExtend(_gapExtend) {};
 };
 
 template <typename TSequence>
-struct SequenceEntryForScore<Score<double, RnaStructureScore>, TSequence>
+struct SequenceEntryForScore<Score<float, RnaStructureScore>, TSequence>
 {
     typedef ConsensusScoreSequenceEntry<TSequence> Type;
 };
 
 template <typename TSeq1, typename TSeq2>
 inline
-double score(Score<double, RnaStructureScore> const & sc,
-             ConsensusScoreSequenceEntry<TSeq1> const & entryH,
-             ConsensusScoreSequenceEntry<TSeq2> const & entryV)
+float score(Score<float, RnaStructureScore> const & sc,
+            ConsensusScoreSequenceEntry<TSeq1> const & entryH,
+            ConsensusScoreSequenceEntry<TSeq2> const & entryV)
 {
     return (*sc.matrix)[position(entryH)][position(entryV)];
 }
 
 template <typename TSeq1, typename TSeq2>
 inline
-double scoreGapExtendHorizontal(Score<double, RnaStructureScore> const & sc,
-                                ConsensusScoreSequenceEntry<TSeq1> const &,
-                                ConsensusScoreSequenceEntry<TSeq2> const &)
+float scoreGapExtendHorizontal(Score<float, RnaStructureScore> const & sc,
+                               ConsensusScoreSequenceEntry<TSeq1> const &,
+                               ConsensusScoreSequenceEntry<TSeq2> const &)
 {
     return sc.gapExtend;
 }
 
 template <typename TSeq1, typename TSeq2>
 inline
-double scoreGapExtendVertical(Score<double, RnaStructureScore> const & sc,
-                              ConsensusScoreSequenceEntry<TSeq1> const &,
-                              ConsensusScoreSequenceEntry<TSeq2> const &)
+float scoreGapExtendVertical(Score<float, RnaStructureScore> const & sc,
+                             ConsensusScoreSequenceEntry<TSeq1> const &,
+                             ConsensusScoreSequenceEntry<TSeq2> const &)
 {
     return sc.gapExtend;
 }
 
 template <typename TSeq1, typename TSeq2>
 inline
-double scoreGapOpenHorizontal(Score<double, RnaStructureScore> const & sc,
-                              ConsensusScoreSequenceEntry<TSeq1> const &,
-                              ConsensusScoreSequenceEntry<TSeq2> const &)
+float scoreGapOpenHorizontal(Score<float, RnaStructureScore> const & sc,
+                             ConsensusScoreSequenceEntry<TSeq1> const &,
+                             ConsensusScoreSequenceEntry<TSeq2> const &)
 {
     return sc.gapOpen;
 }
 
 template <typename TSeq1, typename TSeq2>
 inline
-double scoreGapOpenVertical(Score<double, RnaStructureScore> const & sc,
-                            ConsensusScoreSequenceEntry<TSeq1> const &,
-                            ConsensusScoreSequenceEntry<TSeq2> const &)
+float scoreGapOpenVertical(Score<float, RnaStructureScore> const & sc,
+                           ConsensusScoreSequenceEntry<TSeq1> const &,
+                           ConsensusScoreSequenceEntry<TSeq2> const &)
 {
     return sc.gapOpen;
 }
 
 template <typename TSequence, typename TPosition>
 inline
-ConsensusScoreSequenceEntry<TSequence> sequenceEntryForScore(Score<double, RnaStructureScore> const &,
+ConsensusScoreSequenceEntry<TSequence> sequenceEntryForScore(Score<float, RnaStructureScore> const &,
                                                              TSequence const & seq,
                                                              TPosition pos)
 {

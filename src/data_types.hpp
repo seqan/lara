@@ -77,16 +77,16 @@ enum Status
     CONTINUE
 };
 
-double const negInfinity = std::numeric_limits<double>::lowest();
-double const posInfinity = std::numeric_limits<double>::max();
+float const negInfinity = std::numeric_limits<float>::lowest();
+float const posInfinity = std::numeric_limits<float>::max();
 
 //! \brief Score Matrix type used in LaRA.
-typedef seqan::Score<double, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
+typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
 
 //! \brief Pair of positions (usually in first and second sequence)
 typedef std::pair<size_t, size_t>                         PosPair;
-typedef std::pair<size_t, double>                         Contact;
-typedef std::set<std::pair<double, size_t>>               PriorityQueue;
+typedef std::pair<size_t, float>                          Contact;
+typedef std::set<std::pair<float, size_t>>                PriorityQueue;
 typedef seqan::Align<seqan::Rna5String, seqan::ArrayGaps> Alignment;
 typedef seqan::Row<Alignment>::Type                       AlignmentRow;
 

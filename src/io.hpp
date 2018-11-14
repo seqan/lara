@@ -149,13 +149,13 @@ private:
     {
         using namespace seqan;
 
-        double const minProb = 0.003; // taken from LISA > Lara
+        float const minProb = 0.003f; // taken from LISA > Lara
 
         // open dotplot file and read lines
         std::ifstream file(filename);
         std::string   line;
         unsigned      iPos, jPos;
-        double        prob;
+        float         prob;
 
         if (!file.is_open())
             throw std::runtime_error("ERROR: Cannot open file " + filename);
@@ -248,7 +248,7 @@ private:
         for (size_t idx = 0u; idx < length; ++idx)
             seqan::addVertex(bppMatrGraph.inter);
 
-        double const  minProb = 0.003; // taken from LISA > Lara
+        float const  minProb = 0.003f; // taken from LISA > Lara
         for (size_t i = 0u; i < length; ++i)
         {
             for (size_t j = i + 1u; j < length; ++j)

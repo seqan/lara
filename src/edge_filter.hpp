@@ -55,12 +55,12 @@ private:
     size_t const lenA;
     size_t const lenB;
 
-    std::vector<double> matrixM;
-    std::vector<double> matrixH;
-    std::vector<double> matrixV;
+    std::vector<float> matrixM;
+    std::vector<float> matrixH;
+    std::vector<float> matrixV;
 
     //!\brief Shortcut for retrieving the specified matrix entry.
-    double & get(std::vector<double> & matrix, size_t posA, size_t posB) const
+    float & get(std::vector<float> & matrix, size_t posA, size_t posB) const
     {
         return matrix[(lenB + 1ul) * posA + posB];
     }
@@ -73,11 +73,11 @@ public:
         matrixM.resize((lenA + 1) * (lenB + 1));
         matrixH.resize((lenA + 1) * (lenB + 1));
         matrixV.resize((lenA + 1) * (lenB + 1));
-        double const go = score.data_gap_open;
-        double const ge = score.data_gap_extend;
+        float const go = score.data_gap_open;
+        float const ge = score.data_gap_extend;
 
         // initialise DP matrix
-        get(matrixM, 0, 0) = 0.0;
+        get(matrixM, 0, 0) = 0.0f;
         get(matrixH, 0, 0) = negInfinity;
         get(matrixV, 0, 0) = negInfinity;
 
@@ -116,13 +116,13 @@ public:
         }
     }
 
-    double getPrefixScore(size_t posA, size_t posB)
+    float getPrefixScore(size_t posA, size_t posB)
     {
         assert(posA <= lenA && posB <= lenB);
         return std::max({get(matrixM, posA, posB), get(matrixH, posA, posB), get(matrixV, posA, posB)});
     }
 
-    double getOptimalScore()
+    float getOptimalScore()
     {
         return getPrefixScore(lenA, lenB);
     }
@@ -132,14 +132,14 @@ void generateEdges(std::map<PosPair, size_t> & edges,  // OUT
                    seqan::Rna5String const & seqA,     // IN
                    seqan::Rna5String const & seqB,     // IN
                    RnaScoreMatrix const & scoreMatrix, // IN
-                   double suboptimalDiff)              // IN
+                   float suboptimalDiff)               // IN
 {
     seqan::ModifiedString<seqan::Rna5String const, seqan::ModReverse> reverseA(seqA);
     seqan::ModifiedString<seqan::Rna5String const, seqan::ModReverse> reverseB(seqB);
     PairwiseGotoh forward(seqA, seqB, scoreMatrix);
     PairwiseGotoh backward(reverseA, reverseB, scoreMatrix);
     assert(std::abs(forward.getOptimalScore() - backward.getOptimalScore()) < 1.e-3);
-    double const threshold = forward.getOptimalScore() - suboptimalDiff;
+    float const threshold = forward.getOptimalScore() - suboptimalDiff;
     size_t const lenA = seqan::length(seqA);
     size_t const lenB = seqan::length(seqB);
 
