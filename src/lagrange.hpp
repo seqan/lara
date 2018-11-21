@@ -37,18 +37,13 @@
  * \brief This file contains data structures and algorithms for lagrange relaxation.
  */
 
+#include <cstdint>
 #include <iostream>
 #include <map>
-#include <cstdint>
+#include <set>
+#include <tuple>
 #include <utility>
 #include <vector>
-
-#ifdef LEMON_FOUND
-#include <lemon/smart_graph.h>
-#include <lemon/list_graph.h>
-#include <lemon/matching.h>
-#include <lemon/concepts/graph.h>
-#endif
 
 #include <seqan/align.h>
 #include <seqan/basic.h>
@@ -60,6 +55,7 @@
 #include "edge_filter.hpp"
 #include "parameters.hpp"
 #include "score.hpp"
+#include "matching.hpp"
 
 namespace lara
 {
@@ -110,8 +106,6 @@ private:
 
     seqan::Rna5String sequenceA;
     seqan::Rna5String sequenceB;
-
-    bool doMatching; // True for bpp matrix input
 
     // the best structural alignment score found so far
     float bestStructuralAlignmentScore;
@@ -249,71 +243,6 @@ private:
         return gapScore;
     }
 
-#ifdef LEMON_FOUND
-    float computeMatching(std::map<size_t, size_t> & contacts,
-                          std::vector<size_t> const & currentAlignment,
-                          std::vector<bool> const & inSolution)
-    {
-        float score = 0.0f;
-        contacts.clear();
-
-        lemon::SmartGraph lemonG;
-        std::map<size_t, lemon::SmartGraph::Node> nodes;
-
-        for (size_t const & line : currentAlignment)
-        {
-            contacts[line] = line;
-            nodes[line] = lemonG.addNode();
-        }
-
-        typedef lemon::SmartGraph::EdgeMap<float> EdgeMap;
-        EdgeMap weight(lemonG);
-        lemon::SmartGraph::EdgeMap<PosPair> interactions(lemonG);
-        std::map<PosPair, bool> computed;
-        for (size_t const & line : currentAlignment)
-        {
-            score += sequencesScore[line];
-            for (Contact const & contact : possiblePartners[line])
-            {
-                PosPair interaction{line, contact.first};
-                auto res = computed.find(interaction);
-                if (res == computed.end() && inSolution[contact.first] && line != contact.first)
-                {
-                    PosPair revInteraction = std::make_pair(contact.first, line);
-                    _VVV(params, "addEdge " << line << " " << contact.first << " ("
-                                            << structureScore[interaction] + structureScore[revInteraction] << ")");
-                    auto newEdge = lemonG.addEdge(nodes[line], nodes[contact.first]);
-                    weight[newEdge] = structureScore[interaction] + structureScore[revInteraction];
-                    interactions[newEdge] = interaction;
-                    computed[interaction] = true;
-                    computed[revInteraction] = true;
-                }
-            }
-        }
-        lemon::MaxWeightedMatching<lemon::SmartGraph, EdgeMap> mwm(lemonG, weight);
-        mwm.run();
-        float lemonweight = mwm.matchingWeight();
-        for (lemon::SmartGraph::EdgeIt edgeIt(lemonG); edgeIt!=lemon::INVALID; ++edgeIt)
-        {
-            PosPair inter = interactions[edgeIt];
-            if (mwm.matching(edgeIt))
-            {
-                contacts[inter.first] = inter.second;
-                contacts[inter.second] = inter.first;
-                _VVV(params, "lemon matches  " << inter.first << " " << inter.second << " " << weight[edgeIt]);
-            }
-            else
-            {
-                _VVV(params, "lemon excludes " << inter.first << " " << inter.second << " " << weight[edgeIt]);
-            }
-        }
-        _VV(params, "\nlower bound: seq " << score << " + str " << lemonweight);
-        return score + lemonweight;
-    }
-#endif
-
-
-
 public:
     Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params) : params(_params)
     {
@@ -337,7 +266,6 @@ public:
         residueCount = 0ul;
         dimension.first = 0ul;
         dimension.second = 0ul;
-        doMatching = false;
 
         // score of best alignment
         bestStructuralAlignmentScore = negInfinity;
@@ -447,8 +375,6 @@ public:
                     }
                 }
             }
-
-            doMatching = doMatching || (possiblePartners[edgeIdx].size() > 2);
             numPartners += possiblePartners[edgeIdx].size();
         }
         _VV(params, "Average number of partner edges = " << 1.0 * numPartners / sourceNode.size());
@@ -562,7 +488,7 @@ public:
             auto dualIt = pairedEdgesToDual.find(std::make_pair(idx, maxPE));
             if (dualIt != pairedEdgesToDual.end())
             {
-                subgradient[dualIt->second] = 1.0;
+                subgradient[dualIt->second] = 1.0f;
                 subgradientIndices.push_back(dualIt->second);
             }
             else
@@ -575,7 +501,7 @@ public:
             dualIt = pairedEdgesToDual.find(std::make_pair(maxPE, idx));
             if (dualIt != pairedEdgesToDual.end())
             {
-                subgradient[dualIt->second] = -1.0;
+                subgradient[dualIt->second] = -1.0f;
                 subgradientIndices.push_back(dualIt->second);
             }
             else
@@ -587,45 +513,26 @@ public:
         }
 
         float lowerBound = 0.0f;
-        std::map<size_t, size_t> contacts;
-        if (doMatching)
+        std::map<size_t, size_t> contacts{};
+        if (!subgradientIndices.empty())
         {
-            _VV(params, "start matching");
-#ifdef LEMON_FOUND
-            lowerBound = computeMatching(contacts, currentStructuralAlignment, inSolution);
-#else
-            std::cerr << "Cannot compute a matching without the Lemon library. Please install Lemon and try again."
-                      << std::endl;
-            exit(1);
-#endif
+            Matching mwm(sequencesScore, possiblePartners, params.matching);
+            lowerBound = mwm.computeScore(currentStructuralAlignment, inSolution);
+            contacts = mwm.getContacts();
         }
         else
         {
-            _VV(params, "no matching");
-            float seqPart = 0.0f;
-            float structPart = 0.0f;
-
-            std::map<PosPair, bool> computed;
-            for (size_t line : currentStructuralAlignment)
+            for (size_t idx : currentStructuralAlignment)
             {
-                seqPart += sequencesScore[line];
-                size_t maxPE = maxProfitEdge[line];
-                PosPair interaction{line, maxPE};
-                PosPair revInteraction{maxPE, line};
-                if (inSolution[maxPE] && line != maxPE && computed.count(interaction) == 0)
+                size_t const & maxPE = maxProfitEdge[idx];
+                lowerBound += sequencesScore[idx];
+                if (idx != maxPE)
                 {
-                    if (structureScore[interaction] + structureScore[revInteraction] > 0)
-                    {
-                        structPart += structureScore[interaction] + structureScore[revInteraction];
-                        computed[interaction] = true;
-                        computed[revInteraction] = true;
-                        _VV(params, "solution " << line << " " << maxPE << " " << structureScore[interaction] +
-                                                                                 structureScore[revInteraction]);
-                    }
+                    lowerBound += structureScore[PosPair(idx, maxPE)];
+                    contacts[idx] = maxPE;
+                    contacts[maxPE] = idx;
                 }
             }
-            lowerBound = seqPart + structPart;
-            _VV(params, "without matching: " << seqPart << " + " << structPart << " = " << lowerBound);
         }
 
         for (size_t idx : currentStructuralAlignment)
@@ -634,7 +541,7 @@ public:
             _VVV(params, "Alignment[" << idx << "; " << sourceNode[idx] << "," << targetNode[idx] << "] maxProfitEdge ["
                                       << maxPE << "; " << sourceNode[maxPE] << "," << targetNode[maxPE] << "] score "
                                       << maxProfit[idx] << " inSolution " << inSolution[maxPE] << " rec "
-                                      << (maxProfitEdge[maxPE] == idx) << " mwm " << (contacts[idx] == maxPE));
+                                      << (maxProfitEdge[maxPE] == idx));
         }
 
         // we have to substract the gapcosts, otherwise the lower bound might be higher than the upper bound
@@ -668,7 +575,7 @@ public:
         std::vector<std::tuple<size_t, size_t, bool>> structureLines{};
         for (size_t idx : bestStructuralAlignment)
         {
-            structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1, (idx != edgeMatching.at(idx)));
+            structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1, (edgeMatching.count(idx) == 1));
         }
         return structureLines;
     }

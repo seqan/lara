@@ -84,11 +84,28 @@ float const posInfinity = std::numeric_limits<float>::max();
 typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
 
 //! \brief Pair of positions (usually in first and second sequence)
-typedef std::pair<size_t, size_t>                         PosPair;
-typedef std::pair<size_t, float>                          Contact;
-typedef std::set<std::pair<float, size_t>>                PriorityQueue;
-typedef seqan::Align<seqan::Rna5String, seqan::ArrayGaps> Alignment;
-typedef seqan::Row<Alignment>::Type                       AlignmentRow;
+typedef std::pair<size_t, size_t>                           PosPair;
+typedef std::pair<size_t, float>                            Contact;
+typedef std::set<std::pair<float, size_t>>                  PriorityQueue;
+typedef seqan::Align<seqan::Rna5String, seqan::ArrayGaps>   Alignment;
+typedef seqan::Row<Alignment>::Type                         AlignmentRow;
+typedef std::tuple<float, size_t, size_t>                   Interaction;    // probability, lineL, lineR
+typedef std::set<Interaction>::iterator                     InteractionIterator;
+typedef std::pair<InteractionIterator, InteractionIterator> EdgeConflict;
+typedef std::set<InteractionIterator>                       InteractionSet;
 
 } // namespace lara
 
+namespace std
+{
+
+template <>
+struct less<lara::InteractionIterator>
+{
+    bool operator()(const lara::InteractionIterator & lhs, const lara::InteractionIterator & rhs) const
+    {
+        return make_pair(get<1>(*lhs), get<2>(*lhs)) < make_pair(get<1>(*rhs), get<2>(*rhs));
+    }
+};
+
+} // namespace std

@@ -110,6 +110,7 @@ public:
     // verbosity level (0-3)
     unsigned                 verbose{0u};
     Status                   status;
+    unsigned                 matching{5u};
 
     Parameters(int argc, char const ** argv)
     {
@@ -238,6 +239,10 @@ private:
                                          "if structurescoring=SCALING then we have to give a scaling factor",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
+        addOption(parser, ArgParseOption("m", "matching",
+                                         "Lookahead for greedy matching algorithm. Value 0 uses LEMON instead. (5)",
+                                         ArgParseArgument::INTEGER, "INT"));
+
         ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
         if (parseResult != ArgumentParser::PARSE_OK)
             return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
@@ -261,6 +266,7 @@ private:
         getOptionValue(tcoffeeLocation, parser, "tcoffeeLocation");
         getOptionValue(tcoffeLibMode, parser, "tcoffeLibMode");
         getOptionValue(inFileRef, parser, "inFileRef");
+        getOptionValue(matching, parser, "matching");
 
         getOptionValue(inFile, parser, "inFile");
         unsigned numDotplots = getOptionValueCount(parser, "dotplots");
