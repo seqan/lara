@@ -87,10 +87,6 @@ private:
     // vector holding the index of the maximum profit line
     std::vector<size_t> maxProfitEdge;
 
-    // holds the initial maxProfitScores as set in StartUpLagrange()
-    std::vector<float>              bestLagrangianMultipliers;
-    std::vector<std::vector<float>> bestUpperBoundScores;
-
     std::vector<size_t> bestStructuralAlignment;
     std::map<size_t, size_t> edgeMatching;
     std::vector<PosPair> lines;
@@ -101,18 +97,13 @@ private:
     // number of residues in total
     size_t residueCount;
 
-    // best upper bound found so far
-    std::vector<float> allUpperBounds;
-
     seqan::Rna5String sequenceA;
     seqan::Rna5String sequenceB;
 
     // the best structural alignment score found so far
     float bestStructuralAlignmentScore;
     Alignment bestAlignment;
-
-    // the best (lowest) upper bound found so far
-    float bestUpperBoundScore;
+    Alignment currentAlignment;
 
     std::vector<size_t> sourceNode;
     std::vector<size_t> targetNode;
@@ -140,6 +131,8 @@ private:
 
     // mapping from the index of the dual variable to the pair of alignment edge indices
     std::vector<PosPair> dualToPairedEdges; // former _YToIndex
+
+    seqan::Score<float, seqan::RnaStructureScore> scoreAdaptor;
 
     void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
     {
@@ -244,7 +237,8 @@ private:
     }
 
 public:
-    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params) : params(_params)
+    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params)
+        : params(_params), scoreAdaptor(&maxProfitScores, params.laraGapOpen, params.laraGapExtend)
     {
         _VV(params, recordA.sequence << std::endl << recordB.sequence);
         sequenceA = seqan::Rna5String{recordA.sequence};
@@ -256,10 +250,6 @@ public:
         maxProfitScores.resize(seqLen.first);
         for (std::vector<float> & elem : maxProfitScores)
             elem.resize(seqLen.second, negInfinity);
-        bestLagrangianMultipliers.resize(seqLen.first * seqLen.second);
-        bestUpperBoundScores.resize(seqLen.first);
-        for (std::vector<float> & elem : bestUpperBoundScores)
-            elem.resize(seqLen.second, negInfinity);
 
         // initialize()
         numIterations = 0ul;
@@ -269,7 +259,6 @@ public:
 
         // score of best alignment
         bestStructuralAlignmentScore = negInfinity;
-        bestUpperBoundScore = posInfinity;
 
         // the following things have to be done in the constructor
         // - given the two RNA structures, determine possible partner edges
@@ -382,12 +371,7 @@ public:
         dimension.first = sourceNode.size(); // number of alignment edges (lines)
     }
 
-    void evaluate(std::vector<float> & dual,
-                  std::list<size_t> & dualIndices,
-                  float & dualValue,   // upper bound
-                  float & primalValue, // lower bound
-                  std::vector<float> & subgradient,
-                  std::list<size_t> & subgradientIndices)
+    void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
     {
         for (size_t dualIdx : dualIndices)
         {
@@ -420,63 +404,44 @@ public:
                 std::cerr << "]" << std::endl;
             }
         }
+    }
 
-        seqan::Score<float, seqan::RnaStructureScore> scoreAdaptor(&maxProfitScores,
-                                                                   params.laraGapOpen,
-                                                                   params.laraGapExtend);
-        Alignment alignment;
-        seqan::resize(seqan::rows(alignment), 2);
-        AlignmentRow & rowA = seqan::row(alignment, 0);
-        AlignmentRow & rowB = seqan::row(alignment, 1);
-        _VV(params, "sequence length " << length(sequenceA) << " " << length(sequenceB));
+    /*!
+     * \brief Performs the structural alignment.
+     * \return The dual value (upper bound, solution of relaxed problem).
+     */
+    float relaxed_solution()
+    {
+        seqan::resize(seqan::rows(currentAlignment), 2);
+        AlignmentRow & rowA = seqan::row(currentAlignment, 0);
+        AlignmentRow & rowB = seqan::row(currentAlignment, 1);
 
         seqan::assignSource(rowA, sequenceA);
         seqan::assignSource(rowB, sequenceB);
 
         // perform the alignment
-        float optScore = seqan::globalAlignment(alignment, scoreAdaptor, seqan::AffineGaps());
-        float gapScore = evaluateLines(rowA, rowB);
+        return seqan::globalAlignment(currentAlignment, scoreAdaptor, seqan::AffineGaps());
+    }
+
+    float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices)
+    {
+        float gapScore = evaluateLines(seqan::row(currentAlignment, 0), seqan::row(currentAlignment, 1));
 
         std::vector<size_t> currentStructuralAlignment;
         std::vector<bool> inSolution;
         inSolution.resize(sourceNode.size(), false);
-        float scoreseq = gapScore;
 
         for (PosPair line : lines)
         {
-            //float sc = seqan::score(scoreAdaptor, line.first, line.second);
-            float sc = maxProfitScores[line.first][line.second];
-            scoreseq += sc;
-
             auto edgeIdxIt = getEdgeIdx.find(line);
-            if (edgeIdxIt != getEdgeIdx.end())
-            {
-                size_t edgeIdx = edgeIdxIt->second;
-                currentStructuralAlignment.push_back(edgeIdx);
-                inSolution[edgeIdx] = true;
-                ++primal[edgeIdx]; // primal counter
-            }
-            else
-            {
-                std::cerr << "Alignment match where no alignment edge is defined!!" << std::endl;
-                exit(1);
-            }
-        }
-        dualValue = optScore;
+            SEQAN_ASSERT_MSG(edgeIdxIt != getEdgeIdx.end(), "Alignment match where no alignment edge is defined!");
 
-        // store the subgradient values
-        if (dualValue < bestUpperBoundScore)
-        {
-            for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            {
-                bestUpperBoundScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
-                bestLagrangianMultipliers = dual;
-                bestUpperBoundScore = dualValue;
-            }
+            size_t edgeIdx = edgeIdxIt->second;
+            currentStructuralAlignment.push_back(edgeIdx);
+            inSolution[edgeIdx] = true;
+            ++primal[edgeIdx]; // primal counter
         }
 
-        // store all upper bounds
-        allUpperBounds.push_back(dualValue);
         subgradientIndices.clear();
         for (size_t idx : currentStructuralAlignment)
         {
@@ -545,9 +510,8 @@ public:
         }
 
         // we have to substract the gapcosts, otherwise the lower bound might be higher than the upper bound
-        primalValue = lowerBound + gapScore;
+        float primalValue = lowerBound + gapScore;
         _VV(params, "primal " << primalValue << " = " << lowerBound << " (lb) + " << gapScore << " (gap)");
-        _VV(params, "dual " << scoreseq << " == " << dualValue);
 
         // store the best alignment found so far
         if (primalValue > bestStructuralAlignmentScore)
@@ -555,10 +519,11 @@ public:
             bestStructuralAlignmentScore = primalValue;
             bestStructuralAlignment = currentStructuralAlignment;
             edgeMatching = contacts;
-            bestAlignment = Alignment(alignment);
+            bestAlignment = Alignment(currentAlignment);
         }
         ++numIterations;
-    };
+        return primalValue;
+    }
 
     PosPair getDimension()
     {

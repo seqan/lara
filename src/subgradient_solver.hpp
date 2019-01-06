@@ -104,15 +104,15 @@ public:
     {
         size_t nondecreasingRounds = 0ul;
 
-        std::list<size_t> dualIndices;
         std::list<size_t> subgradientIndices;
-
         std::vector<float> subgradient;
         subgradient.resize(dual.size());
 
         for (iterationIdx = 0ul; iterationIdx < numIterations; ++iterationIdx)
         {
-            lagrange.evaluate(dual, dualIndices, currentUpperBound, currentLowerBound, subgradient, subgradientIndices);
+            lagrange.updateScores(dual, subgradientIndices);
+            currentUpperBound = lagrange.relaxed_solution();
+            currentLowerBound = lagrange.valid_solution(subgradient, subgradientIndices);
 
             if (verbose >= 1)
                 std::cerr << "(" << iterationIdx << ") \tbest: " << bestUpperBound << "\t/" << bestLowerBound << "\t"
@@ -164,14 +164,9 @@ public:
                 std::cerr << "stepsize = " << stepSize << std::endl;
 
             for (size_t idx : subgradientIndices)
-                dual[idx] -= stepSize * subgradient[idx];
-
-            dualIndices = std::list<size_t>(subgradientIndices);
-            subgradientIndices.clear();
-
-            for (size_t dualIdx : dualIndices)
             {
-                subgradient[dualIdx] = 0.0f;
+                dual[idx] -= stepSize * subgradient[idx];
+                subgradient[idx] = 0.0f;
             }
         } // end for (iterationIdx = 0..numIterations-1)
 

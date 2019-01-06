@@ -63,7 +63,7 @@ private:
     std::map<size_t, size_t> contacts;
     std::vector<float> const & sequencesScore;
     std::vector<std::vector<Contact>> const & possiblePartners;
-    uint8_t const algorithm;
+    size_t const algorithm;
 
     //!\brief Helper function that calculates whether two interactions use the same vertex.
     bool hasConflict(Interaction const & a, Interaction const & b)
@@ -187,7 +187,7 @@ private:
      * \returns The score of the matching.
      */
     float computeLemonMatching(std::vector<size_t> const & currentAlignment,
-                          std::vector<bool> const & inSolution)
+                               std::vector<bool> const & inSolution)
     {
         float score = 0.0f;
         contacts.clear();
@@ -243,7 +243,7 @@ private:
 public:
     Matching(std::vector<float> const & sequencesScore_,
              std::vector<std::vector<Contact>> const & possiblePartners_,
-             uint8_t algorithm_)
+             size_t algorithm_)
         : contacts(), sequencesScore(sequencesScore_), possiblePartners(possiblePartners_), algorithm(algorithm_)
     {}
 
