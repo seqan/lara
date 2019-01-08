@@ -1,9 +1,9 @@
 // ===========================================================================
 //                LaRA: Lagrangian Relaxed structural Alignment
 // ===========================================================================
-// Copyright (c) 2016-2018, Jörg Winkler, Freie Universität Berlin
-// Copyright (c) 2016-2018, Gianvito Urgese, Politecnico di Torino
-// Copyright (c) 2006-2018, Knut Reinert, Freie Universität Berlin
+// Copyright (c) 2016-2019, Jörg Winkler, Freie Universität Berlin
+// Copyright (c) 2016-2019, Gianvito Urgese, Politecnico di Torino
+// Copyright (c) 2006-2019, Knut Reinert, Freie Universität Berlin
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
