@@ -27,6 +27,7 @@ if (NOT CMAKE_BUILD_TYPE)
          "Choose the type of build, options are: Debug Release RelWithDebInfo"
          FORCE)
 endif ()
+set(CMAKE_CXX_STANDARD 14)
 
 # Compiler specifics: Clang
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -115,10 +116,15 @@ message(   "     ViennaRNA  ${VIENNA_FOUND}      ${RNA}")
 message(   "     Lemon      ${LEMON_FOUND}      ${LEMON_INCLUDE_PATH}")
 
 # Warn if OpenMP was not found.
-if (NOT OPENMP_FOUND)
+if (OPENMP_FOUND)
+    add_definitions(-DWITH_OPENMP)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+else ()
     message (WARNING "WARNING WARNING WARNING\nWARNING: OpenMP not found. LaRA will be built without multi-threading! "
     "This is probably not what you want! Use GCC >= 4.9.1, Clang >= 3.8.0 or ICC >= 16.0.2\nWARNING WARNING WARNING")
-endif (NOT OPENMP_FOUND)
+endif (OPENMP_FOUND)
 
 # Warn if Zlib was not found.
 if (NOT ZLIB_FOUND)

@@ -37,6 +37,8 @@
  * \brief This file contains all settings and parameters of LaRA.
  */
 
+#include <thread>
+
 #include <seqan/arg_parse.h>
 #include <seqan/score.h>
 
@@ -109,6 +111,7 @@ public:
     unsigned                 tcoffeLibMode{TCoffeeMode::SWITCH};
     Status                   status;
     unsigned                 matching{5u};
+    unsigned                 num_threads{4u};
 
     Parameters(int argc, char const ** argv)
     {
@@ -120,6 +123,10 @@ private:
     {
         using namespace seqan;
         ArgumentParser parser;
+
+        unsigned nthreads = std::thread::hardware_concurrency();
+        if (nthreads != 0)
+            num_threads = nthreads;
 
         setAppName(parser, "lara");
         setShortDescription(parser, "Lagrangian Relaxed Alignment for RNA structures");
@@ -241,6 +248,10 @@ private:
                                          "Lookahead for greedy matching algorithm. Value 0 uses LEMON instead. (5)",
                                          ArgParseArgument::INTEGER, "INT"));
 
+        addOption(parser, ArgParseOption("j", "numThreads",
+                                         "Use the number of specified threads. Decrease if memory problems occur. (5)",
+                                         ArgParseArgument::INTEGER, "INT"));
+
         ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
         if (parseResult != ArgumentParser::PARSE_OK)
             return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
@@ -265,6 +276,7 @@ private:
         getOptionValue(tcoffeLibMode, parser, "tcoffeLibMode");
         getOptionValue(inFileRef, parser, "inFileRef");
         getOptionValue(matching, parser, "matching");
+        getOptionValue(num_threads, parser, "numThreads");
 
         getOptionValue(inFile, parser, "inFile");
         unsigned numDotplots = getOptionValueCount(parser, "dotplots");

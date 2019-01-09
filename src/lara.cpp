@@ -31,6 +31,10 @@
 // OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
 
+#ifdef WITH_OPENMP
+#include <omp.h>
+#endif
+
 #include "data_types.hpp"
 #include "io.hpp"
 #include "lagrange.hpp"
@@ -47,30 +51,13 @@ int main (int argc, char const ** argv)
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
     size_t const problem_size = store.size() * (store.size() - 1) / 2;
-    _LOG(2, "Attempting to solve " << problem_size << " structural alignments." << std::endl);
+    _LOG(1, "Attempting to solve " << problem_size << " structural alignments with max. " << params.num_threads
+                                   << " threads." << std::endl);
     _LOG(2, store << std::endl);
     lara::OutputTCoffeeLibrary tcLib(store);
+    lara::SubgradientSolverMulti solverMulti(store, params);
+    solverMulti.solve(tcLib);
 
-    for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
-    {
-        for (size_t idxB = idxA + 1ul; idxB < store.size(); ++idxB)
-        {
-            _LOG(1, "SEQUENCE " << idxA << " WITH " << idxB << std::endl);
-            lara::Lagrange lagrange(store[idxA], store[idxB], params);
-            lagrange.start();
-
-            lara::SubgradientSolver solver(params.epsilon, params.stepSizeFactor, params.numIterations,
-                                           params.maxNondecrIterations);
-            lara::Status status = solver.solve(lagrange);
-            if (status == lara::Status::EXIT_ERROR)
-                return 1;
-
-            tcLib.addAlignment(lagrange, idxA, idxB);
-            if (problem_size == 1ul)
-                lara::printAlignment(params.outFile, lagrange.getAlignment(), store[idxA].name, store[idxB].name);
-
-        }
-    }
     if (problem_size > 1ul)
         tcLib.print(params.outFile);
 }

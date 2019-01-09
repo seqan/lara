@@ -46,116 +46,185 @@
 #include "data_types.hpp"
 #include "parameters.hpp"
 
-
 namespace lara
 {
 
 class SubgradientSolver
 {
-private:
-    float epsilon;
+public:
+    Lagrange lagrange;
     float stepSizeFactor;
-    size_t numIterations;
-    size_t maxNondecreasingIterations;
-
-    std::vector<float> dual{};
-    float currentLowerBound;
-    float currentUpperBound;
     float bestLowerBound;
     float bestUpperBound;
+    float currentLowerBound;
+    float currentUpperBound;
+    size_t nondecreasingRounds;
+    unsigned remainingIterations;
+    PosPair sequenceIndices;
 
-public:
-    SubgradientSolver(float eps, float stepFac, size_t nIter, size_t maxNondecrIter)
-        : epsilon(eps), stepSizeFactor(stepFac), numIterations(nIter), maxNondecreasingIterations(maxNondecrIter)
+    std::vector<float> subgradient;
+    std::vector<float> dual;
+    std::list<size_t> subgradientIndices;
+
+    SubgradientSolver(PosPair indices, InputStorage const & store, Parameters & params)
+        : lagrange(store[indices.first], store[indices.second], params)
     {
+        stepSizeFactor = params.stepSizeFactor;
+        bestLowerBound = negInfinity;
+        bestUpperBound = posInfinity;
+
         currentLowerBound = negInfinity;
         currentUpperBound = posInfinity;
-        bestLowerBound    = negInfinity;
-        bestUpperBound    = posInfinity;
+        nondecreasingRounds = 0ul;
+        sequenceIndices = indices;
+        remainingIterations = params.numIterations;
+        subgradient.resize(lagrange.getDimension().second);
+        dual.resize(subgradient.size());
+    }
+};
+
+class SubgradientSolverMulti
+{
+private:
+    // parameters
+    InputStorage const & store;
+    Parameters & params;
+
+    std::vector<PosPair> inputPairs;
+    std::vector<SubgradientSolver> solvers;
+
+public:
+    SubgradientSolverMulti(InputStorage const & _store, Parameters & _params)
+        : store(_store), params(_params)
+    {
+        inputPairs.reserve(store.size() * (store.size() - 1ul) / 2ul);
+        for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
+            for (size_t idxB = idxA + 1ul; idxB < store.size(); ++idxB)
+                inputPairs.emplace_back(idxA, idxB);
+
+        solvers.reserve(std::min((size_t)params.num_threads, inputPairs.size()));
     }
 
-    float calcStepsize(float upper, float lower, size_t numSubgradients)
+    float calcStepsize(SubgradientSolver const & slv) const
     {
-        return stepSizeFactor * (upper - lower) / numSubgradients;
+        return slv.stepSizeFactor * (slv.bestUpperBound - slv.bestLowerBound) / slv.subgradientIndices.size();
     }
 
-    float getLowerBound()
+    float getLowerBound(uint8_t sIdx)
     {
-        return bestLowerBound;
+        return solvers[sIdx].bestLowerBound;
     }
 
-    float getUpperBound()
+    float getUpperBound(uint8_t sIdx)
     {
-        return bestUpperBound;
+        return solvers[sIdx].bestUpperBound;
     }
 
-    Status solve(Lagrange & lagrange)
+    void solve(lara::OutputTCoffeeLibrary & results)
     {
-        size_t iterationIdx;
-        size_t nondecreasingRounds = 0ul;
-
-        std::list<size_t> subgradientIndices;
-        std::vector<float> subgradient;
-
-        dual.resize(lagrange.getDimension().second);
-        subgradient.resize(dual.size());
-
-        for (iterationIdx = 0ul; iterationIdx < numIterations; ++iterationIdx)
+        std::vector<PosPair>::const_iterator inputPairIter;
+        for (inputPairIter = inputPairs.cbegin();
+             inputPairIter != inputPairs.cend() && solvers.size() < params.num_threads;
+             ++inputPairIter)
         {
-            lagrange.updateScores(dual, subgradientIndices);
-            currentUpperBound = lagrange.relaxed_solution();
-            currentLowerBound = lagrange.valid_solution(subgradient, subgradientIndices);
+            solvers.emplace_back(*inputPairIter, store, params);
+        }
 
-            _LOG(1, "(" << iterationIdx << ") \tbest: " << bestUpperBound << "\t/" << bestLowerBound << "\t"
-                        << "current: " << currentUpperBound << "/\t" << currentLowerBound
-                        << "\t(" << subgradientIndices.size() << ")\t");
+        size_t num_at_work = solvers.size();
+        std::vector<bool> at_work;
+        at_work.resize(num_at_work, true);
 
-            // compare upper and lower bound
-            if (currentUpperBound < bestUpperBound)
+        while (num_at_work > 0ul)
+        {
+            #pragma omp parallel for num_threads(params.num_threads)
+            for (size_t idx = 0ul; idx < solvers.size(); ++idx)
             {
-                bestUpperBound      = currentUpperBound;
-                nondecreasingRounds = 0ul;
+                if (!at_work[idx])
+                    continue;
+
+                solvers[idx].lagrange.updateScores(solvers[idx].dual, solvers[idx].subgradientIndices);
+//            }
+//
+//            for (size_t idx = 0ul; idx < solvers.size(); ++idx)
+//            {
+                solvers[idx].currentUpperBound = solvers[idx].lagrange.relaxed_solution(params.laraGapOpen,
+                                                                                        params.laraGapExtend);
+//            }
+//
+//            #pragma omp parallel for num_threads(params.num_threads)
+//            for (size_t idx = 0ul; idx < solvers.size(); ++idx)
+//            {
+                solvers[idx].currentLowerBound = solvers[idx].lagrange.valid_solution(solvers[idx].subgradient,
+                                                                                      solvers[idx].subgradientIndices);
+
+//                _LOG(2, "(" << solvers[idx].remainingIterations << ") \tbest: " << solvers[idx].bestUpperBound << "\t/"
+//                            << solvers[idx].bestLowerBound << "\t"
+//                            << "current: " << solvers[idx].currentUpperBound << "/\t" << solvers[idx].currentLowerBound
+//                            << "\t(" << solvers[idx].subgradientIndices.size() << ")\t");
+
+                // compare upper and lower bound
+                if (solvers[idx].currentUpperBound < solvers[idx].bestUpperBound)
+                {
+                    solvers[idx].bestUpperBound = solvers[idx].currentUpperBound;
+                    solvers[idx].nondecreasingRounds = 0ul;
+                }
+
+                if (solvers[idx].currentLowerBound > solvers[idx].bestLowerBound)
+                {
+                    solvers[idx].bestLowerBound = solvers[idx].currentLowerBound;
+                    solvers[idx].nondecreasingRounds = 0ul;
+//                    _LOG(1, "(*)");
+
+                }
+//                _LOG(2, std::endl);
+
+                if (solvers[idx].nondecreasingRounds++ >= params.maxNondecrIterations)
+                {
+                    solvers[idx].stepSizeFactor /= 2.0f;
+                    solvers[idx].nondecreasingRounds = 0;
+                }
+
+                float stepSize = calcStepsize(solvers[idx]);
+                for (size_t si : solvers[idx].subgradientIndices)
+                {
+                    solvers[idx].dual[si] -= stepSize * solvers[idx].subgradient[si];
+                    solvers[idx].subgradient[si] = 0.0f;
+                }
+                --solvers[idx].remainingIterations;
+
+                SEQAN_ASSERT_MSG(!solvers[idx].subgradientIndices.empty() ||
+                                 solvers[idx].currentUpperBound - solvers[idx].currentLowerBound < 0.1f,
+                                 "The bounds differ, although there are no subgradients.");
+                SEQAN_ASSERT_GT_MSG(solvers[idx].bestUpperBound + params.epsilon, solvers[idx].bestLowerBound,
+                                    "The lower boundary exceeds the upper boundary.");
+
+                if (solvers[idx].bestUpperBound - solvers[idx].bestLowerBound < params.epsilon ||
+                    solvers[idx].remainingIterations == 0u)
+                {
+                    #pragma omp critical
+                    {
+                        _LOG(1, "Thread " << idx << " finished alignment (" << solvers[idx].sequenceIndices.first
+                                          << "," << solvers[idx].sequenceIndices.second << ")." << std::endl);
+//                        lara::printAlignment(std::cerr,
+//                                             solvers[idx].lagrange.getAlignment(),
+//                                             store[solvers[idx].sequenceIndices.first].name,
+//                                             store[solvers[idx].sequenceIndices.second].name);
+                        results.addAlignment(solvers[idx].lagrange, solvers[idx].sequenceIndices);
+
+                        if (inputPairIter == inputPairs.cend())
+                        {
+                            at_work[idx] = false;
+                            --num_at_work;
+                        }
+                        else
+                        {
+                            solvers[idx] = SubgradientSolver(*inputPairIter, store, params);
+                            ++inputPairIter;
+                        }
+                    };
+                }
             }
-
-            if (currentLowerBound > bestLowerBound)
-            {
-                bestLowerBound      = currentLowerBound;
-                nondecreasingRounds = 0ul;
-                _LOG(1, "(*)");
-
-            }
-            _LOG(1, std::endl);
-
-            if (subgradientIndices.empty() && currentUpperBound - currentLowerBound > 0.1f)
-            {
-                std::cerr << "Error: The bounds differ, although there are no subgradients." << std::endl;
-                return Status::EXIT_ERROR;
-            }
-
-            if (bestUpperBound - bestLowerBound < epsilon)
-            {
-                SEQAN_ASSERT_GT(bestUpperBound + epsilon, bestLowerBound);
-                _LOG(1, "Found the optimal alignment in iteration " << iterationIdx << "." << std::endl);
-                return Status::EXIT_OK;
-            }
-
-            if (nondecreasingRounds++ >= maxNondecreasingIterations)
-            {
-                stepSizeFactor /= 2.0f;
-                nondecreasingRounds = 0;
-            }
-
-            float stepSize = calcStepsize(bestUpperBound, bestLowerBound, subgradientIndices.size());
-            _LOG(2, "stepsize = " << stepSize << std::endl);
-
-            for (size_t idx : subgradientIndices)
-            {
-                dual[idx] -= stepSize * subgradient[idx];
-                subgradient[idx] = 0.0f;
-            }
-        } // end for (iterationIdx = 0..numIterations-1)
-
-        return iterationIdx < numIterations ? Status::EXIT_OK : Status::CONTINUE;
+        } // end while
     }
 };
 

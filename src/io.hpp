@@ -298,7 +298,7 @@ void printAlignment(std::ostream & stream, Alignment const & alignment, seqan::C
 }
 
 inline
-void printAlignment(seqan::CharString & filename, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
+void printAlignment(seqan::CharString const & filename, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
 {
     if (seqan::empty(filename))
     {
@@ -342,11 +342,11 @@ public:
         }
     }
 
-    void addAlignment(Lagrange const & lagrange, size_t seqIndexA, size_t seqIndexB)
+    void addAlignment(Lagrange const & lagrange, PosPair const & seqIndices)
     {
         if (numSequences > 2)
         {
-            sstream << "# " << (seqIndexA + 1) << " " << (seqIndexB + 1) << std::endl;
+            sstream << "# " << (seqIndices.first + 1) << " " << (seqIndices.second + 1) << std::endl;
             for (auto const & elem : lagrange.getStructureLines())
             {
                 sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << (std::get<2>(elem) ? 1000 : 500)

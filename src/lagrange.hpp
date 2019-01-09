@@ -63,7 +63,7 @@ namespace lara
 class Lagrange
 {
 private:
-    Parameters & params;
+    Parameters params;
 
     // number of primal/dual variables
     PosPair dimension;
@@ -131,8 +131,6 @@ private:
 
     // mapping from the index of the dual variable to the pair of alignment edge indices
     std::vector<PosPair> dualToPairedEdges; // former _YToIndex
-
-    seqan::Score<float, seqan::RnaStructureScore> scoreAdaptor;
 
     void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
     {
@@ -237,8 +235,8 @@ private:
     }
 
 public:
-    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params)
-        : params(_params), scoreAdaptor(&maxProfitScores, params.laraGapOpen, params.laraGapExtend)
+    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters const & _params)
+        : params(_params)
     {
         _LOG(2, recordA.sequence << std::endl << recordB.sequence << std::endl);
         sequenceA = seqan::Rna5String{recordA.sequence};
@@ -301,6 +299,7 @@ public:
             targetNode.push_back(edge.first.second);
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
+        start();
     }
 
     void start()
@@ -407,14 +406,12 @@ public:
      * \brief Performs the structural alignment.
      * \return The dual value (upper bound, solution of relaxed problem).
      */
-    float relaxed_solution()
+    float relaxed_solution(float gapOpen, float gapExtend)
     {
+        seqan::Score<float, seqan::RnaStructureScore> scoreAdaptor(&maxProfitScores, gapOpen, gapExtend);
         seqan::resize(seqan::rows(currentAlignment), 2);
-        AlignmentRow & rowA = seqan::row(currentAlignment, 0);
-        AlignmentRow & rowB = seqan::row(currentAlignment, 1);
-
-        seqan::assignSource(rowA, sequenceA);
-        seqan::assignSource(rowB, sequenceB);
+        seqan::assignSource(seqan::row(currentAlignment, 0), sequenceA);
+        seqan::assignSource(seqan::row(currentAlignment, 1), sequenceB);
 
         // perform the alignment
         return seqan::globalAlignment(currentAlignment, scoreAdaptor, seqan::AffineGaps());
