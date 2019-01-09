@@ -44,15 +44,15 @@
 #include <seqan/rna_io.h>
 #include <seqan/score.h>
 
-/*!
- * \brief Define verbosity levels.
- */
-#define _V(_opt, _str) { if ((_opt).verbose > 0) std::cerr << _str << std::endl; }
-#define _VV(_opt, _str) { if ((_opt).verbose > 1) std::cerr << _str << std::endl; }
-#define _VVV(_opt, _str) { if ((_opt).verbose > 2) std::cerr << _str << std::endl; }
+#define _LOG(_level, _str)   { if (lara::_VERBOSE_LEVEL >= (_level)) std::cerr << _str; }
 
 namespace lara
 {
+
+/*!
+ * \brief Define verbosity levels.
+ */
+int _VERBOSE_LEVEL = 0;
 
 enum ScoringMode
 {

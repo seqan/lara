@@ -47,19 +47,20 @@ int main (int argc, char const ** argv)
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
     size_t const problem_size = store.size() * (store.size() - 1) / 2;
-    _VV(params, "Attempting to solve " << problem_size << " structural alignments.");
-    _VV(params, store);
+    _LOG(2, "Attempting to solve " << problem_size << " structural alignments." << std::endl);
+    _LOG(2, store << std::endl);
     lara::OutputTCoffeeLibrary tcLib(store);
 
     for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
     {
         for (size_t idxB = idxA + 1ul; idxB < store.size(); ++idxB)
         {
-            _V(params, "SEQUENCE " << idxA << " WITH " << idxB);
+            _LOG(1, "SEQUENCE " << idxA << " WITH " << idxB << std::endl);
             lara::Lagrange lagrange(store[idxA], store[idxB], params);
             lagrange.start();
 
-            lara::SubgradientSolver solver(lagrange.getDimension(), params);
+            lara::SubgradientSolver solver(params.epsilon, params.stepSizeFactor, params.numIterations,
+                                           params.maxNondecrIterations);
             lara::Status status = solver.solve(lagrange);
             if (status == lara::Status::EXIT_ERROR)
                 return 1;

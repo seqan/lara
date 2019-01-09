@@ -55,34 +55,23 @@ class SubgradientSolver
 private:
     float epsilon;
     float stepSizeFactor;
-    unsigned verbose;
     size_t numIterations;
     size_t maxNondecreasingIterations;
 
-    size_t iterationIdx;
-    std::vector<float> dual;
+    std::vector<float> dual{};
     float currentLowerBound;
     float currentUpperBound;
     float bestLowerBound;
     float bestUpperBound;
 
 public:
-    SubgradientSolver(PosPair const dim, Parameters const & params)
+    SubgradientSolver(float eps, float stepFac, size_t nIter, size_t maxNondecrIter)
+        : epsilon(eps), stepSizeFactor(stepFac), numIterations(nIter), maxNondecreasingIterations(maxNondecrIter)
     {
-        dual.resize(dim.second);
-
         currentLowerBound = negInfinity;
         currentUpperBound = posInfinity;
         bestLowerBound    = negInfinity;
         bestUpperBound    = posInfinity;
-
-        //        stepSize = 0.0;
-        epsilon        = params.epsilon;
-        stepSizeFactor = params.stepSizeFactor;
-        verbose        = params.verbose;
-        numIterations  = params.numIterations;
-        maxNondecreasingIterations = params.numNondecreasingIterations;
-        iterationIdx   = 0ul;
     }
 
     float calcStepsize(float upper, float lower, size_t numSubgradients)
@@ -102,10 +91,13 @@ public:
 
     Status solve(Lagrange & lagrange)
     {
+        size_t iterationIdx;
         size_t nondecreasingRounds = 0ul;
 
         std::list<size_t> subgradientIndices;
         std::vector<float> subgradient;
+
+        dual.resize(lagrange.getDimension().second);
         subgradient.resize(dual.size());
 
         for (iterationIdx = 0ul; iterationIdx < numIterations; ++iterationIdx)
@@ -114,10 +106,9 @@ public:
             currentUpperBound = lagrange.relaxed_solution();
             currentLowerBound = lagrange.valid_solution(subgradient, subgradientIndices);
 
-            if (verbose >= 1)
-                std::cerr << "(" << iterationIdx << ") \tbest: " << bestUpperBound << "\t/" << bestLowerBound << "\t"
-                          << "current: " << currentUpperBound << "/\t" << currentLowerBound
-                          << "\t(" << subgradientIndices.size() << ")\t";
+            _LOG(1, "(" << iterationIdx << ") \tbest: " << bestUpperBound << "\t/" << bestLowerBound << "\t"
+                        << "current: " << currentUpperBound << "/\t" << currentLowerBound
+                        << "\t(" << subgradientIndices.size() << ")\t");
 
             // compare upper and lower bound
             if (currentUpperBound < bestUpperBound)
@@ -130,12 +121,10 @@ public:
             {
                 bestLowerBound      = currentLowerBound;
                 nondecreasingRounds = 0ul;
-                if (verbose >= 1)
-                    std::cerr << "(*)";
+                _LOG(1, "(*)");
 
             }
-            if (verbose >= 1)
-                std::cerr << std::endl;
+            _LOG(1, std::endl);
 
             if (subgradientIndices.empty() && currentUpperBound - currentLowerBound > 0.1f)
             {
@@ -146,10 +135,7 @@ public:
             if (bestUpperBound - bestLowerBound < epsilon)
             {
                 SEQAN_ASSERT_GT(bestUpperBound + epsilon, bestLowerBound);
-                if (verbose > 0)
-                {
-                    std::cerr << "Found the optimal alignment in iteration " << iterationIdx << "." << std::endl;
-                }
+                _LOG(1, "Found the optimal alignment in iteration " << iterationIdx << "." << std::endl);
                 return Status::EXIT_OK;
             }
 
@@ -160,8 +146,7 @@ public:
             }
 
             float stepSize = calcStepsize(bestUpperBound, bestLowerBound, subgradientIndices.size());
-            if (verbose >= 2)
-                std::cerr << "stepsize = " << stepSize << std::endl;
+            _LOG(2, "stepsize = " << stepSize << std::endl);
 
             for (size_t idx : subgradientIndices)
             {

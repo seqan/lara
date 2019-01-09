@@ -78,7 +78,7 @@ public:
         for (seqan::RnaRecord & record : *this)
             computeStructure(record, usedVienna, logScoring);
         if (usedVienna)
-            _VV(params, "Computed missing base pair probabilities with ViennaRNA library.");
+            _LOG(2, "Computed missing base pair probabilities with ViennaRNA library." << std::endl);
 
         if (!params.dotplotFile.empty())
         {
@@ -89,14 +89,14 @@ public:
                 extractBppFromDotplot(rec, filename);
                 push_back(rec);
             }
-            _VV(params, "Successfully extracted base pair probabilities from given dotplot files.");
+            _LOG(2, "Successfully extracted base pair probabilities from given dotplot files." << std::endl);
         }
 
         if (size() <= 1)
             throw std::runtime_error("ERROR: The given file(s) must contain at least two sequences.");
 
         for (seqan::RnaRecord & record : *this)
-            _VVV(params, record.bppMatrGraphs[0].inter);
+            _LOG(3, record.bppMatrGraphs[0].inter << std::endl);
     }
 
 private:

@@ -240,7 +240,7 @@ public:
     Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters & _params)
         : params(_params), scoreAdaptor(&maxProfitScores, params.laraGapOpen, params.laraGapExtend)
     {
-        _VV(params, recordA.sequence << std::endl << recordB.sequence);
+        _LOG(2, recordA.sequence << std::endl << recordB.sequence << std::endl);
         sequenceA = seqan::Rna5String{recordA.sequence};
         sequenceB = seqan::Rna5String{recordB.sequence};
         PosPair seqLen{seqan::length(sequenceA), seqan::length(sequenceB)};
@@ -280,7 +280,7 @@ public:
             offset[residueCount]                     = idx;
             invLayerOffset[std::make_pair(1ul, idx)] = residueCount++;
         }
-        _VV(params, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")");
+        _LOG(2, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")" << std::endl);
 
         generateEdges(getEdgeIdx, sequenceA, sequenceB, params.laraScoreMatrix, params.suboptimalDiff);
         size_t numEdges = getEdgeIdx.size();
@@ -346,17 +346,17 @@ public:
                             // insert element into the priority queue
                             auto res = priorityQ[edgeIdx].emplace(-(structScore + alignScore), partnerIdx);
                             edgeToPriorityQ[interaction] = res.first;
-                            _VV(params, "dual idx " << dualIdx << " = (" << sourceNode[edgeIdx]
+                            _LOG(2, "dual idx " << dualIdx << " = (" << sourceNode[edgeIdx]
                                                     << "-" << targetNode[edgeIdx] << ") -> (" << sourceNode[partnerIdx]
-                                                    << "-" << targetNode[partnerIdx] << ")");
+                                                    << "-" << targetNode[partnerIdx] << ")" << std::endl);
                             pairedEdgesToDual[interaction] = dualIdx++;
                             dualToPairedEdges.emplace_back(edgeIdx, partnerIdx);
 
                             if (structScore + alignScore > maxProfit[edgeIdx])
                             {
-                                _VV(params, "maxProfit[" << edgeIdx << " (" << head.first << "," << tail.first
+                                _LOG(2, "maxProfit[" << edgeIdx << " (" << head.first << "," << tail.first
                                                          << ")] = " << structScore << " + " << alignScore
-                                                         << " \tpartner " << partnerIdx);
+                                                         << " \tpartner " << partnerIdx << std::endl);
                                 maxProfit[edgeIdx] = structScore + alignScore;
                                 maxProfitEdge[edgeIdx] = partnerIdx;
                             }
@@ -366,7 +366,7 @@ public:
             }
             numPartners += possiblePartners[edgeIdx].size();
         }
-        _VV(params, "Average number of partner edges = " << 1.0 * numPartners / sourceNode.size());
+        _LOG(2, "Average number of partner edges = " << 1.0 * numPartners / sourceNode.size() << std::endl);
         dimension.second = dualIdx; // number of interactions that are observed
         dimension.first = sourceNode.size(); // number of alignment edges (lines)
     }
@@ -391,18 +391,15 @@ public:
             maxProfitScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
         }
 
-        if (params.verbose >= 3)
+        _LOG(3, "maxProfitScores" << std::endl);
+        for (auto & row : maxProfitScores)
         {
-            std::cerr << "maxProfitScores" << std::endl;
-            for (auto & row : maxProfitScores)
+            _LOG(3, "[ ");
+            for (float sc : row)
             {
-                std::cerr << "[ ";
-                for (float sc : row)
-                {
-                    std::cerr << std::setw(14) << sc << " ";
-                }
-                std::cerr << "]" << std::endl;
+                _LOG(3, std::setw(14) << sc << " ");
             }
+            _LOG(3, "]" << std::endl);
         }
     }
 
@@ -503,15 +500,15 @@ public:
         for (size_t idx : currentStructuralAlignment)
         {
             size_t const & maxPE = maxProfitEdge[idx];
-            _VVV(params, "Alignment[" << idx << "; " << sourceNode[idx] << "," << targetNode[idx] << "] maxProfitEdge ["
+            _LOG(3, "Alignment[" << idx << "; " << sourceNode[idx] << "," << targetNode[idx] << "] maxProfitEdge ["
                                       << maxPE << "; " << sourceNode[maxPE] << "," << targetNode[maxPE] << "] score "
                                       << maxProfit[idx] << " inSolution " << inSolution[maxPE] << " rec "
-                                      << (maxProfitEdge[maxPE] == idx));
+                                      << (maxProfitEdge[maxPE] == idx) << std::endl);
         }
 
         // we have to substract the gapcosts, otherwise the lower bound might be higher than the upper bound
         float primalValue = lowerBound + gapScore;
-        _VV(params, "primal " << primalValue << " = " << lowerBound << " (lb) + " << gapScore << " (gap)");
+        _LOG(2, "primal " << primalValue << " = " << lowerBound << " (lb) + " << gapScore << " (gap)" << std::endl);
 
         // store the best alignment found so far
         if (primalValue > bestStructuralAlignmentScore)

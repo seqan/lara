@@ -76,7 +76,7 @@ public:
     // number of iterations
     unsigned                 numIterations{500u};
     // number of non-decreasing iterations
-    unsigned                 numNondecreasingIterations{50u};
+    unsigned                 maxNondecrIterations{50u};
     // value to be considered for the equality of upper and lower bounds difference
     float                    epsilon{0.001f};
     // my, necessary for computing appropriate step sizes
@@ -107,8 +107,6 @@ public:
     seqan::CharString        tcoffeeLocation{"t_coffee/t_coffee_5.05"};
     // specify the method to be used to create the T-Coffe library
     unsigned                 tcoffeLibMode{TCoffeeMode::SWITCH};
-    // verbosity level (0-3)
-    unsigned                 verbose{0u};
     Status                   status;
     unsigned                 matching{5u};
 
@@ -134,7 +132,7 @@ private:
 
         addOption(parser, ArgParseOption("v", "verbose",
                                          "0: no additional outputs, 1: global statistics, "
-                                         "2: extensive statistics for each batch of reads, 3: Debug output. (1)",
+                                         "2: extensive statistics for each batch of reads, 3: Debug output. (0)",
                                          ArgParseArgument::INTEGER, "INT"));
 
         // Input options
@@ -192,7 +190,7 @@ private:
                                          "number of iterations. ",
                                          ArgParseArgument::INTEGER, "INT"));
 
-        addOption(parser, ArgParseOption("nditer", "numNondecreasingIterations",
+        addOption(parser, ArgParseOption("nditer", "maxNondecreasingIterations",
                                          "number of non-decreasing iterations. (50)",
                                          ArgParseArgument::INTEGER, "INT"));
 
@@ -247,12 +245,12 @@ private:
         if (parseResult != ArgumentParser::PARSE_OK)
             return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
 
-        getOptionValue(verbose, parser, "verbose");
+        getOptionValue(_VERBOSE_LEVEL, parser, "verbose");
         getOptionValue(affineLinearDgs, parser, "affineLinearDgs");
         getOptionValue(alignLocally, parser, "local");
         getOptionValue(thrBppm, parser, "thrBppm");
         getOptionValue(numIterations, parser, "iterations");
-        getOptionValue(numNondecreasingIterations, parser, "numNondecreasingIterations");
+        getOptionValue(maxNondecrIterations, parser, "maxNondecreasingIterations");
         getOptionValue(epsilon, parser, "epsilon");
         getOptionValue(stepSizeFactor, parser, "stepSizeFactor");
         getOptionValue(laraScoreMatrixName, parser, "laraScoreMatrixName");
@@ -286,7 +284,7 @@ private:
         getOptionValue(outFile, parser, "outFile");
         if (isSet(parser, "outFile"))
         {
-            _V(*this, "The specified output file is " << outFile);
+            _LOG(1, "The specified output file is " << outFile << std::endl);
         }
         else
         {
@@ -299,7 +297,7 @@ private:
                 erase(tmpDirectory, length(tmpDirectory) - 10u, length(tmpDirectory));
             }
             tmpDir = tmpDirectory;
-            _VV(*this, "The absolute path where to create the tmpDir is " << tmpDir);
+            _LOG(2, "The absolute path where to create the tmpDir is " << tmpDir << std::endl);
         }
 
         // set score matrix
@@ -307,12 +305,12 @@ private:
         laraScoreMatrix.data_gap_open   = laraGapOpen;
         if (empty(laraScoreMatrixName))
         {
-            _VV(*this, "Predefined Ribosum65 matrix will be used.");
+            _LOG(2, "Predefined Ribosum65 matrix will be used." << std::endl);
             setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
         }
         else if (loadScoreMatrix(laraScoreMatrix, toCString(laraScoreMatrixName)))
         {
-            _VV(*this, "Provided scoring matrix will be used: " << laraScoreMatrixName);
+            _LOG(2, "Provided scoring matrix will be used: " << laraScoreMatrixName << std::endl);
         }
         else
         {
