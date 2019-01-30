@@ -368,6 +368,12 @@ public:
         _LOG(2, "Average number of partner edges = " << 1.0 * numPartners / sourceNode.size() << std::endl);
         dimension.second = dualIdx; // number of interactions that are observed
         dimension.first = sourceNode.size(); // number of alignment edges (lines)
+
+        // filling the matrix, we're updating the values afterwards, otherwise
+        // we had to evaluate _maxProfitScores after every update of either the
+        // l or m edge
+        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
+            maxProfitScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
     }
 
     void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
@@ -382,13 +388,8 @@ public:
             maxProfitEdge[pair.first] = maxElement->second; // information
         }
 
-        // filling the matrix, we're updating the values afterwards, otherwise
-        // we had to evaluate _maxProfitScores after every update of either the
-        // l or m edge
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-        {
             maxProfitScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
-        }
 
         _LOG(3, "maxProfitScores" << std::endl);
         for (auto & row : maxProfitScores)

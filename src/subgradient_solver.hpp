@@ -142,18 +142,9 @@ public:
                 if (!at_work[idx])
                     continue;
 
-                solvers[idx].lagrange.updateScores(solvers[idx].dual, solvers[idx].subgradientIndices);
-//            }
-//
-//            for (size_t idx = 0ul; idx < solvers.size(); ++idx)
-//            {
                 solvers[idx].currentUpperBound = solvers[idx].lagrange.relaxed_solution(params.laraGapOpen,
                                                                                         params.laraGapExtend);
-//            }
-//
-//            #pragma omp parallel for num_threads(params.num_threads)
-//            for (size_t idx = 0ul; idx < solvers.size(); ++idx)
-//            {
+
                 solvers[idx].currentLowerBound = solvers[idx].lagrange.valid_solution(solvers[idx].subgradient,
                                                                                       solvers[idx].subgradientIndices);
 
@@ -221,7 +212,11 @@ public:
                             solvers[idx] = SubgradientSolver(*inputPairIter, store, params);
                             ++inputPairIter;
                         }
-                    };
+                    }; // end critical region
+                }
+                else
+                {
+                    solvers[idx].lagrange.updateScores(solvers[idx].dual, solvers[idx].subgradientIndices);
                 }
             }
         } // end while
