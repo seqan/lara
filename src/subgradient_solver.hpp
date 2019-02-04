@@ -142,11 +142,11 @@ public:
                 if (!at_work[idx])
                     continue;
 
-                solvers[idx].currentUpperBound = solvers[idx].lagrange.relaxed_solution(params.laraGapOpen,
-                                                                                        params.laraGapExtend);
+                solvers[idx].currentUpperBound = solvers[idx].lagrange.relaxed_solution();
 
                 solvers[idx].currentLowerBound = solvers[idx].lagrange.valid_solution(solvers[idx].subgradient,
-                                                                                      solvers[idx].subgradientIndices);
+                                                                                      solvers[idx].subgradientIndices,
+                                                                                      params.matching);
 
 //                _LOG(2, "(" << solvers[idx].remainingIterations << ") \tbest: " << solvers[idx].bestUpperBound << "\t/"
 //                            << solvers[idx].bestLowerBound << "\t"

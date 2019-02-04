@@ -63,8 +63,6 @@ namespace lara
 class Lagrange
 {
 private:
-    Parameters params;
-
     // number of primal/dual variables
     PosPair dimension;
 
@@ -79,7 +77,7 @@ private:
 
     // the arrays hold the alignment scores that are passed onto
     // the pairwiseAlignmentAlgorithm object
-    std::vector<std::vector<float>> maxProfitScores;
+    seqan::Score<float, seqan::RnaStructureScore> maxProfitScore;
 
     // vector holding the maximum profit for each alignment edge
     std::vector<float> maxProfit;
@@ -184,11 +182,11 @@ private:
             {
                 if (!isGapOpen0)
                 {
-                    gapScore += params.laraGapOpen;
+                    gapScore += maxProfitScore.data_gap_open;
                 }
                 else
                 {
-                    gapScore += params.laraGapExtend;
+                    gapScore += maxProfitScore.data_gap_extend;
                 }
                 isGapOpen0 = true;
                 ++sourcePos.second;
@@ -203,11 +201,11 @@ private:
             {
                 if (!isGapOpen1)
                 {
-                    gapScore += params.laraGapOpen;
+                    gapScore += maxProfitScore.data_gap_open;
                 }
                 else
                 {
-                    gapScore += params.laraGapExtend;
+                    gapScore += maxProfitScore.data_gap_extend;
                 }
                 isGapOpen1 = true;
                 ++sourcePos.first;
@@ -235,8 +233,7 @@ private:
     }
 
 public:
-    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters const & _params)
-        : params(_params)
+    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters const & params)
     {
         _LOG(2, recordA.sequence << std::endl << recordB.sequence << std::endl);
         sequenceA = seqan::Rna5String{recordA.sequence};
@@ -245,8 +242,10 @@ public:
 
         layer.resize(seqLen.first + seqLen.second);
         offset.resize(seqLen.first + seqLen.second);
-        maxProfitScores.resize(seqLen.first);
-        for (std::vector<float> & elem : maxProfitScores)
+        maxProfitScore.data_gap_open = params.laraGapOpen;
+        maxProfitScore.data_gap_extend = params.laraGapExtend;
+        maxProfitScore.matrix.resize(seqLen.first);
+        for (std::vector<float> & elem : maxProfitScore.matrix)
             elem.resize(seqLen.second, negInfinity);
 
         // initialize()
@@ -299,10 +298,10 @@ public:
             targetNode.push_back(edge.first.second);
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
-        start();
+        start(params.laraScoreMatrix);
     }
 
-    void start()
+    void start(RnaScoreMatrix const & matrix)
     {
         size_t dualIdx = 0ul;
         size_t numPartners = 0ul;
@@ -315,7 +314,7 @@ public:
             extractContacts(headContact, bppGraphs.first, headNode);
             extractContacts(tailContact, bppGraphs.second, tailNode);
 
-            float alignScore = seqan::score(params.laraScoreMatrix,
+            float alignScore = seqan::score(matrix,
                                             sequenceA[sourceNode[edgeIdx]],
                                             sequenceB[targetNode[edgeIdx]]);
 
@@ -373,7 +372,7 @@ public:
         // we had to evaluate _maxProfitScores after every update of either the
         // l or m edge
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            maxProfitScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
+            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
     }
 
     void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
@@ -389,10 +388,10 @@ public:
         }
 
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            maxProfitScores[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
+            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
 
         _LOG(3, "maxProfitScores" << std::endl);
-        for (auto & row : maxProfitScores)
+        for (auto & row : maxProfitScore.matrix)
         {
             _LOG(3, "[ ");
             for (float sc : row)
@@ -407,18 +406,17 @@ public:
      * \brief Performs the structural alignment.
      * \return The dual value (upper bound, solution of relaxed problem).
      */
-    float relaxed_solution(float gapOpen, float gapExtend)
+    float relaxed_solution()
     {
-        seqan::Score<float, seqan::RnaStructureScore> scoreAdaptor(&maxProfitScores, gapOpen, gapExtend);
         seqan::resize(seqan::rows(currentAlignment), 2);
         seqan::assignSource(seqan::row(currentAlignment, 0), sequenceA);
         seqan::assignSource(seqan::row(currentAlignment, 1), sequenceB);
 
         // perform the alignment
-        return seqan::globalAlignment(currentAlignment, scoreAdaptor, seqan::AffineGaps());
+        return seqan::globalAlignment(currentAlignment, maxProfitScore, seqan::AffineGaps());
     }
 
-    float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices)
+    float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices, unsigned lookahead)
     {
         float gapScore = evaluateLines(seqan::row(currentAlignment, 0), seqan::row(currentAlignment, 1));
 
@@ -476,7 +474,7 @@ public:
         std::map<size_t, size_t> contacts{};
         if (!subgradientIndices.empty())
         {
-            Matching mwm(sequencesScore, possiblePartners, params.matching);
+            Matching mwm(sequencesScore, possiblePartners, lookahead);
             lowerBound = mwm.computeScore(currentStructuralAlignment, inSolution);
             contacts = mwm.getContacts();
         }

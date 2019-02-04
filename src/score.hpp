@@ -53,12 +53,9 @@ template <>
 class Score<float, RnaStructureScore>
 {
 public:
-    std::vector<std::vector<float>> * matrix;
-    float gapOpen;
-    float gapExtend;
-
-    Score(std::vector<std::vector<float>> * _matrix, float _gapOpen, float _gapExtend)
-        : matrix(_matrix), gapOpen(_gapOpen), gapExtend(_gapExtend) {};
+    std::vector<std::vector<float>> matrix;
+    float data_gap_open;
+    float data_gap_extend;
 };
 
 template <typename TSequence>
@@ -73,43 +70,7 @@ float score(Score<float, RnaStructureScore> const & sc,
             ConsensusScoreSequenceEntry<TSeq1> const & entryH,
             ConsensusScoreSequenceEntry<TSeq2> const & entryV)
 {
-    return (*sc.matrix)[position(entryH)][position(entryV)];
-}
-
-template <typename TSeq1, typename TSeq2>
-inline
-float scoreGapExtendHorizontal(Score<float, RnaStructureScore> const & sc,
-                               ConsensusScoreSequenceEntry<TSeq1> const &,
-                               ConsensusScoreSequenceEntry<TSeq2> const &)
-{
-    return sc.gapExtend;
-}
-
-template <typename TSeq1, typename TSeq2>
-inline
-float scoreGapExtendVertical(Score<float, RnaStructureScore> const & sc,
-                             ConsensusScoreSequenceEntry<TSeq1> const &,
-                             ConsensusScoreSequenceEntry<TSeq2> const &)
-{
-    return sc.gapExtend;
-}
-
-template <typename TSeq1, typename TSeq2>
-inline
-float scoreGapOpenHorizontal(Score<float, RnaStructureScore> const & sc,
-                             ConsensusScoreSequenceEntry<TSeq1> const &,
-                             ConsensusScoreSequenceEntry<TSeq2> const &)
-{
-    return sc.gapOpen;
-}
-
-template <typename TSeq1, typename TSeq2>
-inline
-float scoreGapOpenVertical(Score<float, RnaStructureScore> const & sc,
-                           ConsensusScoreSequenceEntry<TSeq1> const &,
-                           ConsensusScoreSequenceEntry<TSeq2> const &)
-{
-    return sc.gapOpen;
+    return sc.matrix[position(entryH)][position(entryV)];
 }
 
 template <typename TSequence, typename TPosition>
