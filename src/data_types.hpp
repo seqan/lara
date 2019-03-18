@@ -82,6 +82,7 @@ float const posInfinity = std::numeric_limits<float>::max();
 
 //! \brief Score Matrix type used in LaRA.
 typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
+float const factor2int = 8192.f;
 
 //! \brief Pair of positions (usually in first and second sequence)
 typedef std::pair<size_t, size_t>                           PosPair;

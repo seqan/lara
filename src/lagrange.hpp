@@ -77,7 +77,7 @@ private:
 
     // the arrays hold the alignment scores that are passed onto
     // the pairwiseAlignmentAlgorithm object
-    seqan::Score<float, seqan::RnaStructureScore> maxProfitScore;
+    seqan::Score<int32_t, seqan::RnaStructureScore> maxProfitScore;
 
     // vector holding the maximum profit for each alignment edge
     std::vector<float> maxProfit;
@@ -173,7 +173,7 @@ private:
         lines.clear();
 
         // Sum up gap score.
-        float gapScore = 0.0f;
+        int32_t gapScore = 0;
 
         while (it0 != itEnd0 && it1 != itEnd1)
         {
@@ -229,7 +229,7 @@ private:
         }
         SEQAN_ASSERT(it0 == itEnd0);
         SEQAN_ASSERT(it1 == itEnd1);
-        return gapScore;
+        return gapScore / factor2int;
     }
 
 public:
@@ -242,11 +242,11 @@ public:
 
         layer.resize(seqLen.first + seqLen.second);
         offset.resize(seqLen.first + seqLen.second);
-        maxProfitScore.data_gap_open = params.laraGapOpen;
-        maxProfitScore.data_gap_extend = params.laraGapExtend;
+        maxProfitScore.data_gap_open = static_cast<int32_t>(params.laraGapOpen * factor2int);
+        maxProfitScore.data_gap_extend = static_cast<int32_t>(params.laraGapExtend * factor2int);
         maxProfitScore.matrix.resize(seqLen.first);
-        for (std::vector<float> & elem : maxProfitScore.matrix)
-            elem.resize(seqLen.second, negInfinity);
+        for (std::vector<int32_t> & elem : maxProfitScore.matrix)
+            elem.resize(seqLen.second, std::numeric_limits<int32_t>::lowest() / 3 * 2);
 
         // initialize()
         numIterations = 0ul;
@@ -372,7 +372,8 @@ public:
         // we had to evaluate _maxProfitScores after every update of either the
         // l or m edge
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
+            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = static_cast<int32_t>(maxProfit[edgeIdx]
+                                                                                                   * factor2int);
     }
 
     void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
@@ -388,13 +389,14 @@ public:
         }
 
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = maxProfit[edgeIdx];
+            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = static_cast<int32_t>(maxProfit[edgeIdx]
+                                                                                                   * factor2int);
 
         _LOG(3, "maxProfitScores" << std::endl);
         for (auto & row : maxProfitScore.matrix)
         {
             _LOG(3, "[ ");
-            for (float sc : row)
+            for (int32_t sc : row)
             {
                 _LOG(3, std::setw(14) << sc << " ");
             }
@@ -413,7 +415,7 @@ public:
         seqan::assignSource(seqan::row(currentAlignment, 1), sequenceB);
 
         // perform the alignment
-        return seqan::globalAlignment(currentAlignment, maxProfitScore, seqan::AffineGaps());
+        return seqan::globalAlignment(currentAlignment, maxProfitScore, seqan::AffineGaps()) / factor2int;
     }
 
     float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices, unsigned lookahead)

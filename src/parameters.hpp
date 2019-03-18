@@ -80,7 +80,7 @@ public:
     // number of non-decreasing iterations
     unsigned                 maxNondecrIterations{50u};
     // value to be considered for the equality of upper and lower bounds difference
-    float                    epsilon{0.001f};
+    float                    epsilon{0.01f};
     // my, necessary for computing appropriate step sizes
     float                    stepSizeFactor{1.0f};
     // scoring matrix name that should be used for scoring alignment edges in the actual problem

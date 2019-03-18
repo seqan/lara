@@ -34,7 +34,7 @@
 #pragma once
 
 /*!\file alignment.hpp
- * \brief This file contains scoring data structures and methods for performing alignments.
+ * \brief This file contains a position-dependent RNA scoring matrix.
  */
 
 #include <iostream>
@@ -50,32 +50,32 @@ namespace seqan
 struct RnaStructureScore;
 
 template <>
-class Score<float, RnaStructureScore>
+class Score<int32_t, RnaStructureScore>
 {
 public:
-    std::vector<std::vector<float>> matrix;
-    float data_gap_open;
-    float data_gap_extend;
+    std::vector<std::vector<int32_t>> matrix;
+    int32_t data_gap_open;
+    int32_t data_gap_extend;
 };
 
 template <typename TSequence>
-struct SequenceEntryForScore<Score<float, RnaStructureScore>, TSequence>
+struct SequenceEntryForScore<Score<int32_t, RnaStructureScore>, TSequence>
 {
     typedef ConsensusScoreSequenceEntry<TSequence> Type;
 };
 
 template <typename TSeq1, typename TSeq2>
 inline
-float score(Score<float, RnaStructureScore> const & sc,
-            ConsensusScoreSequenceEntry<TSeq1> const & entryH,
-            ConsensusScoreSequenceEntry<TSeq2> const & entryV)
+int32_t score(Score<int32_t, RnaStructureScore> const & sc,
+              ConsensusScoreSequenceEntry<TSeq1> const & entryH,
+              ConsensusScoreSequenceEntry<TSeq2> const & entryV)
 {
     return sc.matrix[position(entryH)][position(entryV)];
 }
 
 template <typename TSequence, typename TPosition>
 inline
-ConsensusScoreSequenceEntry<TSequence> sequenceEntryForScore(Score<float, RnaStructureScore> const &,
+ConsensusScoreSequenceEntry<TSequence> sequenceEntryForScore(Score<int32_t, RnaStructureScore> const &,
                                                              TSequence const & seq,
                                                              TPosition pos)
 {
