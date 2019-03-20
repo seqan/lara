@@ -128,11 +128,11 @@ public:
     }
 };
 
-void generateEdges(std::map<PosPair, size_t> & edges,  // OUT
-                   seqan::Rna5String const & seqA,     // IN
-                   seqan::Rna5String const & seqB,     // IN
-                   RnaScoreMatrix const & scoreMatrix, // IN
-                   float suboptimalDiff)               // IN
+float generateEdges(std::map<PosPair, size_t> & edges,  // OUT
+                    seqan::Rna5String const & seqA,     // IN
+                    seqan::Rna5String const & seqB,     // IN
+                    RnaScoreMatrix const & scoreMatrix, // IN
+                    float suboptimalDiff)               // IN
 {
     seqan::ModifiedString<seqan::Rna5String const, seqan::ModReverse> reverseA(seqA);
     seqan::ModifiedString<seqan::Rna5String const, seqan::ModReverse> reverseB(seqB);
@@ -153,7 +153,9 @@ void generateEdges(std::map<PosPair, size_t> & edges,  // OUT
             {
                 edges.emplace_hint(edges.end(), std::make_pair(a, b), edgeIdx++);
             }
+
+    // Return a measure of sequence identity: average score per alignment column.
+    return forward.getOptimalScore() / std::max(lenA, lenB);
 }
 
 } // namespace lara
-

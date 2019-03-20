@@ -97,6 +97,7 @@ public:
     // Specifies the contribution of the sequence scores (specified by the larascore matrix) to the overall structural
     // alignment.
     float                    sequenceScale{1.0f};
+    float                    balance{0.0f};
     // gap penalty for RSA
     //    float rsaGapPenalty{3.0};
     // scoring mode, either LOGARITHMIC, SCALE, ORIGINAL, RIBOSUM
@@ -229,7 +230,13 @@ private:
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
         addOption(parser, ArgParseOption("ssc", "sequenceScale",
-                                         "scaling factor for the scores of the alignment edges",
+                                         "Scaling factor for the sequence scores (below 1 gives more impact for "
+                                         "structure).",
+                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+
+        addOption(parser, ArgParseOption("b", "balance",
+                                         "Factor of how much the sequence identity should influence the balance "
+                                         "of sequence and structure score. (0)",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
         addOption(parser, ArgParseOption("stsc", "structureScoring",
@@ -269,6 +276,7 @@ private:
         getOptionValue(laraGapOpen, parser, "laraGapOpen");
         getOptionValue(laraGapExtend, parser, "laraGapExtend");
         getOptionValue(sequenceScale, parser, "sequenceScale");
+        getOptionValue(balance, parser, "balance");
         getOptionValue(structureScoring, parser, "structureScoring");
         getOptionValue(fixedStructWeight, parser, "fixedStructWeight");
         getOptionValue(scalingFactor, parser, "scalingFactor");
@@ -330,12 +338,6 @@ private:
                       << "). Predefined Ribosum65 matrix will be used." << std::endl;
             setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
         }
-
-        // scale the matrix
-        laraScoreMatrix.data_gap_extend *= sequenceScale;
-        laraScoreMatrix.data_gap_open *= sequenceScale;
-        for (float & matrixEntry : laraScoreMatrix.data_tab)
-            matrixEntry *= sequenceScale;
 
         return Status::CONTINUE;
     }

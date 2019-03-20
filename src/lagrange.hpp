@@ -282,7 +282,9 @@ public:
         }
         _LOG(2, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")" << std::endl);
 
-        generateEdges(getEdgeIdx, sequenceA, sequenceB, params.laraScoreMatrix, params.suboptimalDiff);
+        float const avSeqId = generateEdges(getEdgeIdx, sequenceA, sequenceB, params.laraScoreMatrix,
+                                            params.suboptimalDiff);
+        float const sequenceScaleFactor = params.balance * avSeqId + params.sequenceScale;
         size_t numEdges = getEdgeIdx.size();
 
         sourceNode.reserve(numEdges);
@@ -302,11 +304,9 @@ public:
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
         tcoffeeLibMode = params.tcoffeeLibMode;
-        start(params.laraScoreMatrix);
-    }
 
-    void start(RnaScoreMatrix const & matrix)
-    {
+        // start
+
         size_t dualIdx = 0ul;
         size_t numPartners = 0ul;
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
@@ -318,9 +318,9 @@ public:
             extractContacts(headContact, bppGraphs.first, headNode);
             extractContacts(tailContact, bppGraphs.second, tailNode);
 
-            float alignScore = seqan::score(matrix,
-                                            sequenceA[sourceNode[edgeIdx]],
-                                            sequenceB[targetNode[edgeIdx]]);
+            float alignScore = sequenceScaleFactor * seqan::score(params.laraScoreMatrix,
+                                                                  sequenceA[sourceNode[edgeIdx]],
+                                                                  sequenceB[targetNode[edgeIdx]]);
 
             possiblePartners[edgeIdx].emplace_back(edgeIdx, alignScore);
             structureScore[std::make_pair(edgeIdx, edgeIdx)] = negInfinity;
@@ -556,7 +556,7 @@ public:
             float const div = 500.f / (*(mm.second) - *(mm.first));
             for (size_t idx : bestStructuralAlignment)
             {
-                unsigned val = static_cast<unsigned const>((maxProfit[idx] - *(mm.first)) * div);
+                unsigned val = static_cast<unsigned>((maxProfit[idx] - *(mm.first)) * div);
                 val += (tcoffeeLibMode - 750u);
                 structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
                                             edgeMatching.count(idx) == 1 ? val + 500u : val);
