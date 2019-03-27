@@ -90,17 +90,35 @@ private:
     InputStorage const & store;
     Parameters & params;
 
-    std::vector<PosPair> inputPairs;
+    // sort alignment order for the first sequence length
+    struct longer_seq
+    {
+        InputStorage const & store;
+        bool operator()(PosPair lhs, PosPair rhs) const
+        {
+            if (seqan::length(store[lhs.first].sequence) > seqan::length(store[rhs.first].sequence))
+                return true;
+            else if (seqan::length(store[lhs.first].sequence) == seqan::length(store[rhs.first].sequence))
+                return seqan::length(store[lhs.second].sequence) >= seqan::length(store[rhs.second].sequence);
+            else
+                return false;
+        }
+    };
+
+    std::set<PosPair, longer_seq> inputPairs;
     std::vector<SubgradientSolver> solvers;
 
 public:
     SubgradientSolverMulti(InputStorage const & _store, Parameters & _params)
-        : store(_store), params(_params)
+        : store(_store), params(_params), inputPairs(longer_seq{store})
     {
-        inputPairs.reserve(store.size() * (store.size() - 1ul) / 2ul);
+        // Add the sequence index pairs to the set of alignments, longer sequence first.
         for (size_t idxA = 0ul; idxA < store.size() - 1ul; ++idxA)
             for (size_t idxB = idxA + 1ul; idxB < store.size(); ++idxB)
-                inputPairs.emplace_back(idxA, idxB);
+                if (seqan::length(store[idxA].sequence) >= seqan::length(store[idxB].sequence))
+                    inputPairs.emplace(idxA, idxB);
+                else
+                    inputPairs.emplace(idxB, idxA);
 
         solvers.reserve(std::min((size_t)params.num_threads, inputPairs.size()));
     }
@@ -122,7 +140,7 @@ public:
 
     void solve(lara::OutputTCoffeeLibrary & results)
     {
-        std::vector<PosPair>::const_iterator inputPairIter;
+        std::set<PosPair>::const_iterator inputPairIter;
         for (inputPairIter = inputPairs.cbegin();
              inputPairIter != inputPairs.cend() && solvers.size() < params.num_threads;
              ++inputPairIter)
@@ -195,7 +213,10 @@ public:
                     #pragma omp critical
                     {
                         _LOG(1, "Thread " << idx << " finished alignment (" << solvers[idx].sequenceIndices.first
-                                          << "," << solvers[idx].sequenceIndices.second << ")." << std::endl);
+                                          << "," << solvers[idx].sequenceIndices.second << "). " << "Lengths "
+                                          << seqan::length(store[solvers[idx].sequenceIndices.first].sequence) << ", "
+                                          << seqan::length(store[solvers[idx].sequenceIndices.second].sequence)
+                                          << std::endl);
 //                        lara::printAlignment(std::cerr,
 //                                             solvers[idx].lagrange.getAlignment(),
 //                                             store[solvers[idx].sequenceIndices.first].name,
