@@ -331,27 +331,31 @@ private:
 public:
     explicit OutputTCoffeeLibrary(InputStorage const & data) : numSequences(data.size())
     {
-        if (numSequences > 2)
+        sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
+        sstream << numSequences << std::endl;
+        for (seqan::RnaRecord const & rec : data)
         {
-            sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
-            sstream << numSequences << std::endl;
-            for (seqan::RnaRecord const & rec : data)
-            {
-                sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
-            }
+            sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
         }
     }
 
     void addAlignment(Lagrange const & lagrange, PosPair const & seqIndices)
     {
-        if (numSequences > 2)
+        if (seqIndices.first < seqIndices.second)
         {
             sstream << "# " << (seqIndices.first + 1) << " " << (seqIndices.second + 1) << std::endl;
             for (auto const & elem : lagrange.getStructureLines())
-            {
-                sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << (std::get<2>(elem) ? 1000 : 500)
-                        << std::endl;
-            }
+                sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << std::get<2>(elem) << std::endl;
+        }
+        else if (seqIndices.first > seqIndices.second)
+        {
+            sstream << "# " << (seqIndices.second + 1) << " " << (seqIndices.first + 1) << std::endl;
+            for (auto const & elem : lagrange.getStructureLines())
+                sstream << std::get<1>(elem) << " " << std::get<0>(elem) << " " << std::get<2>(elem) << std::endl;
+        }
+        else
+        {
+            SEQAN_ASSERT_MSG(false, "LOGICAL ERROR: Sequence indices must not be equal!");
         }
     }
 

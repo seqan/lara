@@ -37,6 +37,7 @@
  * \brief This file contains data structures and algorithms for lagrange relaxation.
  */
 
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
 #include <map>
@@ -530,16 +531,24 @@ public:
         return bestAlignment;
     }
 
-    std::vector<std::tuple<size_t, size_t, bool>> getStructureLines() const
+    /*!
+     * \brief Calculate the scores for the T-Coffee library.
+     * \return Triple of position, position and score.
+     * \details The score is normalised to [500..1000] if the pair is included in the matching and [0..500] otherwise.
+     */
+    std::vector<std::tuple<size_t, size_t, unsigned>> getStructureLines() const
     {
-        std::vector<std::tuple<size_t, size_t, bool>> structureLines{};
+        std::vector<std::tuple<size_t, size_t, unsigned>> structureLines{};
+        auto const mm = std::minmax_element(maxProfit.begin(), maxProfit.end());
+        float const div = 500.f / (*(mm.second) - *(mm.first));
         for (size_t idx : bestStructuralAlignment)
         {
-            structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1, (edgeMatching.count(idx) == 1));
+            unsigned const val = (maxProfit[idx] - *(mm.first)) * div;
+            structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
+                                        edgeMatching.count(idx) == 1 ? val + 500u : val);
         }
         return structureLines;
     }
 };
 
 } // namespace lara
-

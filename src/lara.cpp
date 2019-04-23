@@ -58,6 +58,5 @@ int main (int argc, char const ** argv)
     lara::SubgradientSolverMulti solverMulti(store, params);
     solverMulti.solve(tcLib);
 
-    if (problem_size > 1ul)
-        tcLib.print(params.outFile);
+    tcLib.print(params.outFile);
 }
