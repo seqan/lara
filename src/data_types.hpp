@@ -62,13 +62,13 @@ enum ScoringMode
     RIBOSUM
 };
 
-enum TCoffeeMode
-{
-    PROPORTIONAL,
-    SWITCH,
-    ALLINTER,
-    FIXEDINTER
-};
+//enum TCoffeeMode
+//{
+//    PROPORTIONAL,
+//    SWITCH,
+//    ALLINTER,
+//    FIXEDINTER
+//};
 
 enum Status
 {

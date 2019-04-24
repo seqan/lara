@@ -131,6 +131,8 @@ private:
     // mapping from the index of the dual variable to the pair of alignment edge indices
     std::vector<PosPair> dualToPairedEdges; // former _YToIndex
 
+    unsigned tcoffeeLibMode;
+
     void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
     {
         for (seqan::RnaAdjacencyIterator adjIt(graph.inter, origin); !seqan::atEnd(adjIt); seqan::goNext(adjIt))
@@ -299,6 +301,7 @@ public:
             targetNode.push_back(edge.first.second);
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
+        tcoffeeLibMode = params.tcoffeeLibMode;
         start(params.laraScoreMatrix);
     }
 
@@ -534,18 +537,30 @@ public:
     /*!
      * \brief Calculate the scores for the T-Coffee library.
      * \return Triple of position, position and score.
-     * \details The score is normalised to [500..1000] if the pair is included in the matching and [0..500] otherwise.
+     * \details The score is normalised to [t-250..t+250] if the pair is included in the matching
+     * and [t-750..t-250] otherwise (with t = tcoffeeLibMode ≠ 0).
      */
     std::vector<std::tuple<size_t, size_t, unsigned>> getStructureLines() const
     {
         std::vector<std::tuple<size_t, size_t, unsigned>> structureLines{};
-        auto const mm = std::minmax_element(maxProfit.begin(), maxProfit.end());
-        float const div = 500.f / (*(mm.second) - *(mm.first));
-        for (size_t idx : bestStructuralAlignment)
+        if (tcoffeeLibMode == 0)
         {
-            unsigned const val = (maxProfit[idx] - *(mm.first)) * div;
-            structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
-                                        edgeMatching.count(idx) == 1 ? val + 500u : val);
+            for (size_t idx : bestStructuralAlignment)
+                structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
+                                            edgeMatching.count(idx) == 1 ? 1000u : 500u);
+        }
+        else
+        {
+            SEQAN_ASSERT_GEQ_MSG(tcoffeeLibMode, 750u, "tcoffeeLibMode must be = 0 or >= 750.");
+            auto const mm = std::minmax_element(maxProfit.begin(), maxProfit.end());
+            float const div = 500.f / (*(mm.second) - *(mm.first));
+            for (size_t idx : bestStructuralAlignment)
+            {
+                unsigned val = static_cast<unsigned const>((maxProfit[idx] - *(mm.first)) * div);
+                val += (tcoffeeLibMode - 750u);
+                structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
+                                            edgeMatching.count(idx) == 1 ? val + 500u : val);
+            }
         }
         return structureLines;
     }

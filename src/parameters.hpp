@@ -108,7 +108,7 @@ public:
     // specify the location of T-COFFEE
     seqan::CharString        tcoffeeLocation{"t_coffee/t_coffee_5.05"};
     // specify the method to be used to create the T-Coffe library
-    unsigned                 tcoffeLibMode{TCoffeeMode::SWITCH};
+    unsigned                 tcoffeeLibMode{0};
     Status                   status;
     unsigned                 matching{5u};
     unsigned                 num_threads{4u};
@@ -172,9 +172,9 @@ private:
                                          "location of T-COFFEE.",
                                          ArgParseOption::STRING));
 
-        addOption(parser, ArgParseOption("tcm", "tcoffeLibMode",
-                                         "method used to create the T-Coffe library either 0: PROPORTIONAL, 1: SWITCH, "
-                                         "2: ALLINTER, 3: FIXEDINTER. (0)",
+        addOption(parser, ArgParseOption("tcm", "tcoffeeLibMode",
+                                         "Method used to score the T-Coffe library. Either 0: switch(500/1000) or "
+                                         "NUM: proportional in [NUM-250..NUM+250]. (0)",
                                          ArgParseArgument::INTEGER, "INT"));
 
         // Alignment options
@@ -273,7 +273,7 @@ private:
         getOptionValue(fixedStructWeight, parser, "fixedStructWeight");
         getOptionValue(scalingFactor, parser, "scalingFactor");
         getOptionValue(tcoffeeLocation, parser, "tcoffeeLocation");
-        getOptionValue(tcoffeLibMode, parser, "tcoffeLibMode");
+        getOptionValue(tcoffeeLibMode, parser, "tcoffeeLibMode");
         getOptionValue(inFileRef, parser, "inFileRef");
         getOptionValue(matching, parser, "matching");
         getOptionValue(num_threads, parser, "numThreads");
@@ -342,4 +342,3 @@ private:
 };
 
 } // namespace lara
-
