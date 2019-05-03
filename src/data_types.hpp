@@ -88,7 +88,7 @@ float const factor2int = 8192.f;
 typedef std::pair<size_t, size_t>                           PosPair;
 typedef std::pair<size_t, float>                            Contact;
 typedef std::set<std::pair<float, size_t>>                  PriorityQueue;
-typedef seqan::Align<seqan::Rna5String, seqan::ArrayGaps>   Alignment;
+typedef seqan::Align<seqan::String<unsigned>, seqan::ArrayGaps> Alignment;
 typedef seqan::Row<Alignment>::Type                         AlignmentRow;
 typedef std::tuple<float, size_t, size_t>                   Interaction;    // probability, lineL, lineR
 typedef std::set<Interaction>::iterator                     InteractionIterator;

@@ -103,6 +103,8 @@ private:
     float bestStructuralAlignmentScore;
     Alignment bestAlignment;
     Alignment currentAlignment;
+    seqan::String<unsigned> intSeqA;
+    seqan::String<unsigned> intSeqB;
 
     std::vector<size_t> sourceNode;
     std::vector<size_t> targetNode;
@@ -159,13 +161,13 @@ private:
     // return gap cost
     float evaluateLines(AlignmentRow const & rowA, AlignmentRow const & rowB)
     {
-        typedef typename seqan::Iterator<seqan::Gaps<seqan::Rna5String, seqan::ArrayGaps> const>::Type GapsIterator;
+        // typedef typename seqan::Iterator<seqan::Gaps<unsigned, seqan::ArrayGaps> const>::Type GapsIterator;
 
         // Get iterators.
-        GapsIterator it0    = seqan::begin(rowA);
-        GapsIterator itEnd0 = seqan::end(rowA);
-        GapsIterator it1    = seqan::begin(rowB);
-        GapsIterator itEnd1 = seqan::end(rowB);
+        auto it0    = seqan::begin(rowA);
+        auto itEnd0 = seqan::end(rowA);
+        auto it1    = seqan::begin(rowB);
+        auto itEnd1 = seqan::end(rowB);
 
         // State whether we have already opened a gap.
         bool isGapOpen0 = false;
@@ -243,13 +245,20 @@ public:
         sequenceB = seqan::Rna5String{recordB.sequence};
         PosPair seqLen{seqan::length(sequenceA), seqan::length(sequenceB)};
 
+        seqan::resize(intSeqA, seqLen.first);
+        seqan::resize(intSeqB, seqLen.second);
+        std::iota(begin(intSeqA), end(intSeqA), 0u);
+        std::iota(begin(intSeqB), end(intSeqB), 0u);
+        seqan::resize(seqan::rows(currentAlignment), 2);
+        seqan::assignSource(seqan::row(currentAlignment, 0), intSeqA);
+        seqan::assignSource(seqan::row(currentAlignment, 1), intSeqB);
+
         layer.resize(seqLen.first + seqLen.second);
         offset.resize(seqLen.first + seqLen.second);
         maxProfitScore.data_gap_open = static_cast<int32_t>(params.laraGapOpen * factor2int);
         maxProfitScore.data_gap_extend = static_cast<int32_t>(params.laraGapExtend * factor2int);
-        maxProfitScore.matrix.resize(seqLen.first);
-        for (std::vector<int32_t> & elem : maxProfitScore.matrix)
-            elem.resize(seqLen.second, std::numeric_limits<int32_t>::lowest() / 3 * 2);
+        maxProfitScore.dim = seqLen.second;
+        seqan::resize(maxProfitScore.matrix, seqLen.first * seqLen.second, std::numeric_limits<int32_t>::lowest() / 3 * 2);
 
         // initialize()
         numIterations = 0ul;
@@ -376,8 +385,10 @@ public:
         // we had to evaluate _maxProfitScores after every update of either the
         // l or m edge
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = static_cast<int32_t>(maxProfit[edgeIdx]
-                                                                                                   * factor2int);
+        {
+            maxProfitScore.matrix[maxProfitScore.dim * sourceNode[edgeIdx] + targetNode[edgeIdx]]
+                = static_cast<int32_t>(maxProfit[edgeIdx] * factor2int);
+        }
     }
 
     void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
@@ -393,18 +404,9 @@ public:
         }
 
         for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-            maxProfitScore.matrix[sourceNode[edgeIdx]][targetNode[edgeIdx]] = static_cast<int32_t>(maxProfit[edgeIdx]
-                                                                                                   * factor2int);
-
-        _LOG(3, "maxProfitScores" << std::endl);
-        for (auto & row : maxProfitScore.matrix)
         {
-            _LOG(3, "[ ");
-            for (int32_t sc : row)
-            {
-                _LOG(3, std::setw(14) << sc << " ");
-            }
-            _LOG(3, "]" << std::endl);
+            maxProfitScore.matrix[maxProfitScore.dim * sourceNode[edgeIdx] + targetNode[edgeIdx]]
+                = static_cast<int32_t>(maxProfit[edgeIdx] * factor2int);
         }
     }
 
@@ -414,10 +416,6 @@ public:
      */
     float relaxed_solution()
     {
-        seqan::resize(seqan::rows(currentAlignment), 2);
-        seqan::assignSource(seqan::row(currentAlignment, 0), sequenceA);
-        seqan::assignSource(seqan::row(currentAlignment, 1), sequenceB);
-
         // perform the alignment
         return seqan::globalAlignment(currentAlignment, maxProfitScore, seqan::AffineGaps()) / factor2int;
     }

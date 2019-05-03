@@ -38,6 +38,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 #include <ostream>
 #include <sstream>
 
@@ -47,40 +48,103 @@
 namespace seqan
 {
 
+// --------------------------------------------------------
+// POSITION DEPENDENT SCORE
+// --------------------------------------------------------
+
 struct RnaStructureScore;
 
-template <>
-class Score<int32_t, RnaStructureScore>
+template <typename ScoreType>
+class Score<ScoreType, RnaStructureScore>
 {
 public:
-    std::vector<std::vector<int32_t>> matrix;
-    int32_t data_gap_open;
-    int32_t data_gap_extend;
+    String<ScoreType, Alloc<OverAligned>> matrix; // aligned alloc
+    ScoreType data_gap_open;
+    ScoreType data_gap_extend;
+    size_t dim; // length of second sequence
 };
 
-template <typename TSequence>
-struct SequenceEntryForScore<Score<int32_t, RnaStructureScore>, TSequence>
+template <typename ScoreType, typename TPos>
+inline
+ScoreType score(Score<ScoreType, RnaStructureScore> const & sc, TPos const entryH, TPos const entryV)
 {
-    typedef ConsensusScoreSequenceEntry<TSequence> Type;
+    return sc.matrix[sc.dim * entryH + entryV];
+}
+
+#ifdef SEQAN_SIMD_ENABLED
+
+// --------------------------------------------------------
+// POSITION DEPENDENT SCORE WITH SIMD
+// --------------------------------------------------------
+
+struct RnaStructureScoreSimd;
+
+template <typename ScoreType>
+class Score<ScoreType, RnaStructureScoreSimd>
+{
+public:
+    String<typename seqan::SimdVector<ScoreType>::Type, Alloc<OverAligned>> matrix; // aligned alloc
+    ScoreType data_gap_open;
+    ScoreType data_gap_extend;
+    size_t dim; // length of second sequence
 };
 
-template <typename TSeq1, typename TSeq2>
+template <typename ScoreType, typename TPosVec>
 inline
-int32_t score(Score<int32_t, RnaStructureScore> const & sc,
-              ConsensusScoreSequenceEntry<TSeq1> const & entryH,
-              ConsensusScoreSequenceEntry<TSeq2> const & entryV)
+typename seqan::SimdVector<ScoreType>::Type score(Score<ScoreType, RnaStructureScoreSimd> const & sc,
+                                                  TPosVec const entryH,
+                                                  TPosVec const entryV)
 {
-    return sc.matrix[position(entryH)][position(entryV)];
+    auto tmp = createVector<TPosVec>(sc.dim) * entryH + entryV;
+
+    typename seqan::SimdVector<ScoreType>::Type res{};
+    for (auto idx = 0u; idx < LENGTH<TPosVec>::VALUE; ++idx)
+        res[idx] = sc.matrix[tmp[idx]][idx];
+
+    return res;
 }
 
-template <typename TSequence, typename TPosition>
-inline
-ConsensusScoreSequenceEntry<TSequence> sequenceEntryForScore(Score<int32_t, RnaStructureScore> const &,
-                                                             TSequence const & seq,
-                                                             TPosition pos)
+// --------------------------------------------------------
+// WRAPPER FOR POSITION DEPENDENT SCORE WITH SIMD
+// --------------------------------------------------------
+
+template <typename TScoreVec>
+class Score<TScoreVec, ScoreSimdWrapper<Score<int32_t, RnaStructureScoreSimd>>>
 {
-    return ConsensusScoreSequenceEntry<TSequence>(seq, pos);
+public:
+    using TVecValue = typename Value<TScoreVec>::Type;
+    using TBaseScoreSpec = typename Spec<Score<int32_t, RnaStructureScoreSimd>>::Type;
+    using TBaseScore = Score<typename IfC<sizeof(TVecValue) <= 2,
+                                          int32_t,
+                                          typename IfC<sizeof(TVecValue) == 8, int64_t, TVecValue>::Type
+                                         >::Type,
+                             TBaseScoreSpec>;
+
+    // The score type is a ScoreMatrix.
+    TScoreVec data_gap_extend = createVector<TScoreVec>(-1);
+    TScoreVec data_gap_open   = createVector<TScoreVec>(-1);
+    TBaseScore _baseScore;
+
+    // Default Constructor.
+    Score()
+    {}
+
+    template <typename TScoreVal2, typename TScoreSpec2>
+    Score(Score<TScoreVal2, TScoreSpec2> const & pScore) :
+        data_gap_extend(createVector<TScoreVec>(scoreGapExtend(pScore))),
+        data_gap_open(createVector<TScoreVec>(scoreGapOpen(pScore))),
+        _baseScore(pScore)
+    {}
+};
+
+template <typename TValue, typename TVal1, typename TVal2>
+TValue score(Score<TValue, ScoreSimdWrapper<Score<int32_t, RnaStructureScoreSimd>>> const & sc,
+             TVal1 const & val1,
+             TVal2 const & val2)
+{
+    return score(sc._baseScore, val1, val2);
 }
+
+#endif
 
 } // namespace seqan
-
