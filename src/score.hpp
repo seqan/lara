@@ -33,40 +33,60 @@
 
 #pragma once
 
-/*!\file alignment.hpp
- * \brief This file contains a position-dependent RNA scoring matrix.
+/*!\file score.hpp
+ * \brief This file contains a position-dependent scoring matrix.
  */
 
-#include <iostream>
-#include <iomanip>
-#include <ostream>
-#include <sstream>
+#include <algorithm> // std::fill
+#include <limits>    // std::numeric_limits
 
-#include <seqan/consensus.h>
 #include <seqan/score.h>
+#include <seqan/sequence.h>
+#include <seqan/simd.h>
 
 namespace seqan
 {
 
 // --------------------------------------------------------
-// POSITION DEPENDENT SCORE
+// POSITION SPECIFIC SCORE
 // --------------------------------------------------------
 
-struct RnaStructureScore;
+struct PositionSpecificScore;
 
-template <typename ScoreType>
-class Score<ScoreType, RnaStructureScore>
+template <typename TScore>
+class Score<TScore, PositionSpecificScore>
 {
+private:
+    static TScore const initValue = std::numeric_limits<TScore>::lowest() / 3 * 2;
+
 public:
-    String<ScoreType, Alloc<OverAligned>> matrix; // aligned alloc
-    ScoreType data_gap_open;
-    ScoreType data_gap_extend;
+    String<TScore, Alloc<OverAligned>> matrix; // aligned alloc
     size_t dim; // length of second sequence
+    TScore data_gap_open;
+    TScore data_gap_extend;
+
+    void init(size_t dim1, size_t dim2, TScore gapOpen, TScore gapExtend)
+    {
+        resize(matrix, dim1 * dim2, initValue);
+        dim = dim2;
+        data_gap_open = gapOpen;
+        data_gap_extend = gapExtend;
+    }
+
+    void set(size_t /* unused */, size_t idx1, size_t idx2, TScore value)
+    {
+        matrix[dim * idx1 + idx2] = value;
+    }
+
+    void reset(size_t /* unused */)
+    {
+        std::fill(begin(matrix), end(matrix), initValue);
+    }
 };
 
-template <typename ScoreType, typename TPos>
+template <typename TScore, typename TPos>
 inline
-ScoreType score(Score<ScoreType, RnaStructureScore> const & sc, TPos const entryH, TPos const entryV)
+TScore score(Score<TScore, PositionSpecificScore> const & sc, TPos const entryH, TPos const entryV)
 {
     return sc.matrix[sc.dim * entryH + entryV];
 }
@@ -74,30 +94,53 @@ ScoreType score(Score<ScoreType, RnaStructureScore> const & sc, TPos const entry
 #ifdef SEQAN_SIMD_ENABLED
 
 // --------------------------------------------------------
-// POSITION DEPENDENT SCORE WITH SIMD
+// POSITION SPECIFIC SCORE WITH SIMD
 // --------------------------------------------------------
 
-struct RnaStructureScoreSimd;
+struct PositionSpecificScoreSimd;
 
-template <typename ScoreType>
-class Score<ScoreType, RnaStructureScoreSimd>
+template <typename TScore>
+class Score<TScore, PositionSpecificScoreSimd>
 {
+private:
+    static TScore const initValue = std::numeric_limits<TScore>::lowest() / 3 * 2;
+
 public:
-    String<typename seqan::SimdVector<ScoreType>::Type, Alloc<OverAligned>> matrix; // aligned alloc
-    ScoreType data_gap_open;
-    ScoreType data_gap_extend;
+    using SimdScoreType = typename seqan::SimdVector<TScore>::Type;
+    String<SimdScoreType, Alloc<OverAligned>> matrix; // aligned alloc
     size_t dim; // length of second sequence
+    TScore data_gap_open;
+    TScore data_gap_extend;
+
+    void init(size_t dim1, size_t dim2, TScore gapOpen, TScore gapExtend)
+    {
+        resize(matrix, dim1 * dim2, createVector<SimdScoreType>(initValue));
+        dim = dim2;
+        data_gap_open = gapOpen;
+        data_gap_extend = gapExtend;
+    }
+
+    void set(size_t seq, size_t idx1, size_t idx2, TScore value)
+    {
+        matrix[dim * idx1 + idx2][seq] = value;
+    }
+
+    void reset(size_t seq)
+    {
+        for (auto & score : matrix)
+            score[seq] = initValue;
+    }
 };
 
-template <typename ScoreType, typename TPosVec>
+template <typename TScore, typename TPosVec>
 inline
-typename seqan::SimdVector<ScoreType>::Type score(Score<ScoreType, RnaStructureScoreSimd> const & sc,
+typename seqan::SimdVector<TScore>::Type score(Score<TScore, PositionSpecificScoreSimd> const & sc,
                                                   TPosVec const entryH,
                                                   TPosVec const entryV)
 {
     auto tmp = createVector<TPosVec>(sc.dim) * entryH + entryV;
 
-    typename seqan::SimdVector<ScoreType>::Type res{};
+    typename seqan::SimdVector<TScore>::Type res{};
     for (auto idx = 0u; idx < LENGTH<TPosVec>::VALUE; ++idx)
         res[idx] = sc.matrix[tmp[idx]][idx];
 
@@ -105,15 +148,15 @@ typename seqan::SimdVector<ScoreType>::Type score(Score<ScoreType, RnaStructureS
 }
 
 // --------------------------------------------------------
-// WRAPPER FOR POSITION DEPENDENT SCORE WITH SIMD
+// WRAPPER FOR POSITION SPECIFIC SCORE WITH SIMD
 // --------------------------------------------------------
 
 template <typename TScoreVec>
-class Score<TScoreVec, ScoreSimdWrapper<Score<int32_t, RnaStructureScoreSimd>>>
+class Score<TScoreVec, ScoreSimdWrapper<Score<int32_t, PositionSpecificScoreSimd>>>
 {
 public:
     using TVecValue = typename Value<TScoreVec>::Type;
-    using TBaseScoreSpec = typename Spec<Score<int32_t, RnaStructureScoreSimd>>::Type;
+    using TBaseScoreSpec = typename Spec<Score<int32_t, PositionSpecificScoreSimd>>::Type;
     using TBaseScore = Score<typename IfC<sizeof(TVecValue) <= 2,
                                           int32_t,
                                           typename IfC<sizeof(TVecValue) == 8, int64_t, TVecValue>::Type
@@ -126,11 +169,10 @@ public:
     TBaseScore _baseScore;
 
     // Default Constructor.
-    Score()
-    {}
+    Score() = default;
 
     template <typename TScoreVal2, typename TScoreSpec2>
-    Score(Score<TScoreVal2, TScoreSpec2> const & pScore) :
+    explicit Score(Score<TScoreVal2, TScoreSpec2> const & pScore) :
         data_gap_extend(createVector<TScoreVec>(scoreGapExtend(pScore))),
         data_gap_open(createVector<TScoreVec>(scoreGapOpen(pScore))),
         _baseScore(pScore)
@@ -138,7 +180,7 @@ public:
 };
 
 template <typename TValue, typename TVal1, typename TVal2>
-TValue score(Score<TValue, ScoreSimdWrapper<Score<int32_t, RnaStructureScoreSimd>>> const & sc,
+TValue score(Score<TValue, ScoreSimdWrapper<Score<int32_t, PositionSpecificScoreSimd>>> const & sc,
              TVal1 const & val1,
              TVal2 const & val2)
 {

@@ -76,10 +76,6 @@ private:
     // inverse mapping of layer and offset to  node index
     std::map<PosPair, size_t> invLayerOffset;
 
-    // the arrays hold the alignment scores that are passed onto
-    // the pairwiseAlignmentAlgorithm object
-    seqan::Score<int32_t, seqan::RnaStructureScore> maxProfitScore;
-
     // vector holding the maximum profit for each alignment edge
     std::vector<float> maxProfit;
 
@@ -101,10 +97,7 @@ private:
 
     // the best structural alignment score found so far
     float bestStructuralAlignmentScore;
-    Alignment bestAlignment;
-    Alignment currentAlignment;
-    seqan::String<unsigned> intSeqA;
-    seqan::String<unsigned> intSeqB;
+    //Alignment bestAlignment;
 
     std::vector<size_t> sourceNode;
     std::vector<size_t> targetNode;
@@ -135,6 +128,11 @@ private:
 
     unsigned tcoffeeLibMode;
 
+    float gap_open;
+    float gap_extend;
+
+    SetScoreFunction set_score;
+
     void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
     {
         for (seqan::RnaAdjacencyIterator adjIt(graph.inter, origin); !seqan::atEnd(adjIt); seqan::goNext(adjIt))
@@ -158,16 +156,14 @@ private:
         edgeToPriorityQ[pair] = priorityQ[pair.first].emplace(-value, pair.second).first;
     }
 
-    // return gap cost
-    float evaluateLines(AlignmentRow const & rowA, AlignmentRow const & rowB)
+    // return gap score
+    float evaluateLines(std::pair<GappedSeq, GappedSeq> const & alignment)
     {
-        // typedef typename seqan::Iterator<seqan::Gaps<unsigned, seqan::ArrayGaps> const>::Type GapsIterator;
-
         // Get iterators.
-        auto it0    = seqan::begin(rowA);
-        auto itEnd0 = seqan::end(rowA);
-        auto it1    = seqan::begin(rowB);
-        auto itEnd1 = seqan::end(rowB);
+        auto it0    = seqan::begin(alignment.first);
+        auto itEnd0 = seqan::end(alignment.first);
+        auto it1    = seqan::begin(alignment.second);
+        auto itEnd1 = seqan::end(alignment.second);
 
         // State whether we have already opened a gap.
         bool isGapOpen0 = false;
@@ -178,7 +174,7 @@ private:
         lines.clear();
 
         // Sum up gap score.
-        int32_t gapScore = 0;
+        float gapScore = 0.0f;
 
         while (it0 != itEnd0 && it1 != itEnd1)
         {
@@ -187,11 +183,11 @@ private:
             {
                 if (!isGapOpen0)
                 {
-                    gapScore += maxProfitScore.data_gap_open;
+                    gapScore += gap_open;
                 }
                 else
                 {
-                    gapScore += maxProfitScore.data_gap_extend;
+                    gapScore += gap_extend;
                 }
                 isGapOpen0 = true;
                 ++sourcePos.second;
@@ -206,11 +202,11 @@ private:
             {
                 if (!isGapOpen1)
                 {
-                    gapScore += maxProfitScore.data_gap_open;
+                    gapScore += gap_open;
                 }
                 else
                 {
-                    gapScore += maxProfitScore.data_gap_extend;
+                    gapScore += gap_extend;
                 }
                 isGapOpen1 = true;
                 ++sourcePos.first;
@@ -234,31 +230,20 @@ private:
         }
         SEQAN_ASSERT(it0 == itEnd0);
         SEQAN_ASSERT(it1 == itEnd1);
-        return gapScore / factor2int;
+        return gapScore;
     }
 
 public:
-    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, Parameters const & params)
+    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, SetScoreFunction func,
+             Parameters const & params) : set_score(std::move(func))
     {
         _LOG(2, recordA.sequence << std::endl << recordB.sequence << std::endl);
         sequenceA = seqan::Rna5String{recordA.sequence};
         sequenceB = seqan::Rna5String{recordB.sequence};
         PosPair seqLen{seqan::length(sequenceA), seqan::length(sequenceB)};
 
-        seqan::resize(intSeqA, seqLen.first);
-        seqan::resize(intSeqB, seqLen.second);
-        std::iota(begin(intSeqA), end(intSeqA), 0u);
-        std::iota(begin(intSeqB), end(intSeqB), 0u);
-        seqan::resize(seqan::rows(currentAlignment), 2);
-        seqan::assignSource(seqan::row(currentAlignment, 0), intSeqA);
-        seqan::assignSource(seqan::row(currentAlignment, 1), intSeqB);
-
         layer.resize(seqLen.first + seqLen.second);
         offset.resize(seqLen.first + seqLen.second);
-        maxProfitScore.data_gap_open = static_cast<int32_t>(params.laraGapOpen * factor2int);
-        maxProfitScore.data_gap_extend = static_cast<int32_t>(params.laraGapExtend * factor2int);
-        maxProfitScore.dim = seqLen.second;
-        seqan::resize(maxProfitScore.matrix, seqLen.first * seqLen.second, std::numeric_limits<int32_t>::lowest() / 3 * 2);
 
         // initialize()
         numIterations = 0ul;
@@ -289,7 +274,7 @@ public:
             offset[residueCount]                     = idx;
             invLayerOffset[std::make_pair(1ul, idx)] = residueCount++;
         }
-        _LOG(2, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")" << std::endl);
+        _LOG(3, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")" << std::endl);
 
         float const avSeqId = generateEdges(getEdgeIdx, sequenceA, sequenceB, params.laraScoreMatrix,
                                             params.suboptimalDiff);
@@ -357,7 +342,7 @@ public:
                             // insert element into the priority queue
                             auto res = priorityQ[edgeIdx].emplace(-(structScore + alignScore), partnerIdx);
                             edgeToPriorityQ[interaction] = res.first;
-                            _LOG(2, "dual idx " << dualIdx << " = (" << sourceNode[edgeIdx]
+                            _LOG(3, "dual idx " << dualIdx << " = (" << sourceNode[edgeIdx]
                                                     << "-" << targetNode[edgeIdx] << ") -> (" << sourceNode[partnerIdx]
                                                     << "-" << targetNode[partnerIdx] << ")" << std::endl);
                             pairedEdgesToDual[interaction] = dualIdx++;
@@ -365,7 +350,7 @@ public:
 
                             if (structScore + alignScore > maxProfit[edgeIdx])
                             {
-                                _LOG(2, "maxProfit[" << edgeIdx << " (" << head.first << "," << tail.first
+                                _LOG(3, "maxProfit[" << edgeIdx << " (" << head.first << "," << tail.first
                                                          << ")] = " << structScore << " + " << alignScore
                                                          << " \tpartner " << partnerIdx << std::endl);
                                 maxProfit[edgeIdx] = structScore + alignScore;
@@ -384,11 +369,10 @@ public:
         // filling the matrix, we're updating the values afterwards, otherwise
         // we had to evaluate _maxProfitScores after every update of either the
         // l or m edge
-        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-        {
-            maxProfitScore.matrix[maxProfitScore.dim * sourceNode[edgeIdx] + targetNode[edgeIdx]]
-                = static_cast<int32_t>(maxProfit[edgeIdx] * factor2int);
-        }
+        gap_open = params.laraGapOpen;
+        gap_extend = params.laraGapExtend;
+        for (size_t edgeIdx = 0ul; edgeIdx < maxProfit.size(); ++edgeIdx)
+            set_score(sourceNode[edgeIdx], targetNode[edgeIdx], static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
     }
 
     void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
@@ -403,26 +387,14 @@ public:
             maxProfitEdge[pair.first] = maxElement->second; // information
         }
 
-        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
-        {
-            maxProfitScore.matrix[maxProfitScore.dim * sourceNode[edgeIdx] + targetNode[edgeIdx]]
-                = static_cast<int32_t>(maxProfit[edgeIdx] * factor2int);
-        }
+        for (size_t edgeIdx = 0ul; edgeIdx < maxProfit.size(); ++edgeIdx)
+            set_score(sourceNode[edgeIdx], targetNode[edgeIdx], static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
     }
 
-    /*!
-     * \brief Performs the structural alignment.
-     * \return The dual value (upper bound, solution of relaxed problem).
-     */
-    float relaxed_solution()
+    float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices,
+                         std::pair<GappedSeq, GappedSeq> const & alignment, unsigned lookahead)
     {
-        // perform the alignment
-        return seqan::globalAlignment(currentAlignment, maxProfitScore, seqan::AffineGaps()) / factor2int;
-    }
-
-    float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices, unsigned lookahead)
-    {
-        float gapScore = evaluateLines(seqan::row(currentAlignment, 0), seqan::row(currentAlignment, 1));
+        float gapScore = evaluateLines(alignment);
 
         std::vector<size_t> currentStructuralAlignment;
         std::vector<bool> inSolution;
@@ -516,7 +488,6 @@ public:
             bestStructuralAlignmentScore = primalValue;
             bestStructuralAlignment = currentStructuralAlignment;
             edgeMatching = contacts;
-            bestAlignment = Alignment(currentAlignment);
         }
         ++numIterations;
         return primalValue;
@@ -525,11 +496,6 @@ public:
     PosPair getDimension()
     {
         return dimension;
-    }
-
-    Alignment & getAlignment()
-    {
-        return bestAlignment;
     }
 
     /*!
@@ -554,7 +520,7 @@ public:
             float const div = 500.f / (*(mm.second) - *(mm.first));
             for (size_t idx : bestStructuralAlignment)
             {
-                unsigned val = static_cast<unsigned>((maxProfit[idx] - *(mm.first)) * div);
+                auto val = static_cast<unsigned>((maxProfit[idx] - *(mm.first)) * div);
                 val += (tcoffeeLibMode - 750u);
                 structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
                                             edgeMatching.count(idx) == 1 ? val + 500u : val);

@@ -38,12 +38,16 @@
  */
 
 #include <iostream>
+#include <iterator>
 #include <list>
 #include <ostream>
 #include <utility>
 #include <vector>
 
+#include <seqan/simd.h>
+
 #include "data_types.hpp"
+#include "lagrange.hpp"
 #include "parameters.hpp"
 
 namespace lara
@@ -66,8 +70,8 @@ public:
     std::vector<float> dual;
     std::list<size_t> subgradientIndices;
 
-    SubgradientSolver(PosPair indices, InputStorage const & store, Parameters & params)
-        : lagrange(store[indices.first], store[indices.second], params)
+    SubgradientSolver(PosPair indices, InputStorage const & store, SetScoreFunction const & func, Parameters & params)
+        : lagrange(store[indices.first], store[indices.second], func, params)
     {
         stepSizeFactor = params.stepSizeFactor;
         bestLowerBound = negInfinity;
@@ -81,6 +85,13 @@ public:
         subgradient.resize(lagrange.getDimension().second);
         dual.resize(subgradient.size());
     }
+
+    SubgradientSolver()                                      = delete;
+    SubgradientSolver(SubgradientSolver const &)             = default;
+    SubgradientSolver(SubgradientSolver &&)                  = default;
+    SubgradientSolver & operator=(SubgradientSolver const &) = default;
+    SubgradientSolver & operator=(SubgradientSolver &&)      = default;
+    ~SubgradientSolver()                                     = default;
 };
 
 class SubgradientSolverMulti
@@ -94,6 +105,7 @@ private:
     struct longer_seq
     {
         InputStorage const & store;
+
         bool operator()(PosPair lhs, PosPair rhs) const
         {
             if (seqan::length(store[lhs.first].sequence) > seqan::length(store[rhs.first].sequence))
@@ -108,6 +120,12 @@ private:
     std::set<PosPair, longer_seq> inputPairs;
     std::vector<SubgradientSolver> solvers;
 
+#ifdef SEQAN_SIMD_ENABLED
+    using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScoreSimd>;
+#else
+    using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScore>;
+#endif
+
 public:
     SubgradientSolverMulti(InputStorage const & _store, Parameters & _params)
         : store(_store), params(_params), inputPairs(longer_seq{store})
@@ -119,8 +137,6 @@ public:
                     inputPairs.emplace(idxA, idxB);
                 else
                     inputPairs.emplace(idxB, idxA);
-
-        solvers.reserve(std::min((size_t)params.num_threads, inputPairs.size()));
     }
 
     float calcStepsize(SubgradientSolver const & slv) const
@@ -140,104 +156,187 @@ public:
 
     void solve(lara::OutputTCoffeeLibrary & results)
     {
-        std::set<PosPair>::const_iterator inputPairIter;
-        for (inputPairIter = inputPairs.cbegin();
-             inputPairIter != inputPairs.cend() && solvers.size() < params.num_threads;
-             ++inputPairIter)
+        if (inputPairs.empty())
+            return;
+
+        _LOG(1, "Attempting to solve " << inputPairs.size() << " structural alignments with " << params.num_threads
+                << " parallel threads." << std::endl);
+
+        // Determine number of parallel alignments.
+        size_t const num_parallel = std::min(simd_len * params.num_threads, inputPairs.size());
+        size_t const num_threads = (num_parallel - 1) / simd_len + 1;
+
+        // We iterate over all pairs of input sequences, starting with the longest.
+        auto iter = inputPairs.cbegin(); // iter -> pair of sequence indices
+
+        // Initialise the alignments.
+        std::vector<std::pair<seqan::StringSet<GappedSeq>, seqan::StringSet<GappedSeq>>> alignments(num_threads);
+
+        // Integer sequence from 0 until length of longest seq -1
+        seqan::String<unsigned> integerSeq;
+        seqan::resize(integerSeq, seqan::length(store[iter->first].sequence));
+        std::iota(begin(integerSeq), end(integerSeq), 0u);
+
+        // Store the integer sequences.
+        using PrefixType = seqan::Prefix<seqan::String<unsigned>>::Type;
+        seqan::StringSet<seqan::String<unsigned>> seq1;
+        seqan::StringSet<seqan::String<unsigned>> seq2;
+        seqan::reserve(seq1, num_parallel);
+        seqan::reserve(seq2, num_parallel);
+
+        // Initialise the scores.
+        std::vector<RnaScoreType> scores(num_threads);
+        size_t const max_2nd_length = seqan::length(store[iter->second].sequence);
+        auto const go = static_cast<ScoreType>(params.laraGapOpen * factor2int);
+        auto const ge = static_cast<ScoreType>(params.laraGapExtend * factor2int);
+
+        // Initialise the solvers.
+        solvers.reserve(num_parallel);
+
+        for (iter = inputPairs.cbegin(); solvers.size() < num_parallel; ++iter)
         {
-            solvers.emplace_back(*inputPairIter, store, params);
+            size_t const aliIdx = solvers.size() / simd_len;
+            size_t const seqIdx = solvers.size() % simd_len;
+
+            // Once for each chunk of size simd_len.
+            if (seqIdx == 0)
+            {
+                // Initialise the alignments.
+                seqan::reserve(alignments[aliIdx].first, simd_len);
+                seqan::reserve(alignments[aliIdx].second, simd_len);
+
+                // Initialise the scores.
+                size_t const current_1st_length = seqan::length(store[iter->first].sequence);
+                scores[aliIdx].init(current_1st_length, std::min(max_2nd_length, current_1st_length), go, ge);
+                _LOG(3, "Resize matrix: " << current_1st_length << " * " << scores[aliIdx].dim << std::endl);
+            }
+
+            // Fill the alignments.
+            appendValue(seq1, PrefixType(integerSeq, length(store[iter->first].sequence)));
+            appendValue(seq2, PrefixType(integerSeq, length(store[iter->second].sequence)));
+            appendValue(alignments[aliIdx].first, GappedSeq(seqan::back(seq1)));
+            appendValue(alignments[aliIdx].second, GappedSeq(seqan::back(seq2)));
+
+            // Fill the scores.
+            SetScoreFunction set_score = std::bind(&RnaScoreType::set, &(scores[aliIdx]), seqIdx,
+                                                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+            // Fill the solvers.
+            solvers.emplace_back(*iter, store, set_score, params);
+            _LOG(2, "Add solver " << iter->first << "/" << iter->second << std::endl);
         }
+        SEQAN_ASSERT_EQ(num_parallel, solvers.size());
+        SEQAN_ASSERT_EQ(num_parallel, seqan::length(seq1));
+        SEQAN_ASSERT_EQ(num_parallel, seqan::length(seq2));
+        SEQAN_ASSERT_EQ(num_threads, seqan::length(alignments));
 
         size_t num_at_work = solvers.size();
-        std::vector<bool> at_work;
-        at_work.resize(num_at_work, true);
+        std::vector<bool> at_work(num_at_work, true);
 
         while (num_at_work > 0ul)
         {
             #pragma omp parallel for num_threads(params.num_threads)
-            for (size_t idx = 0ul; idx < solvers.size(); ++idx)
+            for (size_t aliIdx = 0ul; aliIdx < num_threads; ++aliIdx)
             {
-                if (!at_work[idx])
-                    continue;
+                //Performs the structural alignment. Returns the dual value (upper bound, solution of relaxed problem).
+                seqan::String<ScoreType> res = seqan::globalAlignment(alignments[aliIdx].first,
+                                                                      alignments[aliIdx].second,
+                                                                      scores[aliIdx]);
 
-                solvers[idx].currentUpperBound = solvers[idx].lagrange.relaxed_solution();
-
-                solvers[idx].currentLowerBound = solvers[idx].lagrange.valid_solution(solvers[idx].subgradient,
-                                                                                      solvers[idx].subgradientIndices,
-                                                                                      params.matching);
-
-//                _LOG(2, "(" << solvers[idx].remainingIterations << ") \tbest: " << solvers[idx].bestUpperBound << "\t/"
-//                            << solvers[idx].bestLowerBound << "\t"
-//                            << "current: " << solvers[idx].currentUpperBound << "/\t" << solvers[idx].currentLowerBound
-//                            << "\t(" << solvers[idx].subgradientIndices.size() << ")\t");
-
-                // compare upper and lower bound
-                if (solvers[idx].currentUpperBound < solvers[idx].bestUpperBound)
+                for (size_t idx = aliIdx * simd_len; idx < (aliIdx + 1) * simd_len && idx < num_parallel; ++idx)
                 {
-                    solvers[idx].bestUpperBound = solvers[idx].currentUpperBound;
-                    solvers[idx].nondecreasingRounds = 0ul;
-                }
+                    if (!at_work[idx])
+                        continue;
 
-                if (solvers[idx].currentLowerBound > solvers[idx].bestLowerBound)
-                {
-                    solvers[idx].bestLowerBound = solvers[idx].currentLowerBound;
-                    solvers[idx].nondecreasingRounds = 0ul;
-//                    _LOG(1, "(*)");
+                    SubgradientSolver & ss = solvers[idx];
+                    size_t const seqIdx = idx % simd_len;
 
-                }
-//                _LOG(2, std::endl);
+                    ss.currentUpperBound = res[seqIdx] / factor2int; // global alignment result
 
-                if (solvers[idx].nondecreasingRounds++ >= params.maxNondecrIterations)
-                {
-                    solvers[idx].stepSizeFactor /= 2.0f;
-                    solvers[idx].nondecreasingRounds = 0;
-                }
+                    ss.currentLowerBound = ss.lagrange.valid_solution(ss.subgradient, ss.subgradientIndices,
+                                                                      std::make_pair(alignments[aliIdx].first[seqIdx],
+                                                                                     alignments[aliIdx].second[seqIdx]),
+                                                                      params.matching);
 
-                float stepSize = calcStepsize(solvers[idx]);
-                for (size_t si : solvers[idx].subgradientIndices)
-                {
-                    solvers[idx].dual[si] -= stepSize * solvers[idx].subgradient[si];
-                    solvers[idx].subgradient[si] = 0.0f;
-                }
-                --solvers[idx].remainingIterations;
-
-                SEQAN_ASSERT_MSG(!solvers[idx].subgradientIndices.empty() ||
-                                 solvers[idx].currentUpperBound - solvers[idx].currentLowerBound < 0.1f,
-                                 "The bounds differ, although there are no subgradients.");
-                SEQAN_ASSERT_GT_MSG(solvers[idx].bestUpperBound + params.epsilon, solvers[idx].bestLowerBound,
-                                    "The lower boundary exceeds the upper boundary.");
-
-                if (solvers[idx].bestUpperBound - solvers[idx].bestLowerBound < params.epsilon ||
-                    solvers[idx].remainingIterations == 0u)
-                {
-                    #pragma omp critical
+                    // compare upper and lower bound
+                    if (ss.currentUpperBound < ss.bestUpperBound)
                     {
-                        _LOG(1, "Thread " << idx << " finished alignment (" << solvers[idx].sequenceIndices.first
-                                          << "," << solvers[idx].sequenceIndices.second << "). " << "Lengths "
-                                          << seqan::length(store[solvers[idx].sequenceIndices.first].sequence) << ", "
-                                          << seqan::length(store[solvers[idx].sequenceIndices.second].sequence)
-                                          << std::endl);
-//                        lara::printAlignment(std::cerr,
-//                                             solvers[idx].lagrange.getAlignment(),
-//                                             store[solvers[idx].sequenceIndices.first].name,
-//                                             store[solvers[idx].sequenceIndices.second].name);
-                        results.addAlignment(solvers[idx].lagrange, solvers[idx].sequenceIndices);
+                        ss.bestUpperBound = ss.currentUpperBound;
+                        ss.nondecreasingRounds = 0ul;
+                    }
 
-                        if (inputPairIter == inputPairs.cend())
+                    if (ss.currentLowerBound > ss.bestLowerBound)
+                    {
+                        ss.bestLowerBound = ss.currentLowerBound;
+                        ss.nondecreasingRounds = 0ul;
+
+                    }
+
+                    if (ss.nondecreasingRounds++ >= params.maxNondecrIterations)
+                    {
+                        ss.stepSizeFactor /= 2.0f;
+                        ss.nondecreasingRounds = 0;
+                    }
+
+                    float stepSize = calcStepsize(ss);
+                    for (size_t si : ss.subgradientIndices)
+                    {
+                        ss.dual[si] -= stepSize * ss.subgradient[si];
+                        ss.subgradient[si] = 0.0f;
+                    }
+                    --ss.remainingIterations;
+
+                    SEQAN_ASSERT_MSG(!ss.subgradientIndices.empty() ||
+                                     ss.currentUpperBound - ss.currentLowerBound < 0.1f,
+                                     "The bounds differ, although there are no subgradients.");
+                    SEQAN_ASSERT_GT_MSG(ss.bestUpperBound + params.epsilon,
+                                        ss.bestLowerBound,
+                                        "The lower boundary exceeds the upper boundary.");
+
+                    // The alignment is finished.
+                    if (ss.bestUpperBound - ss.bestLowerBound < params.epsilon || ss.remainingIterations == 0u)
+                    {
+                        #pragma omp critical (finished_alignment)
                         {
-                            at_work[idx] = false;
-                            --num_at_work;
-                        }
-                        else
-                        {
-                            solvers[idx] = SubgradientSolver(*inputPairIter, store, params);
-                            ++inputPairIter;
-                        }
-                    }; // end critical region
-                }
-                else
-                {
-                    solvers[idx].lagrange.updateScores(solvers[idx].dual, solvers[idx].subgradientIndices);
+                            results.addAlignment(ss.lagrange, ss.sequenceIndices);
+
+                            _LOG(1, "Thread " << aliIdx << "." << seqIdx << " finished alignment "
+                                    << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
+
+                            if (iter == inputPairs.cend())
+                            {
+                                at_work[idx] = false;
+                                --num_at_work;
+                            }
+                            else
+                            {
+                                // Reset scores.
+                                scores[aliIdx].reset(seqIdx);
+
+                                // Set new sequences.
+                                seq1[idx] = PrefixType(integerSeq, length(store[iter->first].sequence));
+                                seq2[idx] = PrefixType(integerSeq, length(store[iter->second].sequence));
+                                alignments[aliIdx].first[seqIdx] = GappedSeq(seq1[idx]);
+                                alignments[aliIdx].second[seqIdx] = GappedSeq(seq2[idx]);
+
+                                // Set new score matrix.
+                                SetScoreFunction set_score = std::bind(&RnaScoreType::set,
+                                                                       &(scores[aliIdx]),
+                                                                       seqIdx,
+                                                                       std::placeholders::_1,
+                                                                       std::placeholders::_2,
+                                                                       std::placeholders::_3);
+
+                                solvers[idx] = SubgradientSolver(*iter, store, set_score, params);
+                                _LOG(2, "Add solver " << iter->first << "/" << iter->second << std::endl);
+                                ++iter;
+                            }
+                        }; // end critical region
+                    }
+                    else
+                    {
+                        ss.lagrange.updateScores(ss.dual, ss.subgradientIndices);
+                    }
                 }
             }
         } // end while
@@ -245,4 +344,3 @@ public:
 };
 
 } // namespace lara
-

@@ -38,6 +38,7 @@
  */
 
 #include <iostream>
+#include <functional>
 #include <limits>
 #include <set>
 
@@ -77,23 +78,32 @@ enum Status
     CONTINUE
 };
 
-float const negInfinity = std::numeric_limits<float>::lowest();
-float const posInfinity = std::numeric_limits<float>::max();
-
 //! \brief Score Matrix type used in LaRA.
 typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
-float const factor2int = 8192.f;
 
 //! \brief Pair of positions (usually in first and second sequence)
 typedef std::pair<size_t, size_t>                           PosPair;
 typedef std::pair<size_t, float>                            Contact;
 typedef std::set<std::pair<float, size_t>>                  PriorityQueue;
-typedef seqan::Align<seqan::String<unsigned>, seqan::ArrayGaps> Alignment;
-typedef seqan::Row<Alignment>::Type                         AlignmentRow;
+typedef seqan::Gaps<seqan::String<unsigned>, seqan::ArrayGaps> GappedSeq;
+typedef std::pair<GappedSeq, GappedSeq>                     Alignment;
 typedef std::tuple<float, size_t, size_t>                   Interaction;    // probability, lineL, lineR
 typedef std::set<Interaction>::iterator                     InteractionIterator;
 typedef std::pair<InteractionIterator, InteractionIterator> EdgeConflict;
 typedef std::set<InteractionIterator>                       InteractionSet;
+typedef int32_t                                             ScoreType;
+typedef std::function<void(size_t, size_t, ScoreType)>      SetScoreFunction;
+
+#ifdef SEQAN_SIMD_ENABLED
+typedef typename seqan::SimdVector<ScoreType>::Type         SimdScoreType;
+size_t const simd_len = seqan::LENGTH<SimdScoreType>::VALUE;
+#else
+size_t const simd_len = 1ul;
+#endif
+
+float const negInfinity = std::numeric_limits<float>::lowest();
+float const posInfinity = std::numeric_limits<float>::max();
+float const factor2int = 8192.f;
 
 } // namespace lara
 

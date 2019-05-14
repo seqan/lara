@@ -112,7 +112,7 @@ public:
     unsigned                 tcoffeeLibMode{0};
     Status                   status;
     unsigned                 matching{5u};
-    unsigned                 num_threads{4u};
+    unsigned                 num_threads{1u};
 
     Parameters(int argc, char const ** argv)
     {
@@ -124,10 +124,6 @@ private:
     {
         using namespace seqan;
         ArgumentParser parser;
-
-        unsigned nthreads = std::thread::hardware_concurrency();
-        if (nthreads != 0)
-            num_threads = nthreads;
 
         setAppName(parser, "lara");
         setShortDescription(parser, "Lagrangian Relaxed Alignment for RNA structures");
@@ -299,6 +295,15 @@ private:
 //            std::cerr << "ERROR: You have to specify either -i or -d to pass input files." << std::endl;
             printShortHelp(parser);
             return Status::EXIT_ERROR;
+        }
+
+        if (num_threads == 0u)
+        {
+            unsigned nthreads = std::thread::hardware_concurrency() / 2u;
+            if (nthreads != 0)
+                num_threads = nthreads;
+            else
+                num_threads = 1u;
         }
 
         getOptionValue(outFile, parser, "outFile");

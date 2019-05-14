@@ -293,8 +293,8 @@ std::ostream & operator<<(std::ostream & stream, InputStorage & store)
 inline
 void printAlignment(std::ostream & stream, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
 {
-    stream << ">" << nameA << std::endl << seqan::row(alignment, 0) << std::endl;
-    stream << ">" << nameB << std::endl << seqan::row(alignment, 1) << std::endl;
+    stream << ">" << nameA << std::endl << alignment.first << std::endl;
+    stream << ">" << nameB << std::endl << alignment.second << std::endl;
 }
 
 inline
@@ -326,13 +326,13 @@ class OutputTCoffeeLibrary
 {
 private:
     std::ostringstream sstream;
-    size_t const numSequences;
+    size_t numAlignments;
 
 public:
-    explicit OutputTCoffeeLibrary(InputStorage const & data) : numSequences(data.size())
+    explicit OutputTCoffeeLibrary(InputStorage const & data) : numAlignments(0ul)
     {
         sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
-        sstream << numSequences << std::endl;
+        sstream << data.size() << std::endl;
         for (seqan::RnaRecord const & rec : data)
         {
             sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
@@ -341,6 +341,7 @@ public:
 
     void addAlignment(Lagrange const & lagrange, PosPair const & seqIndices)
     {
+        ++numAlignments;
         if (seqIndices.first < seqIndices.second)
         {
             sstream << "# " << (seqIndices.first + 1) << " " << (seqIndices.second + 1) << std::endl;
@@ -387,7 +388,10 @@ public:
 
 std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)
 {
-    return stream << library.sstream.str() << "! SEQ_1_TO_N" << std::endl;
+    if (library.numAlignments > 0ul)
+        return stream << library.sstream.str() << "! SEQ_1_TO_N" << std::endl;
+    else
+        return stream;
 }
 
 } // namespace lara

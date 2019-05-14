@@ -38,8 +38,6 @@
 #include <iostream>
 #include <thread>
 
-#include <seqan/simd.h>
-
 #include "data_types.hpp"
 #include "io.hpp"
 #include "lagrange.hpp"
@@ -48,20 +46,6 @@
 
 int main (int argc, char const ** argv)
 {
-    {
-        unsigned nthreads = std::thread::hardware_concurrency();
-        std::cerr << "hardware_concurrency() = " << nthreads << std::endl;
-
-        int ompthreads = omp_get_num_procs();
-        std::cerr << "omp_get_num_procs() = " << ompthreads << std::endl;
-
-        int j = omp_get_num_places();
-        std::cerr << "omp_get_num_places() = " << j << std::endl;
-
-        int d = omp_get_num_devices();
-        std::cerr << "omp_get_num_devices() = " << d << std::endl;
-    }
-
     // Parse arguments and options.
     lara::Parameters params(argc, argv);
     if (params.status != lara::Status::CONTINUE)
@@ -69,10 +53,6 @@ int main (int argc, char const ** argv)
 
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
-    size_t const problem_size = store.size() * (store.size() - 1) / 2;
-    _LOG(1, "Attempting to solve " << problem_size << " structural alignments with max. " << params.num_threads
-                                   << " threads." << std::endl);
-    _LOG(2, store << std::endl);
     lara::OutputTCoffeeLibrary tcLib(store);
     lara::SubgradientSolverMulti solverMulti(store, params);
     solverMulti.solve(tcLib);
