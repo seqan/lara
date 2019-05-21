@@ -67,8 +67,6 @@ public:
     std::vector<std::string> dotplotFile{};
     // Name of output file (default: stdout)
     seqan::CharString        outFile{};
-    // temporary directory where to save intermediate files. Default: use the input file directory.
-    seqan::CharString        tmpDir{};
     // number of iterations
     unsigned                 numIterations{500u};
     // number of non-decreasing iterations
@@ -148,10 +146,6 @@ private:
         addOption(parser, ArgParseOption("w", "outFile",
                                          "Path to the output file (default: stdout)",
                                          ArgParseArgument::OUTPUT_FILE, "OUT"));
-
-        addOption(parser, ArgParseOption("td", "tmpDir",
-                                         "A temporary directory where to save intermediate files. (input file directory)",
-                                         ArgParseOption::STRING));
 
         addOption(parser, ArgParseOption("tcm", "tcoffeeLibMode",
                                          "Method used to score the T-Coffe library. Either 0: switch(500/1000) or "
@@ -274,19 +268,6 @@ private:
         if (isSet(parser, "outFile"))
         {
             _LOG(1, "The specified output file is " << outFile << std::endl);
-        }
-        else
-        {
-            CharString tmpDirectory;
-            getOptionValue(tmpDirectory, parser, "tmpDir");
-            if (!isSet(parser, "tmpDir"))
-            {
-                tmpDirectory = SEQAN_TEMP_FILENAME();
-                // remove "/test_file" suffix
-                erase(tmpDirectory, length(tmpDirectory) - 10u, length(tmpDirectory));
-            }
-            tmpDir = tmpDirectory;
-            _LOG(2, "The absolute path where to create the tmpDir is " << tmpDir << std::endl);
         }
 
         // set score matrix
