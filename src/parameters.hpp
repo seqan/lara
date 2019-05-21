@@ -69,12 +69,6 @@ public:
     seqan::CharString        outFile{};
     // temporary directory where to save intermediate files. Default: use the input file directory.
     seqan::CharString        tmpDir{};
-    // Use the gap scheme to be used in the N-W alignment (default: affine(0))
-    unsigned                 affineLinearDgs{0u};
-    // Use the global local or global-Unconstrained algorithm (default: global(0) - local(1) )
-    bool                     alignLocally{false};
-    // Parameter used during the RNAfold execution to select the minimum energy to be considered
-    float                    thrBppm{1e-15f}; // old Lara: 0.1
     // number of iterations
     unsigned                 numIterations{500u};
     // number of non-decreasing iterations
@@ -98,16 +92,8 @@ public:
     // alignment.
     float                    sequenceScale{1.0f};
     float                    balance{0.0f};
-    // gap penalty for RSA
-    //    float rsaGapPenalty{3.0};
     // scoring mode, either LOGARITHMIC, SCALE, ORIGINAL, RIBOSUM
     unsigned                 structureScoring{ScoringMode::LOGARITHMIC};
-    // define the weight of _half_ an interaction match for fixed structures
-    float                    fixedStructWeight{8.0f};
-    // if structureScoring=SCALING then we have to give a scaling factor
-    float                    scalingFactor{1.0f};
-    // specify the location of T-COFFEE
-    seqan::CharString        tcoffeeLocation{"t_coffee/t_coffee_5.05"};
     // specify the method to be used to create the T-Coffe library
     unsigned                 tcoffeeLibMode{0};
     Status                   status;
@@ -128,16 +114,18 @@ private:
         setAppName(parser, "lara");
         setShortDescription(parser, "Lagrangian Relaxed Alignment for RNA structures");
         setVersion(parser, "2.0.0");
-        setDate(parser, "January 2019");
+        setDate(parser, "May 2019");
         addDescription(parser, "RNA structural alignment algorithm.");
 
-        addUsageLine(parser, " -i \\fIinFile\\fP [\\fIparameters\\fP]");
-        addUsageLine(parser, " -d \\fIdpFile\\fP -d \\fIdpFile\\fP [-d ...] [\\fIparameters\\fP]");
+        addUsageLine(parser, R"( -i \fIinFile\fP [\fIparameters\fP])");
+        addUsageLine(parser, R"( -d \fIdpFile\fP -d \fIdpFile\fP [-d ...] [\fIparameters\fP])");
 
         addOption(parser, ArgParseOption("v", "verbose",
                                          "0: no additional outputs, 1: global statistics, "
                                          "2: extensive statistics for each batch of reads, 3: Debug output. (0)",
                                          ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "verbose", "0");
+        setMaxValue(parser, "verbose", "3");
 
         // Input options
         addSection(parser, "Input Options");
@@ -165,38 +153,24 @@ private:
                                          "A temporary directory where to save intermediate files. (input file directory)",
                                          ArgParseOption::STRING));
 
-        addOption(parser, ArgParseOption("tcl", "tcoffeeLocation",
-                                         "location of T-COFFEE.",
-                                         ArgParseOption::STRING));
-
         addOption(parser, ArgParseOption("tcm", "tcoffeeLibMode",
                                          "Method used to score the T-Coffe library. Either 0: switch(500/1000) or "
                                          "NUM: proportional in [NUM-250..NUM+250]. (0)",
                                          ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "tcoffeeLibMode", "0");
 
         // Alignment options
         addSection(parser, "LaRA Alignment Options");
 
-        addOption(parser, ArgParseOption("g", "affineLinearDgs",
-                                         "Chose the gap scheme affine(0) linear(1) or dynamic(2) "
-                                         "to be used in the alignment. (affine(0)). ",
-                                         ArgParseArgument::INTEGER, "INT"));
-
-        addOption(parser, ArgParseOption("a", "local",
-                                         "Perform local alignment. (False)"));
-
-        addOption(parser, ArgParseOption("tb", "thrBppm",
-                                         "(Parameter used during the RNAfold execution to select the minimum energy to be "
-                                         "considered (1e-15)",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
-
         addOption(parser, ArgParseOption("iter", "iterations",
                                          "number of iterations. ",
                                          ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "iterations", "1");
 
         addOption(parser, ArgParseOption("nditer", "maxNondecreasingIterations",
                                          "number of non-decreasing iterations. (50)",
                                          ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "maxNondecreasingIterations", "0");
 
         addOption(parser, ArgParseOption("ep", "epsilon",
                                          "value to be considered for the equality of upper and lower bounds difference",
@@ -238,31 +212,25 @@ private:
         addOption(parser, ArgParseOption("stsc", "structureScoring",
                                          "scoring mode, either LOGARITHMIC (0), SCALE (1), ORIGINAL (2), RIBOSUM (3). (0)",
                                          ArgParseArgument::INTEGER, "INT"));
-
-        addOption(parser, ArgParseOption("fsw", "fixedStructWeight",
-                                         "define the weight of _half_ an interaction match for fixed structures",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
-
-        addOption(parser, ArgParseOption("scal", "scalingFactor",
-                                         "if structurescoring=SCALING then we have to give a scaling factor",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+        setMinValue(parser, "structureScoring", "0");
+        setMaxValue(parser, "structureScoring", "3");
 
         addOption(parser, ArgParseOption("m", "matching",
                                          "Lookahead for greedy matching algorithm. Value 0 uses LEMON instead. (5)",
                                          ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "matching", "0");
 
         addOption(parser, ArgParseOption("j", "numThreads",
-                                         "Use the number of specified threads. Decrease if memory problems occur. (5)",
+                                         "Use the number of specified threads. Decrease if memory problems occur. "
+                                         "Value 0 tries to detect the maximum number. (1)",
                                          ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "numThreads", "0");
 
         ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
         if (parseResult != ArgumentParser::PARSE_OK)
             return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
 
         getOptionValue(_VERBOSE_LEVEL, parser, "verbose");
-        getOptionValue(affineLinearDgs, parser, "affineLinearDgs");
-        getOptionValue(alignLocally, parser, "local");
-        getOptionValue(thrBppm, parser, "thrBppm");
         getOptionValue(numIterations, parser, "iterations");
         getOptionValue(maxNondecrIterations, parser, "maxNondecreasingIterations");
         getOptionValue(epsilon, parser, "epsilon");
@@ -274,9 +242,6 @@ private:
         getOptionValue(sequenceScale, parser, "sequenceScale");
         getOptionValue(balance, parser, "balance");
         getOptionValue(structureScoring, parser, "structureScoring");
-        getOptionValue(fixedStructWeight, parser, "fixedStructWeight");
-        getOptionValue(scalingFactor, parser, "scalingFactor");
-        getOptionValue(tcoffeeLocation, parser, "tcoffeeLocation");
         getOptionValue(tcoffeeLibMode, parser, "tcoffeeLibMode");
         getOptionValue(inFileRef, parser, "inFileRef");
         getOptionValue(matching, parser, "matching");
@@ -292,14 +257,13 @@ private:
 
         if (empty(inFile) && dotplotFile.empty())
         {
-//            std::cerr << "ERROR: You have to specify either -i or -d to pass input files." << std::endl;
             printShortHelp(parser);
             return Status::EXIT_ERROR;
         }
 
         if (num_threads == 0u)
         {
-            unsigned nthreads = std::thread::hardware_concurrency() / 2u;
+            unsigned nthreads = std::thread::hardware_concurrency();
             if (nthreads != 0)
                 num_threads = nthreads;
             else

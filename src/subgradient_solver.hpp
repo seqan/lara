@@ -162,6 +162,10 @@ public:
         _LOG(1, "Attempting to solve " << inputPairs.size() << " structural alignments with " << params.num_threads
                 << " parallel threads." << std::endl);
 
+#ifdef SEQAN_SIMD_ENABLED
+        _LOG(1, "SIMD is enabled: Computing " << simd_len << " alignments per thread in parallel." << std::endl);
+#endif
+
         // Determine number of parallel alignments.
         size_t const num_parallel = std::min(simd_len * params.num_threads, inputPairs.size());
         size_t const num_threads = (num_parallel - 1) / simd_len + 1;
@@ -300,7 +304,7 @@ public:
                         {
                             results.addAlignment(ss.lagrange, ss.sequenceIndices);
 
-                            _LOG(1, "Thread " << aliIdx << "." << seqIdx << " finished alignment "
+                            _LOG(2, "Thread " << aliIdx << "." << seqIdx << " finished alignment "
                                     << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
 
                             if (iter == inputPairs.cend())
