@@ -234,27 +234,29 @@ public:
         SEQAN_ASSERT_EQ(num_parallel, seqan::length(seq2));
         SEQAN_ASSERT_EQ(num_threads, seqan::length(alignments));
 
-        size_t num_at_work = solvers.size();
-        std::vector<bool> at_work(num_at_work, true);
-
-        while (num_at_work > 0ul)
+        // in parallel for each (SIMD) alignment
+        #pragma omp parallel for num_threads(params.num_threads)
+        for (size_t aliIdx = 0ul; aliIdx < num_threads; ++aliIdx)
         {
-            #pragma omp parallel for num_threads(params.num_threads)
-            for (size_t aliIdx = 0ul; aliIdx < num_threads; ++aliIdx)
+            size_t num_at_work = seqan::length(alignments[aliIdx].first);
+            std::vector<bool> at_work(num_at_work, true);
+
+            // loop the thread until there is no more work to do
+            while (num_at_work > 0ul)
             {
-                //Performs the structural alignment. Returns the dual value (upper bound, solution of relaxed problem).
+                // Performs the structural alignment. Returns the dual value (upper bound, solution of relaxed problem).
                 seqan::String<ScoreType> res = seqan::globalAlignment(alignments[aliIdx].first,
                                                                       alignments[aliIdx].second,
                                                                       scores[aliIdx]);
 
+                // Evaluate each alignment result and adapt multipliers.
                 for (size_t idx = aliIdx * simd_len; idx < (aliIdx + 1) * simd_len && idx < num_parallel; ++idx)
                 {
-                    if (!at_work[idx])
+                    size_t const seqIdx = idx % simd_len;
+                    if (!at_work[seqIdx])
                         continue;
 
                     SubgradientSolver & ss = solvers[idx];
-                    size_t const seqIdx = idx % simd_len;
-
                     ss.currentUpperBound = res[seqIdx] / factor2int; // global alignment result
 
                     ss.currentLowerBound = ss.lagrange.valid_solution(ss.subgradient, ss.subgradientIndices,
@@ -309,7 +311,7 @@ public:
 
                             if (iter == inputPairs.cend())
                             {
-                                at_work[idx] = false;
+                                at_work[seqIdx] = false;
                                 --num_at_work;
                             }
                             else
