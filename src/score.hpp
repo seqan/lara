@@ -57,7 +57,7 @@ template <typename TScore>
 class Score<TScore, PositionSpecificScore>
 {
 private:
-    static TScore const initValue = std::numeric_limits<TScore>::lowest() / 3 * 2;
+    static TScore const INITVALUE;
 
 public:
     String<TScore, Alloc<OverAligned>> matrix; // aligned alloc
@@ -67,7 +67,7 @@ public:
 
     void init(size_t dim1, size_t dim2, TScore gapOpen, TScore gapExtend)
     {
-        resize(matrix, dim1 * dim2, initValue);
+        resize(matrix, dim1 * dim2, INITVALUE);
         dim = dim2;
         data_gap_open = gapOpen;
         data_gap_extend = gapExtend;
@@ -80,9 +80,14 @@ public:
 
     void reset(size_t /* unused */)
     {
-        std::fill(begin(matrix), end(matrix), initValue);
+        std::fill(begin(matrix), end(matrix), INITVALUE);
     }
+
+    void updateLongestSeq(uint8_t /* unused */, uint8_t /* unused */) {}
 };
+
+template <typename TScore>
+TScore const Score<TScore, PositionSpecificScore>::INITVALUE = std::numeric_limits<TScore>::lowest() / 3 * 2;
 
 template <typename TScore, typename TPos>
 inline
@@ -103,21 +108,25 @@ template <typename TScore>
 class Score<TScore, PositionSpecificScoreSimd>
 {
 private:
-    static TScore const initValue = std::numeric_limits<TScore>::lowest() / 3 * 2;
+    using SimdScoreType = typename seqan::SimdVector<TScore>::Type;
+    static TScore const INITVALUE;
 
 public:
-    using SimdScoreType = typename seqan::SimdVector<TScore>::Type;
     String<SimdScoreType, Alloc<OverAligned>> matrix; // aligned alloc
     size_t dim; // length of second sequence
     TScore data_gap_open;
     TScore data_gap_extend;
+    uint8_t longestSeqIdx1;
+    uint8_t longestSeqIdx2;
 
     void init(size_t dim1, size_t dim2, TScore gapOpen, TScore gapExtend)
     {
-        resize(matrix, dim1 * dim2, createVector<SimdScoreType>(initValue));
+        resize(matrix, dim1 * dim2, createVector<SimdScoreType>(INITVALUE));
         dim = dim2;
         data_gap_open = gapOpen;
         data_gap_extend = gapExtend;
+        longestSeqIdx1 = 0;
+        longestSeqIdx2 = 0;
     }
 
     void set(size_t seq, size_t idx1, size_t idx2, TScore value)
@@ -128,9 +137,18 @@ public:
     void reset(size_t seq)
     {
         for (auto & score : matrix)
-            score[seq] = initValue;
+            score[seq] = INITVALUE;
+    }
+
+    void updateLongestSeq(uint8_t idx1, uint8_t idx2)
+    {
+        longestSeqIdx1 = idx1;
+        longestSeqIdx2 = idx2;
     }
 };
+
+template <typename TScore>
+TScore const Score<TScore, PositionSpecificScoreSimd>::INITVALUE = std::numeric_limits<TScore>::lowest() / 3 * 2;
 
 template <typename TScore, typename TPosVec>
 inline
@@ -138,13 +156,8 @@ typename seqan::SimdVector<TScore>::Type score(Score<TScore, PositionSpecificSco
                                                   TPosVec const entryH,
                                                   TPosVec const entryV)
 {
-    auto tmp = createVector<TPosVec>(sc.dim) * entryH + entryV;
-
-    typename seqan::SimdVector<TScore>::Type res{};
-    for (auto idx = 0u; idx < LENGTH<TPosVec>::VALUE; ++idx)
-        res[idx] = sc.matrix[tmp[idx]][idx];
-
-    return res;
+    // The entry vectors consist of the same values, so we can always use the entry of the longest sequence.
+    return sc.matrix[sc.dim * entryH[sc.longestSeqIdx1] + entryV[sc.longestSeqIdx2]];
 }
 
 // --------------------------------------------------------

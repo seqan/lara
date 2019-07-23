@@ -44,6 +44,7 @@
 #include <utility>
 #include <vector>
 
+#include <seqan/sequence.h>
 #include <seqan/simd.h>
 
 #include "data_types.hpp"
@@ -119,6 +120,21 @@ private:
 
     std::set<PosPair, longer_seq> inputPairs;
     std::vector<SubgradientSolver> solvers;
+
+    uint8_t maxLenIdx(seqan::StringSet<seqan::String<unsigned>> const & seqs, std::pair<size_t, size_t> interval)
+    {
+        SEQAN_IF_CONSTEXPR (simd_len > 1)
+        {
+            auto maxE = std::max_element(begin(seqs) + interval.first,
+                                         begin(seqs) + interval.second,
+                                         [] (auto const & a, auto const & b) { return length(a) < length(b); });
+            return static_cast<uint8_t>(std::distance(begin(seqs) + interval.first, maxE));
+        }
+        else
+        {
+            return 0;
+        }
+    }
 
 #ifdef SEQAN_SIMD_ENABLED
     using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScoreSimd>;
@@ -196,11 +212,13 @@ public:
 
         // Initialise the solvers.
         solvers.reserve(num_parallel);
+        size_t maxLenV{};
 
         for (iter = inputPairs.cbegin(); solvers.size() < num_parallel; ++iter)
         {
             size_t const aliIdx = solvers.size() / simd_len;
             size_t const seqIdx = solvers.size() % simd_len;
+            auto const len = std::make_pair(length(store[iter->first].sequence), length(store[iter->second].sequence));
 
             // Once for each chunk of size simd_len.
             if (seqIdx == 0)
@@ -210,14 +228,19 @@ public:
                 seqan::reserve(alignments[aliIdx].second, simd_len);
 
                 // Initialise the scores.
-                size_t const current_1st_length = seqan::length(store[iter->first].sequence);
-                scores[aliIdx].init(current_1st_length, std::min(max_2nd_length, current_1st_length), go, ge);
-                _LOG(3, "Resize matrix: " << current_1st_length << " * " << scores[aliIdx].dim << std::endl);
+                maxLenV = len.second;
+                scores[aliIdx].init(len.first, std::min(max_2nd_length, len.first), go, ge);
+                _LOG(3, "Resize matrix: " << len.first << " * " << std::min(max_2nd_length, len.first) << std::endl);
+            }
+            else if (len.second > maxLenV)
+            {
+                maxLenV = len.second;
+                scores[aliIdx].updateLongestSeq(0, static_cast<uint8_t>(seqIdx));
             }
 
             // Fill the alignments.
-            appendValue(seq1, PrefixType(integerSeq, length(store[iter->first].sequence)));
-            appendValue(seq2, PrefixType(integerSeq, length(store[iter->second].sequence)));
+            appendValue(seq1, PrefixType(integerSeq, len.first));
+            appendValue(seq2, PrefixType(integerSeq, len.second));
             appendValue(alignments[aliIdx].first, GappedSeq(seqan::back(seq1)));
             appendValue(alignments[aliIdx].second, GappedSeq(seqan::back(seq2)));
 
@@ -240,6 +263,7 @@ public:
         {
             size_t num_at_work = seqan::length(alignments[aliIdx].first);
             std::vector<bool> at_work(num_at_work, true);
+            auto const interval = std::make_pair(aliIdx * simd_len, std::min((aliIdx + 1) * simd_len, num_parallel));
 
             // loop the thread until there is no more work to do
             while (num_at_work > 0ul)
@@ -250,7 +274,7 @@ public:
                                                                       scores[aliIdx]);
 
                 // Evaluate each alignment result and adapt multipliers.
-                for (size_t idx = aliIdx * simd_len; idx < (aliIdx + 1) * simd_len && idx < num_parallel; ++idx)
+                for (size_t idx = interval.first; idx < interval.second; ++idx)
                 {
                     size_t const seqIdx = idx % simd_len;
                     if (!at_work[seqIdx])
@@ -294,18 +318,24 @@ public:
 
                     SEQAN_ASSERT_MSG(!ss.subgradientIndices.empty() ||
                                      ss.currentUpperBound - ss.currentLowerBound < 0.1f,
-                                     "The bounds differ, although there are no subgradients.");
+                                     (std::string{"The bounds differ, although there are no subgradients. "} +
+                                         "Problem in aligning sequences " +
+                                         seqan::toCString(store[ss.sequenceIndices.first].name) + " and " +
+                                         seqan::toCString(store[ss.sequenceIndices.second].name)).c_str());
                     SEQAN_ASSERT_GT_MSG(ss.bestUpperBound + params.epsilon,
                                         ss.bestLowerBound,
-                                        "The lower boundary exceeds the upper boundary.");
+                                        (std::string{"The lower boundary exceeds the upper boundary. "} +
+                                            "Problem in aligning sequences " +
+                                            seqan::toCString(store[ss.sequenceIndices.first].name) + " and " +
+                                            seqan::toCString(store[ss.sequenceIndices.second].name)).c_str());
 
                     // The alignment is finished.
                     if (ss.bestUpperBound - ss.bestLowerBound < params.epsilon || ss.remainingIterations == 0u)
                     {
                         #pragma omp critical (finished_alignment)
                         {
+                            // write results
                             results.addAlignment(ss.lagrange, ss.sequenceIndices);
-
                             _LOG(2, "Thread " << aliIdx << "." << seqIdx << " finished alignment "
                                     << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
 
@@ -337,7 +367,8 @@ public:
                                 _LOG(2, "Add solver " << iter->first << "/" << iter->second << std::endl);
                                 ++iter;
                             }
-                        }; // end critical region
+                            scores[aliIdx].updateLongestSeq(maxLenIdx(seq1, interval), maxLenIdx(seq2, interval));
+                        } // end critical region
                     }
                     else
                     {
