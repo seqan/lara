@@ -15,7 +15,7 @@ message ("${ColourBold}Compiler detection${ColourReset}")
 
 # change version after every release
 project(lara
-        VERSION 2.0.0
+        VERSION 2.0.1
         LANGUAGES CXX)
 set(PROJECT_DESCRIPTION "LaRA: Lagrangian Relaxed structural Alignment")
 set (LARA_SOURCE_FILES src/lara.cpp)
