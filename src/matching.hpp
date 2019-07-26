@@ -46,6 +46,7 @@
 #include <vector>
 
 #ifdef LEMON_FOUND
+#include <lemon/core.h>
 #include <lemon/smart_graph.h>
 #include <lemon/list_graph.h>
 #include <lemon/matching.h>

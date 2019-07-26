@@ -87,6 +87,7 @@ find_path(LEMON_INCLUDE_PATH NAMES lemon/smart_graph.h HINTS ${CMAKE_CURRENT_SOU
 if (LEMON_INCLUDE_PATH)
     set (CMAKE_INCLUDE_PATH ${LEMON_INCLUDE_PATH} ${CMAKE_INCLUDE_PATH})
     add_definitions(-DLEMON_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLEMON_ONLY_TEMPLATES")
     set (LEMON_FOUND "TRUE")
 else()
     message (STATUS "Cannot find header files of the LEMON library, which is required to compute matchings.")
