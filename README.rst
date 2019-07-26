@@ -29,7 +29,7 @@ Requirements
 ------------
 
 * platforms: Linux, MacOS
-* compiler: gcc ≥ 5
+* compiler: gcc ≥ 5 or clang ≥ 3.8 or icc ≥ 17
 * cmake ≥ 3
 
 LaRA is dependent on the following libraries:
