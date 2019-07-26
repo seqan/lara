@@ -90,7 +90,7 @@ public:
     // alignment.
     float                    sequenceScale{1.0f};
     float                    balance{0.0f};
-    // scoring mode, either LOGARITHMIC, SCALE, ORIGINAL, RIBOSUM
+    // scoring mode, either LOGARITHMIC or SCALE
     unsigned                 structureScoring{ScoringMode::LOGARITHMIC};
     // specify the method to be used to create the T-Coffe library
     unsigned                 tcoffeeLibMode{0};
@@ -128,72 +128,72 @@ private:
         // Input options
         addSection(parser, "Input Options");
 
-        addOption(parser, ArgParseOption("i", "inFile",
+        addOption(parser, ArgParseOption("i", "infile",
                                          "Path to the input file",
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
-        addOption(parser, ArgParseOption("ir", "inFileRef",
+        addOption(parser, ArgParseOption("r", "reffile",
                                          "Path to the reference input file",
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
-        addOption(parser, ArgParseOption("d", "dotplots",
+        addOption(parser, ArgParseOption("d", "dotplot",
                                          "Use dotplot files from RNAfold (*_dp.ps) as sequence and structure input.",
                                          ArgParseArgument::INPUT_FILE, "IN", true));
 
         // Output options
         addSection(parser, "Output Options");
 
-        addOption(parser, ArgParseOption("w", "outFile",
+        addOption(parser, ArgParseOption("w", "write",
                                          "Path to the output file (default: stdout)",
                                          ArgParseArgument::OUTPUT_FILE, "OUT"));
 
-        addOption(parser, ArgParseOption("tcm", "tcoffeeLibMode",
+        addOption(parser, ArgParseOption("l", "libscore",
                                          "Method used to score the T-Coffe library. Either 0: switch(500/1000) or "
                                          "NUM: proportional in [NUM-250..NUM+250]. (0)",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "tcoffeeLibMode", "0");
+        setMinValue(parser, "libscore", "0");
 
         // Alignment options
         addSection(parser, "LaRA Alignment Options");
 
-        addOption(parser, ArgParseOption("iter", "iterations",
+        addOption(parser, ArgParseOption("n", "numiter",
                                          "number of iterations. ",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "iterations", "1");
+        setMinValue(parser, "numiter", "1");
 
-        addOption(parser, ArgParseOption("nditer", "maxNondecreasingIterations",
+        addOption(parser, ArgParseOption("a", "maxnondecreasing",
                                          "number of non-decreasing iterations. (50)",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "maxNondecreasingIterations", "0");
+        setMinValue(parser, "maxnondecreasing", "0");
 
-        addOption(parser, ArgParseOption("ep", "epsilon",
+        addOption(parser, ArgParseOption("e", "epsilon",
                                          "value to be considered for the equality of upper and lower bounds difference",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("my", "stepSizeFactor",
+        addOption(parser, ArgParseOption("f", "factor",
                                          "necessary for computing appropriate step sizes.",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("lsm", "laraScoreMatrixName",
+        addOption(parser, ArgParseOption("s", "scorematrix",
                                          "scoring matrix name that should be used for scoring alignment edges in the "
                                          "actual problem",
                                          ArgParseOption::STRING));
 
-        addOption(parser, ArgParseOption("s", "suboptimalDiff",
+        addOption(parser, ArgParseOption("u", "subopt",
                                          "Parameter for filtering alignment edges. Only those are created, whose prefix"
-                                         " score + suffix score in the DP matrix is at most suboptimalDiff below the "
+                                         " score + suffix score in the DP matrix is at most subopt below the "
                                          "optimal score.",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("lgo", "laraGapOpen",
+        addOption(parser, ArgParseOption("y", "gapopen",
                                          "Gap open costs for generating the alignment edges",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("lge", "laraGapExtend",
+        addOption(parser, ArgParseOption("x", "gapextend",
                                          "Gap extend costs for generating the alignment edges",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("ssc", "sequenceScale",
+        addOption(parser, ArgParseOption("c", "seqscale",
                                          "Scaling factor for the sequence scores (below 1 gives more impact for "
                                          "structure).",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
@@ -203,46 +203,46 @@ private:
                                          "of sequence and structure score. (0)",
                                          ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("stsc", "structureScoring",
-                                         "scoring mode, either LOGARITHMIC (0), SCALE (1), ORIGINAL (2), RIBOSUM (3). (0)",
+        addOption(parser, ArgParseOption("p", "probscoremode",
+                                         "base pair probability scoring mode, either LOGARITHMIC (0), SCALE (1). (0)",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "structureScoring", "0");
-        setMaxValue(parser, "structureScoring", "3");
+        setMinValue(parser, "probscoremode", "0");
+        setMaxValue(parser, "probscoremode", "1");
 
         addOption(parser, ArgParseOption("m", "matching",
                                          "Lookahead for greedy matching algorithm. Value 0 uses LEMON instead. (5)",
                                          ArgParseArgument::INTEGER, "INT"));
         setMinValue(parser, "matching", "0");
 
-        addOption(parser, ArgParseOption("j", "numThreads",
+        addOption(parser, ArgParseOption("j", "threads",
                                          "Use the number of specified threads. Decrease if memory problems occur. "
                                          "Value 0 tries to detect the maximum number. (1)",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "numThreads", "0");
+        setMinValue(parser, "threads", "0");
 
         ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
         if (parseResult != ArgumentParser::PARSE_OK)
             return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
 
         getOptionValue(_VERBOSE_LEVEL, parser, "verbose");
-        getOptionValue(numIterations, parser, "iterations");
-        getOptionValue(maxNondecrIterations, parser, "maxNondecreasingIterations");
+        getOptionValue(numIterations, parser, "numiter");
+        getOptionValue(maxNondecrIterations, parser, "maxnondecreasing");
         getOptionValue(epsilon, parser, "epsilon");
-        getOptionValue(stepSizeFactor, parser, "stepSizeFactor");
-        getOptionValue(laraScoreMatrixName, parser, "laraScoreMatrixName");
-        getOptionValue(suboptimalDiff, parser, "suboptimalDiff");
-        getOptionValue(laraGapOpen, parser, "laraGapOpen");
-        getOptionValue(laraGapExtend, parser, "laraGapExtend");
-        getOptionValue(sequenceScale, parser, "sequenceScale");
+        getOptionValue(stepSizeFactor, parser, "factor");
+        getOptionValue(laraScoreMatrixName, parser, "scorematrix");
+        getOptionValue(suboptimalDiff, parser, "subopt");
+        getOptionValue(laraGapOpen, parser, "gapopen");
+        getOptionValue(laraGapExtend, parser, "gapextend");
+        getOptionValue(sequenceScale, parser, "seqscale");
         getOptionValue(balance, parser, "balance");
-        getOptionValue(structureScoring, parser, "structureScoring");
-        getOptionValue(tcoffeeLibMode, parser, "tcoffeeLibMode");
-        getOptionValue(inFileRef, parser, "inFileRef");
+        getOptionValue(structureScoring, parser, "probscoremode");
+        getOptionValue(tcoffeeLibMode, parser, "libscore");
+        getOptionValue(inFileRef, parser, "reffile");
         getOptionValue(matching, parser, "matching");
-        getOptionValue(num_threads, parser, "numThreads");
+        getOptionValue(num_threads, parser, "threads");
 
-        getOptionValue(inFile, parser, "inFile");
-        unsigned numDotplots = getOptionValueCount(parser, "dotplots");
+        getOptionValue(inFile, parser, "infile");
+        unsigned numDotplots = getOptionValueCount(parser, "dotplot");
         dotplotFile.resize(numDotplots);
         for (unsigned idx = 0; idx < numDotplots; ++idx)
         {
@@ -264,8 +264,8 @@ private:
                 num_threads = 1u;
         }
 
-        getOptionValue(outFile, parser, "outFile");
-        if (isSet(parser, "outFile"))
+        getOptionValue(outFile, parser, "write");
+        if (isSet(parser, "write"))
         {
             _LOG(1, "The specified output file is " << outFile << std::endl);
         }

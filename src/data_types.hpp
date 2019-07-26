@@ -58,9 +58,7 @@ int _VERBOSE_LEVEL = 0;
 enum ScoringMode
 {
     LOGARITHMIC,
-    SCALE,
-    ORIGINAL,
-    RIBOSUM
+    SCALE
 };
 
 //enum TCoffeeMode
