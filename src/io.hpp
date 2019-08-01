@@ -145,7 +145,7 @@ private:
         }
     }
 
-    void extractBppFromDotplot(seqan::RnaRecord & rnaRecord, std::string const & filename)
+    static void extractBppFromDotplot(seqan::RnaRecord & rnaRecord, std::string const & filename)
     {
         using namespace seqan;
 
@@ -224,17 +224,12 @@ private:
         append(rnaRecord.fixedGraphs, fixedGraph);
     }
 
-    void computeStructure(seqan::RnaRecord & rnaRecord, bool & usedVienna, bool logStructureScoring)
+    static void computeStructure(seqan::RnaRecord & rnaRecord, bool & usedVienna, bool logStructureScoring)
     {
         if (!seqan::empty(rnaRecord.bppMatrGraphs))
             return;
 
-#ifndef VIENNA_RNA_FOUND
-        std::cerr << "Cannot compute a structure without the ViennaRNA library. Please install ViennaRNA and try again."
-                  << std::endl;
-        exit(1);
-#endif
-
+#ifdef VIENNA_RNA_FOUND
         usedVienna = true;
         size_t const length = seqan::length(rnaRecord.sequence);
         seqan::String<char, seqan::CStyle> sequence{rnaRecord.sequence};
@@ -275,6 +270,13 @@ private:
         seqan::back(rnaRecord.fixedGraphs).energy = energy;
         seqan::back(rnaRecord.fixedGraphs).specs = seqan::CharString{"ViennaRNA fold"};
         delete[] structure;
+#else
+        std::cerr << "Cannot compute a structure without the ViennaRNA library. Please install ViennaRNA and try again."
+                  << std::endl;
+        (void) usedVienna;
+        (void) logStructureScoring;
+        exit(1);
+#endif
     }
 };
 

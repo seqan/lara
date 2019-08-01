@@ -83,24 +83,23 @@ endif ()
 find_package(SeqAn REQUIRED CONFIG)
 
 # LEMON
-find_path(LEMON_INCLUDE_PATH NAMES lemon/smart_graph.h HINTS ${CMAKE_CURRENT_SOURCE_DIR}/include/lemon/include)
-if (LEMON_INCLUDE_PATH)
-    set (CMAKE_INCLUDE_PATH ${LEMON_INCLUDE_PATH} ${CMAKE_INCLUDE_PATH})
+set (LEMON_FOUND "FALSE")
+find_path(LEMON_PATH NAMES lemon/smart_graph.h HINTS ${CMAKE_CURRENT_SOURCE_DIR}/include/lemon/include)
+if (LEMON_PATH)
+    set (CMAKE_INCLUDE_PATH ${LEMON_PATH} ${CMAKE_INCLUDE_PATH})
     add_definitions(-DLEMON_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLEMON_ONLY_TEMPLATES")
     set (LEMON_FOUND "TRUE")
 else()
     message (STATUS "Cannot find header files of the LEMON library, which is required to compute matchings.")
-    set (LEMON_FOUND "FALSE")
 endif ()
 
 #ViennaRNA
-find_library(RNA libRNA.a)
-if (RNA)
+set (VIENNA_FOUND "FALSE")
+find_library(VIENNA_RNA_LIB libRNA.a)
+if (VIENNA_RNA_LIB)
     add_definitions(-DVIENNA_RNA_FOUND)
     set (VIENNA_FOUND "TRUE")
-else()
-    set (VIENNA_FOUND "FALSE")
 endif ()
 
 # others
@@ -109,12 +108,12 @@ find_package(ZLIB   QUIET)
 find_package(BZip2  QUIET)
 
 message(STATUS "These dependencies where found:")
-message(   "     SEQAN      ${SEQAN_FOUND}      ${SEQAN_VERSION_STRING}")
-message(   "     ZLIB       ${ZLIB_FOUND}      ${ZLIB_VERSION_STRING}")
-message(   "     BZIP2      ${BZIP2_FOUND}      ${BZIP2_VERSION_STRING}")
-message(   "     OPENMP     ${OPENMP_FOUND}      ${OpenMP_CXX_FLAGS}")
-message(   "     ViennaRNA  ${VIENNA_FOUND}      ${RNA}")
-message(   "     Lemon      ${LEMON_FOUND}      ${LEMON_INCLUDE_PATH}")
+message(   "     SEQAN       ${SEQAN_FOUND}   \t${SEQAN_VERSION_STRING}")
+message(   "     ZLIB        ${ZLIB_FOUND}   \t${ZLIB_VERSION_STRING}")
+message(   "     BZIP2       ${BZIP2_FOUND}   \t${BZIP2_VERSION_STRING}")
+message(   "     OPENMP      ${OPENMP_FOUND}   \t${OpenMP_CXX_FLAGS}")
+message(   "     ViennaRNA   ${VIENNA_FOUND}   \t${VIENNA_RNA_LIB}")
+message(   "     Lemon       ${LEMON_FOUND}   \t${LEMON_PATH}")
 
 # Warn if OpenMP was not found.
 if (OPENMP_FOUND)
@@ -171,7 +170,7 @@ set (SEQAN_APP_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set (SEQAN_APP_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set (SEQAN_APP_VERSION "${PROJECT_VERSION}")
 
-target_link_libraries (lara ${SEQAN_LIBRARIES} ${RNA})
+target_link_libraries (lara ${SEQAN_LIBRARIES} ${VIENNA_RNA_LIB})
 message(STATUS "The requirements where met.")
 
 # ----------------------------------------------------------------------------
@@ -182,7 +181,7 @@ message(STATUS "The requirements where met.")
 set (SEQAN_DEFINITIONS ${SEQAN_DEFINITIONS} -DSEQAN_GLOBAL_EXCEPTION_HANDLER=1)
 
 # Add include directories.
-include_directories (${SEQAN_INCLUDE_DIRS} ${LEMON_INCLUDE_PATH})
+include_directories (${SEQAN_INCLUDE_DIRS} ${LEMON_PATH})
 
 # Add definitions set by find_package (SeqAn).
 add_definitions (${SEQAN_DEFINITIONS})
