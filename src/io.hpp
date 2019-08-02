@@ -255,7 +255,7 @@ private:
                 }
                 else
                 {
-                    if (pr[iindx[i + 1] - (j + 1)] > 0.0)
+                    if (pr[iindx[i + 1] - (j + 1)] > minProb)
                         seqan::addEdge(bppMatrGraph.inter, i, j, pr[iindx[i + 1] - (j + 1)]);
                 }
             }
