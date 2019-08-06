@@ -126,14 +126,15 @@ private:
     // mapping from the index of the dual variable to the pair of alignment edge indices
     std::vector<PosPair> dualToPairedEdges; // former _YToIndex
 
-    unsigned tcoffeeLibMode;
+    std::pair<unsigned, unsigned> libraryScore{};
+    bool libraryScoreIsLinear{};
 
     float gap_open;
     float gap_extend;
 
     SetScoreFunction set_score;
 
-    void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
+    static void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
     {
         for (seqan::RnaAdjacencyIterator adjIt(graph.inter, origin); !seqan::atEnd(adjIt); seqan::goNext(adjIt))
         {
@@ -297,7 +298,8 @@ public:
             targetNode.push_back(edge.first.second);
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
-        tcoffeeLibMode = params.tcoffeeLibMode;
+        libraryScore = params.libraryScore;
+        libraryScoreIsLinear = params.libraryScoreIsLinear;
 
         // start
 
@@ -500,31 +502,29 @@ public:
 
     /*!
      * \brief Calculate the scores for the T-Coffee library.
-     * \return Triple of position, position and score.
-     * \details The score is normalised to [t-250..t+250] if the pair is included in the matching
-     * and [t-750..t-250] otherwise (with t = tcoffeeLibMode ≠ 0).
+     * \return A vector of triples of position, position and score.
+     * \details
+     * The score is normalised to [l_min..l_max] if the pair is included in the matching
+     * and equals l_min otherwise. The pair {l-min, l_max} is the libscore parameter of LaRA.
      */
     std::vector<std::tuple<size_t, size_t, unsigned>> getStructureLines() const
     {
         std::vector<std::tuple<size_t, size_t, unsigned>> structureLines{};
-        if (tcoffeeLibMode == 0)
+        if (libraryScoreIsLinear)
         {
+            auto const mm = std::minmax_element(maxProfit.begin(), maxProfit.end());
+            float const div = 1.f * (libraryScore.second - libraryScore.first) / (*(mm.second) - *(mm.first));
             for (size_t idx : bestStructuralAlignment)
-                structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
-                                            edgeMatching.count(idx) == 1 ? 1000u : 500u);
+            {
+                auto val = static_cast<unsigned>(edgeMatching.count(idx) * (maxProfit[idx] - *(mm.first)) * div);
+                structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1, libraryScore.first + val);
+            }
         }
         else
         {
-            SEQAN_ASSERT_GEQ_MSG(tcoffeeLibMode, 750u, "tcoffeeLibMode must be = 0 or >= 750.");
-            auto const mm = std::minmax_element(maxProfit.begin(), maxProfit.end());
-            float const div = 500.f / (*(mm.second) - *(mm.first));
             for (size_t idx : bestStructuralAlignment)
-            {
-                auto val = static_cast<unsigned>((maxProfit[idx] - *(mm.first)) * div);
-                val += (tcoffeeLibMode - 750u);
                 structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
-                                            edgeMatching.count(idx) == 1 ? val + 500u : val);
-            }
+                                            edgeMatching.count(idx) * 500u + 500u);
         }
         return structureLines;
     }

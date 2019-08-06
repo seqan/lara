@@ -93,7 +93,8 @@ public:
     // scoring mode, either LOGARITHMIC or SCALE
     unsigned                 structureScoring{ScoringMode::LOGARITHMIC};
     // specify the method to be used to create the T-Coffe library
-    unsigned                 tcoffeeLibMode{0};
+    std::pair<unsigned, unsigned> libraryScore{};
+    bool                     libraryScoreIsLinear{};
     Status                   status;
     unsigned                 matching{5u};
     unsigned                 num_threads{1u};
@@ -148,10 +149,10 @@ private:
                                          ArgParseArgument::OUTPUT_FILE, "OUT"));
 
         addOption(parser, ArgParseOption("l", "libscore",
-                                         "Method used to score the T-Coffe library. Either 0: switch(500/1000) or "
-                                         "NUM: proportional in [NUM-250..NUM+250]. (0)",
-                                         ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "libscore", "0");
+                                         "The range of the scores for the T-Coffe library. "
+                                         "Default: 500 1000 (binary)",
+                                         ArgParseArgument::INTEGER, "MIN MAX",
+                                         false, 2));
 
         // Alignment options
         addSection(parser, "LaRA Alignment Options");
@@ -236,7 +237,8 @@ private:
         getOptionValue(sequenceScale, parser, "seqscale");
         getOptionValue(balance, parser, "balance");
         getOptionValue(structureScoring, parser, "probscoremode");
-        getOptionValue(tcoffeeLibMode, parser, "libscore");
+        getOptionValue(libraryScore.first, parser, "libscore", 0);
+        getOptionValue(libraryScore.second, parser, "libscore", 1);
         getOptionValue(inFileRef, parser, "reffile");
         getOptionValue(matching, parser, "matching");
         getOptionValue(num_threads, parser, "threads");
@@ -254,6 +256,8 @@ private:
             printShortHelp(parser);
             return Status::EXIT_ERROR;
         }
+
+        libraryScoreIsLinear = isSet(parser, "l");
 
         if (num_threads == 0u)
         {
