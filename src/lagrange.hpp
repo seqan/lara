@@ -277,7 +277,7 @@ public:
         }
         _LOG(3, "residueCount = " << residueCount << " (" << seqLen.first << "+" << seqLen.second << ")" << std::endl);
 
-        float const avSeqId = generateEdges(getEdgeIdx, sequenceA, sequenceB, params.laraScoreMatrix,
+        float const avSeqId = generateEdges(getEdgeIdx, sequenceA, sequenceB, params.rnaScore,
                                             params.suboptimalDiff);
         float const sequenceScaleFactor = params.balance * avSeqId + params.sequenceScale;
         size_t numEdges = getEdgeIdx.size();
@@ -298,7 +298,7 @@ public:
             targetNode.push_back(edge.first.second);
         }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
-        libraryScore = params.libraryScore;
+        libraryScore = std::make_pair(params.libraryScoreMin, params.libraryScoreMax);
         libraryScoreIsLinear = params.libraryScoreIsLinear;
 
         // start
@@ -314,7 +314,7 @@ public:
             extractContacts(headContact, bppGraphs.first, headNode);
             extractContacts(tailContact, bppGraphs.second, tailNode);
 
-            float alignScore = sequenceScaleFactor * seqan::score(params.laraScoreMatrix,
+            float alignScore = sequenceScaleFactor * seqan::score(params.rnaScore,
                                                                   sequenceA[sourceNode[edgeIdx]],
                                                                   sequenceB[targetNode[edgeIdx]]);
 
@@ -371,8 +371,8 @@ public:
         // filling the matrix, we're updating the values afterwards, otherwise
         // we had to evaluate _maxProfitScores after every update of either the
         // l or m edge
-        gap_open = params.laraGapOpen;
-        gap_extend = params.laraGapExtend;
+        gap_open = params.rnaScore.data_gap_open;
+        gap_extend = params.rnaScore.data_gap_extend;
         for (size_t edgeIdx = 0ul; edgeIdx < maxProfit.size(); ++edgeIdx)
             set_score(sourceNode[edgeIdx], targetNode[edgeIdx], static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
     }

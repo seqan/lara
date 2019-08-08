@@ -69,13 +69,6 @@ enum ScoringMode
 //    FIXEDINTER
 //};
 
-enum Status
-{
-    EXIT_OK,
-    EXIT_ERROR,
-    CONTINUE
-};
-
 //! \brief Score Matrix type used in LaRA.
 typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
 

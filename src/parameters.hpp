@@ -37,7 +37,9 @@
  * \brief This file contains all settings and parameters of LaRA.
  */
 
+#include <string>
 #include <thread>
+#include <vector>
 
 #include <seqan/arg_parse.h>
 #include <seqan/score.h>
@@ -52,64 +54,61 @@ template<typename TSequenceValue, typename TTag>
 inline void setRnaScoreMatrix(seqan::Score<float, seqan::ScoreMatrix<TSequenceValue>> & matrix, TTag)
 {
     float const * tab = RnaScoringMatrixData_<float, TSequenceValue, TTag>::getData();
-    seqan::arrayCopy(tab, tab + RnaScoringMatrixData_<float, TSequenceValue, TTag>::TAB_SIZE,
-                     matrix.data_tab);
+    seqan::arrayCopy(tab, tab + RnaScoringMatrixData_<float, TSequenceValue, TTag>::TAB_SIZE, matrix.data_tab);
 }
 
 class Parameters
 {
 public:
-    // Name of input file
-    seqan::CharString        inFile{};
-    // Name of input fileRef
-    seqan::CharString        inFileRef{};
-    // Name of dotplot file
-    std::vector<std::string> dotplotFile{};
-    // Name of output file (default: stdout)
-    seqan::CharString        outFile{};
-    // number of iterations
-    unsigned                 numIterations{500u};
-    // number of non-decreasing iterations
-    unsigned                 maxNondecrIterations{50u};
-    // value to be considered for the equality of upper and lower bounds difference
-    float                    epsilon{0.01f};
-    // my, necessary for computing appropriate step sizes
-    float                    stepSizeFactor{1.0f};
-    // scoring matrix name that should be used for scoring alignment edges in the actual problem
-    seqan::CharString        laraScoreMatrixName{};
-    //    Score<float, ScoreMatrix<Rna5, Default> > laraScoreMatrix;
-    RnaScoreMatrix           laraScoreMatrix;
-    //    TScoringSchemeRib laraScoreMatrixRib;
-    // Gap open and extend costs for generating the alignment edges
-    float                    suboptimalDiff{40.0f};
-    // Gap open and extend costs for generating the alignment edges
-    float                    laraGapOpen{-6.0f};
-    float                    laraGapExtend{-2.0f};
-    // scaling factor for the scores of the alignment edges
-    // Specifies the contribution of the sequence scores (specified by the larascore matrix) to the overall structural
-    // alignment.
-    float                    sequenceScale{1.0f};
-    float                    balance{0.0f};
-    // scoring mode, either LOGARITHMIC or SCALE
-    unsigned                 structureScoring{ScoringMode::LOGARITHMIC};
-    // specify the method to be used to create the T-Coffe library
-    std::pair<unsigned, unsigned> libraryScore{};
-    bool                     libraryScoreIsLinear{};
-    Status                   status;
-    unsigned                 matching{5u};
-    unsigned                 num_threads{1u};
+    enum Status
+    {
+        EXIT_OK    = 0,
+        EXIT_ERROR = 1,
+        CONTINUE   = 2
+    };
+    Status status{};
 
-    Parameters(int argc, char const ** argv)
+    // GENERAL OPTIONS
+    unsigned                 threads{};
+
+    // INPUT OPTIONS
+    std::string              inFile{};               // Name of input file
+    std::string              refFile{};              // Name of input fileRef
+    std::vector<std::string> dotplotFiles{};         // Names of dotplot files
+
+    // OUTPUT OPTIONS
+    std::string              outFile{};              // Name of output file (default: stdout)
+    unsigned                 libraryScoreMin{};      // specify the minimum score for the T-Coffee library
+    unsigned                 libraryScoreMax{};      // specify the maximum score for the T-Coffee library
+    bool                     libraryScoreIsLinear{}; // whether T-Coffee scores are binary or linearly scaled
+
+    // RUNTIME/QUALITY OPTIONS
+    unsigned                 numIterations{};        // number of iterations
+    unsigned                 maxNondecrIterations{}; // number of non-decreasing iterations
+    float                    stepSizeFactor{};       // my, necessary for computing appropriate step sizes
+    float                    epsilon{};              // max distance that means equality of upper and lower bound
+    unsigned                 matching{};             // select matching algorithm
+    float                    suboptimalDiff{};       // Gap open and extend costs for generating the alignment edges
+
+    // SCORING OPTIONS
+    float                    balance{};
+    float                    sequenceScale{};        // scaling factor for the scores of the alignment edges
+    unsigned                 structureScoring{};     // scoring mode for structures, either LOGARITHMIC or SCALE
+    RnaScoreMatrix           rnaScore{};             // scoring matrix for scoring alignment edges (sequence score)
+
+    // Constructor.
+    Parameters(int argc, char const ** argv) noexcept
     {
         status = setParameters(argc, argv);
     }
 
 private:
-    inline Status setParameters(int argc, char const ** argv)
+    inline Status setParameters(int argc, char const ** argv) noexcept
     {
         using namespace seqan;
         ArgumentParser parser;
 
+        // Set up the parser.
         setAppName(parser, "lara");
         setShortDescription(parser, "Lagrangian Relaxed Alignment for RNA structures");
         setVersion(parser, "2.0.1");
@@ -121,20 +120,28 @@ private:
 
         addOption(parser, ArgParseOption("v", "verbose",
                                          "0: no additional outputs, 1: global statistics, "
-                                         "2: extensive statistics for each batch of reads, 3: Debug output. (0)",
+                                         "2: extensive statistics for each batch of reads, 3: Debug output.",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "verbose", "0");
-        setMaxValue(parser, "verbose", "3");
+        setMinValue(parser, "v", "0");
+        setMaxValue(parser, "v", "3");
+        setDefaultValue(parser, "v", "0");
+
+        addOption(parser, ArgParseOption("j", "threads",
+                                         "Use the number of specified threads. Decrease if memory problems occur. "
+                                         "Value 0 tries to detect the maximum number.",
+                                         ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "j", "0");
+        setDefaultValue(parser, "j", "1");
 
         // Input options
         addSection(parser, "Input Options");
 
         addOption(parser, ArgParseOption("i", "infile",
-                                         "Path to the input file",
+                                         "Path to the input file.",
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
         addOption(parser, ArgParseOption("r", "reffile",
-                                         "Path to the reference input file",
+                                         "Path to the reference input file.",
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
         addOption(parser, ArgParseOption("d", "dotplot",
@@ -145,152 +152,163 @@ private:
         addSection(parser, "Output Options");
 
         addOption(parser, ArgParseOption("w", "write",
-                                         "Path to the output file (default: stdout)",
+                                         "Path to the output file. Default: stdout.",
                                          ArgParseArgument::OUTPUT_FILE, "OUT"));
 
         addOption(parser, ArgParseOption("l", "libscore",
                                          "The range of the scores for the T-Coffe library. "
-                                         "Default: 500 1000 (binary)",
+                                         "Default: 500 1000 (binary).",
                                          ArgParseArgument::INTEGER, "MIN MAX",
                                          false, 2));
 
-        // Alignment options
-        addSection(parser, "LaRA Alignment Options");
+        // Runtime/Quality options
+        addSection(parser, "Runtime/Quality Options");
 
         addOption(parser, ArgParseOption("n", "numiter",
-                                         "number of iterations. ",
+                                         "The number of iterations.",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "numiter", "1");
+        setMinValue(parser, "n", "1");
+        setDefaultValue(parser, "n", "500");
 
         addOption(parser, ArgParseOption("a", "maxnondecreasing",
-                                         "number of non-decreasing iterations. (50)",
+                                         "The number of non-decreasing iterations.",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "maxnondecreasing", "0");
-
-        addOption(parser, ArgParseOption("e", "epsilon",
-                                         "value to be considered for the equality of upper and lower bounds difference",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+        setMinValue(parser, "a", "0");
+        setDefaultValue(parser, "a", "50");
 
         addOption(parser, ArgParseOption("f", "factor",
-                                         "necessary for computing appropriate step sizes.",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+                                         "The factor of how much to increase the step sizes.",
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "f", "1.0");
 
-        addOption(parser, ArgParseOption("s", "scorematrix",
-                                         "scoring matrix name that should be used for scoring alignment edges in the "
-                                         "actual problem",
-                                         ArgParseOption::STRING));
+        addOption(parser, ArgParseOption("e", "epsilon",
+                                         "Maximal distance that means equality of upper and lower bound.",
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "e", "0.01");
+
+        addOption(parser, ArgParseOption("m", "matching",
+                                         "Lookahead for greedy matching algorithm. Value 0 uses LEMON instead.",
+                                         ArgParseArgument::INTEGER, "INT"));
+        setMinValue(parser, "m", "0");
+        setDefaultValue(parser, "m", "5");
 
         addOption(parser, ArgParseOption("u", "subopt",
                                          "Parameter for filtering alignment edges. Only those are created, whose prefix"
                                          " score + suffix score in the DP matrix is at most subopt below the "
                                          "optimal score.",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "u", "40.0");
 
-        addOption(parser, ArgParseOption("y", "gapopen",
-                                         "Gap open costs for generating the alignment edges",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
 
-        addOption(parser, ArgParseOption("x", "gapextend",
-                                         "Gap extend costs for generating the alignment edges",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+        // Scoring options
+        addSection(parser, "Scoring Options");
+
+        addOption(parser, ArgParseOption("b", "balance",
+                                         "Factor of how much the sequence identity should influence the balance "
+                                         "of sequence and structure score.",
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "b", "0.0");
 
         addOption(parser, ArgParseOption("c", "seqscale",
                                          "Scaling factor for the sequence scores (below 1 gives more impact for "
                                          "structure).",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
-
-        addOption(parser, ArgParseOption("b", "balance",
-                                         "Factor of how much the sequence identity should influence the balance "
-                                         "of sequence and structure score. (0)",
-                                         ArgParseArgument::DOUBLE, "DOUBLE"));
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "c", "1.0");
 
         addOption(parser, ArgParseOption("p", "probscoremode",
-                                         "base pair probability scoring mode, either LOGARITHMIC (0), SCALE (1). (0)",
+                                         "The base pair probability scoring mode, either LOGARITHMIC (0), SCALE (1).",
                                          ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "probscoremode", "0");
-        setMaxValue(parser, "probscoremode", "1");
+        setMinValue(parser, "p", "0");
+        setMaxValue(parser, "p", "1");
+        setDefaultValue(parser, "p", "0");
 
-        addOption(parser, ArgParseOption("m", "matching",
-                                         "Lookahead for greedy matching algorithm. Value 0 uses LEMON instead. (5)",
-                                         ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "matching", "0");
+        addOption(parser, ArgParseOption("x", "gapextend",
+                                         "Gap extend costs for generating the alignment edges.",
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "x", "-2.0");
 
-        addOption(parser, ArgParseOption("j", "threads",
-                                         "Use the number of specified threads. Decrease if memory problems occur. "
-                                         "Value 0 tries to detect the maximum number. (1)",
-                                         ArgParseArgument::INTEGER, "INT"));
-        setMinValue(parser, "threads", "0");
+        addOption(parser, ArgParseOption("y", "gapopen",
+                                         "Gap open costs for generating the alignment edges.",
+                                         ArgParseArgument::DOUBLE, "FLOAT"));
+        setDefaultValue(parser, "y", "-6.0");
 
+        addOption(parser, ArgParseOption("s", "scorematrix",
+                                         "The score matrix file for scoring alignment edges in the "
+                                         "actual problem. Default: Ribosum65N.",
+                                         ArgParseOption::STRING));
+
+        // Parse.
         ArgumentParser::ParseResult parseResult = parse(parser, argc, argv);
-        if (parseResult != ArgumentParser::PARSE_OK)
-            return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? Status::EXIT_ERROR : Status::EXIT_OK;
+        if (parseResult != ArgumentParser::ParseResult::PARSE_OK)
+            return parseResult == ArgumentParser::ParseResult::PARSE_ERROR ? EXIT_ERROR : EXIT_OK;
 
+        // Fill the parameters and check validity.
+
+        // GENERAL OPTIONS
         getOptionValue(_VERBOSE_LEVEL, parser, "verbose");
-        getOptionValue(numIterations, parser, "numiter");
-        getOptionValue(maxNondecrIterations, parser, "maxnondecreasing");
-        getOptionValue(epsilon, parser, "epsilon");
-        getOptionValue(stepSizeFactor, parser, "factor");
-        getOptionValue(laraScoreMatrixName, parser, "scorematrix");
-        getOptionValue(suboptimalDiff, parser, "subopt");
-        getOptionValue(laraGapOpen, parser, "gapopen");
-        getOptionValue(laraGapExtend, parser, "gapextend");
-        getOptionValue(sequenceScale, parser, "seqscale");
-        getOptionValue(balance, parser, "balance");
-        getOptionValue(structureScoring, parser, "probscoremode");
-        getOptionValue(libraryScore.first, parser, "libscore", 0);
-        getOptionValue(libraryScore.second, parser, "libscore", 1);
-        getOptionValue(inFileRef, parser, "reffile");
-        getOptionValue(matching, parser, "matching");
-        getOptionValue(num_threads, parser, "threads");
-
-        getOptionValue(inFile, parser, "infile");
-        unsigned numDotplots = getOptionValueCount(parser, "dotplot");
-        dotplotFile.resize(numDotplots);
-        for (unsigned idx = 0; idx < numDotplots; ++idx)
-        {
-            getOptionValue(dotplotFile[idx], parser, "dotplots", idx);
-        }
-
-        if (empty(inFile) && dotplotFile.empty())
-        {
-            printShortHelp(parser);
-            return Status::EXIT_ERROR;
-        }
-
-        libraryScoreIsLinear = isSet(parser, "l");
-
-        if (num_threads == 0u)
+        getOptionValue(threads, parser, "threads");
+        if (threads == 0u)
         {
             unsigned nthreads = std::thread::hardware_concurrency();
-            if (nthreads != 0)
-                num_threads = nthreads;
-            else
-                num_threads = 1u;
+            threads = nthreads != 0 ? nthreads : 1u;
         }
 
+        // INPUT OPTIONS
+        getOptionValue(inFile, parser, "infile");
+        getOptionValue(refFile, parser, "reffile");
+        dotplotFiles.resize(getOptionValueCount(parser, "dotplot"));
+        for (size_t idx = 0ul; idx < dotplotFiles.size(); ++idx)
+            getOptionValue(dotplotFiles[idx], parser, "dotplots", idx);
+
+        if (inFile.empty() && dotplotFiles.empty())
+        {
+            printShortHelp(parser);
+            return EXIT_ERROR;
+        }
+
+        // OUTPUT OPTIONS
         getOptionValue(outFile, parser, "write");
         if (isSet(parser, "write"))
         {
             _LOG(1, "The specified output file is " << outFile << std::endl);
         }
 
+        getOptionValue(libraryScoreMin, parser, "libscore", 0);
+        getOptionValue(libraryScoreMax, parser, "libscore", 1);
+        libraryScoreIsLinear = isSet(parser, "libscore");
+
+        // RUNTIME/QUALITY OPTIONS
+        getOptionValue(numIterations, parser, "numiter");
+        getOptionValue(maxNondecrIterations, parser, "maxnondecreasing");
+        getOptionValue(stepSizeFactor, parser, "factor");
+        getOptionValue(epsilon, parser, "epsilon");
+        getOptionValue(matching, parser, "matching");
+        getOptionValue(suboptimalDiff, parser, "subopt");
+
+        // SCORING OPTIONS
+        getOptionValue(balance, parser, "balance");
+        getOptionValue(sequenceScale, parser, "seqscale");
+        getOptionValue(structureScoring, parser, "probscoremode");
+        getOptionValue(rnaScore.data_gap_open, parser, "gapopen");
+        getOptionValue(rnaScore.data_gap_extend, parser, "gapextend");
+
         // set score matrix
-        laraScoreMatrix.data_gap_extend = laraGapExtend;
-        laraScoreMatrix.data_gap_open   = laraGapOpen;
-        if (empty(laraScoreMatrixName))
+        std::string scoreMatrixFile{};
+        getOptionValue(scoreMatrixFile, parser, "scorematrix");
+        if (scoreMatrixFile.empty())
         {
             _LOG(2, "Predefined Ribosum65 matrix will be used." << std::endl);
-            setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
+            setRnaScoreMatrix(rnaScore, Ribosum65N());
         }
-        else if (loadScoreMatrix(laraScoreMatrix, toCString(laraScoreMatrixName)))
+        else if (loadScoreMatrix(rnaScore, scoreMatrixFile.c_str()))
         {
-            _LOG(2, "Provided scoring matrix will be used: " << laraScoreMatrixName << std::endl);
+            _LOG(2, "Provided scoring matrix will be used: " << scoreMatrixFile << std::endl);
         }
         else
         {
-            std::cerr << "Matrix file could not be opened: " << laraScoreMatrixName
+            std::cerr << "Matrix file could not be opened: " << scoreMatrixFile
                       << "). Predefined Ribosum65 matrix will be used." << std::endl;
-            setRnaScoreMatrix(laraScoreMatrix, Ribosum65N());
+            setRnaScoreMatrix(rnaScore, Ribosum65N());
         }
 
         return Status::CONTINUE;

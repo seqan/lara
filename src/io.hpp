@@ -42,6 +42,7 @@
 #include <iostream>
 #include <ostream>
 #include <sstream>
+#include <vector>
 
 #include <seqan/file.h>
 #include <seqan/graph_types.h>
@@ -70,7 +71,7 @@ public:
     explicit InputStorage(Parameters const & params)
     {
         readRnaFile(params.inFile);
-        readRnaFile(params.inFileRef);
+        readRnaFile(params.refFile);
 
         // If not present, compute the weighted interaction edges using ViennaRNA functions.
         bool const logScoring = params.structureScoring == ScoringMode::LOGARITHMIC;
@@ -80,10 +81,10 @@ public:
         if (usedVienna)
             _LOG(2, "Computed missing base pair probabilities with ViennaRNA library." << std::endl);
 
-        if (!params.dotplotFile.empty())
+        if (!params.dotplotFiles.empty())
         {
             // Load base pair probabilities from dot plot file.
-            for (std::string const & filename : params.dotplotFile)
+            for (std::string const & filename : params.dotplotFiles)
             {
                 seqan::RnaRecord rec;
                 extractBppFromDotplot(rec, filename);
@@ -100,13 +101,13 @@ public:
     }
 
 private:
-    void readRnaFile(seqan::CharString filename)
+    void readRnaFile(std::string const & filename)
     {
-        if (seqan::empty(filename))
+        if (filename.empty())
             return;
 
         seqan::RnaStructFileIn rnaStructFile;
-        if (seqan::open(rnaStructFile, toCString(filename), seqan::OPEN_RDONLY))
+        if (seqan::open(rnaStructFile, filename.c_str(), seqan::OPEN_RDONLY))
         {
             seqan::RnaHeader header;                   // dummy, just for Ebpseq files
             seqan::readHeader(header, rnaStructFile);
@@ -121,7 +122,7 @@ private:
         else
         {
             // Read the file.
-            seqan::SeqFileIn seqFileIn(toCString(filename));
+            seqan::SeqFileIn seqFileIn(filename.c_str());
             seqan::StringSet<seqan::CharString>  ids;
             seqan::StringSet<seqan::IupacString> seqs;
             seqan::StringSet<seqan::CharString>  quals;
@@ -215,8 +216,8 @@ private:
         if (seqan::numEdges(bppMatrGraph.inter) == 0)
             throw std::runtime_error("WARNING: No structure information found in file " + filename);
 
-        bppMatrGraph.specs = CharString("ViennaRNA dot plot from file " + std::string(filename));
-        fixedGraph.specs   = CharString("ViennaRNA dot plot from file " + std::string(filename));
+        bppMatrGraph.specs = CharString{"ViennaRNA dot plot from file " + filename};
+        fixedGraph.specs   = CharString{"ViennaRNA dot plot from file " + filename};
 
         std::string name = filename.substr(filename.find_last_of("/\\") + 1);
         rnaRecord.name = name.substr(0, name.rfind(".ps")).substr(0, name.rfind("_dp"));
@@ -292,24 +293,28 @@ std::ostream & operator<<(std::ostream & stream, InputStorage & store)
 
 // FASTA output
 
-inline
-void printAlignment(std::ostream & stream, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
+inline void printAlignment(std::ostream & stream,
+                           Alignment const & alignment,
+                           std::string const & nameA,
+                           std::string const & nameB)
 {
     stream << ">" << nameA << std::endl << alignment.first << std::endl;
     stream << ">" << nameB << std::endl << alignment.second << std::endl;
 }
 
-inline
-void printAlignment(seqan::CharString const & filename, Alignment const & alignment, seqan::CharString const & nameA, seqan::CharString const & nameB)
+inline void printAlignment(std::string const & filename,
+                           Alignment const & alignment,
+                           std::string const & nameA,
+                           std::string const & nameB)
 {
-    if (seqan::empty(filename))
+    if (filename.empty())
     {
         printAlignment(std::cout, alignment, nameA, nameB);
     }
     else
     {
         std::ofstream fastaFile;
-        fastaFile.open(seqan::toCString(filename), std::ios::out);
+        fastaFile.open(filename.c_str(), std::ios::out);
         if (fastaFile.is_open())
         {
             printAlignment(fastaFile, alignment, nameA, nameB);
@@ -364,16 +369,16 @@ public:
 
     friend std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library);
 
-    void print(seqan::CharString & filename)
+    void print(std::string const & filename)
     {
-        if (seqan::empty(filename))
+        if (filename.empty())
         {
             std::cout << *this;
         }
         else
         {
             std::ofstream tcLibFile;
-            tcLibFile.open(seqan::toCString(filename), std::ios::out);
+            tcLibFile.open(filename.c_str(), std::ios::out);
             if (tcLibFile.is_open())
             {
                 tcLibFile << *this;
@@ -397,4 +402,3 @@ std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)
 }
 
 } // namespace lara
-

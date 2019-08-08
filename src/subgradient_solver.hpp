@@ -37,6 +37,10 @@
  * \brief This file contains the Subgradient Solver for LaRA.
  */
 
+#ifdef WITH_OPENMP
+#include <omp.h>
+#endif
+
 #include <iostream>
 #include <iterator>
 #include <list>
@@ -67,22 +71,24 @@ public:
     unsigned remainingIterations;
     PosPair sequenceIndices;
 
-    std::vector<float> subgradient;
-    std::vector<float> dual;
-    std::list<size_t> subgradientIndices;
+    std::vector<float> subgradient{};
+    std::vector<float> dual{};
+    std::list<size_t> subgradientIndices{};
 
-    SubgradientSolver(PosPair indices, InputStorage const & store, SetScoreFunction const & func, Parameters & params)
-        : lagrange(store[indices.first], store[indices.second], func, params)
+    SubgradientSolver(PosPair const & indices,
+                      InputStorage const & store,
+                      SetScoreFunction const & func,
+                      Parameters & params):
+        lagrange(store[indices.first], store[indices.second], func, params),
+        stepSizeFactor{params.stepSizeFactor},
+        bestLowerBound{negInfinity},
+        bestUpperBound{posInfinity},
+        currentLowerBound{negInfinity},
+        currentUpperBound{posInfinity},
+        nondecreasingRounds{0ul},
+        remainingIterations{params.numIterations},
+        sequenceIndices{indices}
     {
-        stepSizeFactor = params.stepSizeFactor;
-        bestLowerBound = negInfinity;
-        bestUpperBound = posInfinity;
-
-        currentLowerBound = negInfinity;
-        currentUpperBound = posInfinity;
-        nondecreasingRounds = 0ul;
-        sequenceIndices = indices;
-        remainingIterations = params.numIterations;
         subgradient.resize(lagrange.getDimension().second);
         dual.resize(subgradient.size());
     }
@@ -143,7 +149,7 @@ private:
 #endif
 
 public:
-    SubgradientSolverMulti(InputStorage const & _store, Parameters & _params)
+    explicit SubgradientSolverMulti(InputStorage const & _store, Parameters & _params)
         : store(_store), params(_params), inputPairs(longer_seq{store})
     {
         // Add the sequence index pairs to the set of alignments, longer sequence first.
@@ -175,7 +181,7 @@ public:
         if (inputPairs.empty())
             return;
 
-        _LOG(1, "Attempting to solve " << inputPairs.size() << " structural alignments with " << params.num_threads
+        _LOG(1, "Attempting to solve " << inputPairs.size() << " structural alignments with " << params.threads
                 << " parallel threads." << std::endl);
 
 #ifdef SEQAN_SIMD_ENABLED
@@ -183,7 +189,7 @@ public:
 #endif
 
         // Determine number of parallel alignments.
-        size_t const num_parallel = std::min(simd_len * params.num_threads, inputPairs.size());
+        size_t const num_parallel = std::min(simd_len * params.threads, inputPairs.size());
         size_t const num_threads = (num_parallel - 1) / simd_len + 1;
 
         // We iterate over all pairs of input sequences, starting with the longest.
@@ -207,8 +213,8 @@ public:
         // Initialise the scores.
         std::vector<RnaScoreType> scores(num_threads);
         size_t const max_2nd_length = seqan::length(store[iter->second].sequence);
-        auto const go = static_cast<ScoreType>(params.laraGapOpen * factor2int);
-        auto const ge = static_cast<ScoreType>(params.laraGapExtend * factor2int);
+        auto const go = static_cast<ScoreType>(params.rnaScore.data_gap_open * factor2int);
+        auto const ge = static_cast<ScoreType>(params.rnaScore.data_gap_extend * factor2int);
 
         // Initialise the solvers.
         solvers.reserve(num_parallel);
@@ -258,7 +264,7 @@ public:
         SEQAN_ASSERT_EQ(num_threads, seqan::length(alignments));
 
         // in parallel for each (SIMD) alignment
-        #pragma omp parallel for num_threads(params.num_threads)
+        #pragma omp parallel for num_threads(params.threads)
         for (size_t aliIdx = 0ul; aliIdx < num_threads; ++aliIdx)
         {
             size_t num_at_work = seqan::length(alignments[aliIdx].first);

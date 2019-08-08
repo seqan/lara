@@ -31,16 +31,7 @@
 // OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
 
-#ifdef WITH_OPENMP
-#include <omp.h>
-#endif
-
-#include <iostream>
-#include <thread>
-
-#include "data_types.hpp"
 #include "io.hpp"
-#include "lagrange.hpp"
 #include "parameters.hpp"
 #include "subgradient_solver.hpp"
 
@@ -48,8 +39,8 @@ int main (int argc, char const ** argv)
 {
     // Parse arguments and options.
     lara::Parameters params(argc, argv);
-    if (params.status != lara::Status::CONTINUE)
-        return params.status == lara::Status::EXIT_OK ? 0 : 1;
+    if (params.status != lara::Parameters::Status::CONTINUE)
+        return static_cast<int>(params.status);
 
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
