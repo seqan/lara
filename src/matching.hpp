@@ -133,7 +133,8 @@ private:
             {
                 if (line != contact.first && inSolution[contact.first])
                 {
-                    float sc = 2 * contact.second; //structureScore[PosPair(line, pp)] + structureScore[PosPair(pp, line)];
+                    float sc = 2 * contact.second;
+                    // sc = structureScore[PosPair(line, pp)] + structureScore[PosPair(pp, line)];
                     queue.emplace(-sc, std::min(line, contact.first), std::max(line, contact.first));
                 }
             }

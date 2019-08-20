@@ -75,7 +75,7 @@ public:
     std::vector<float> dual{};
     std::list<size_t> subgradientIndices{};
 
-    SubgradientSolver(PosPair const & indices,
+    SubgradientSolver(PosPair indices,
                       InputStorage const & store,
                       SetScoreFunction const & func,
                       Parameters & params):
@@ -127,21 +127,6 @@ private:
     std::set<PosPair, longer_seq> inputPairs;
     std::vector<SubgradientSolver> solvers;
 
-    uint8_t maxLenIdx(seqan::StringSet<seqan::String<unsigned>> const & seqs, std::pair<size_t, size_t> interval)
-    {
-        SEQAN_IF_CONSTEXPR (simd_len > 1)
-        {
-            auto maxE = std::max_element(begin(seqs) + interval.first,
-                                         begin(seqs) + interval.second,
-                                         [] (auto const & a, auto const & b) { return length(a) < length(b); });
-            return static_cast<uint8_t>(std::distance(begin(seqs) + interval.first, maxE));
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
 #ifdef SEQAN_SIMD_ENABLED
     using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScoreSimd>;
 #else
@@ -185,7 +170,10 @@ public:
                 << " parallel threads." << std::endl);
 
 #ifdef SEQAN_SIMD_ENABLED
+        size_t const simd_len = seqan::LENGTH<typename seqan::SimdVector<ScoreType>::Type>::VALUE;
         _LOG(1, "SIMD is enabled: Computing " << simd_len << " alignments per thread in parallel." << std::endl);
+#else
+        size_t const simd_len = 1ul;
 #endif
 
         // Determine number of parallel alignments.
@@ -218,7 +206,6 @@ public:
 
         // Initialise the solvers.
         solvers.reserve(num_parallel);
-        size_t maxLenV{};
 
         for (iter = inputPairs.cbegin(); solvers.size() < num_parallel; ++iter)
         {
@@ -234,14 +221,8 @@ public:
                 seqan::reserve(alignments[aliIdx].second, simd_len);
 
                 // Initialise the scores.
-                maxLenV = len.second;
                 scores[aliIdx].init(len.first, std::min(max_2nd_length, len.first), go, ge);
                 _LOG(3, "Resize matrix: " << len.first << " * " << std::min(max_2nd_length, len.first) << std::endl);
-            }
-            else if (len.second > maxLenV)
-            {
-                maxLenV = len.second;
-                scores[aliIdx].updateLongestSeq(0, static_cast<uint8_t>(seqIdx));
             }
 
             // Fill the alignments.
@@ -270,6 +251,7 @@ public:
             size_t num_at_work = seqan::length(alignments[aliIdx].first);
             std::vector<bool> at_work(num_at_work, true);
             auto const interval = std::make_pair(aliIdx * simd_len, std::min((aliIdx + 1) * simd_len, num_parallel));
+            scores[aliIdx].updateLongestSeq(seq1, seq2, interval);
 
             // loop the thread until there is no more work to do
             while (num_at_work > 0ul)
@@ -338,6 +320,7 @@ public:
                     // The alignment is finished.
                     if (ss.bestUpperBound - ss.bestLowerBound < params.epsilon || ss.remainingIterations == 0u)
                     {
+                        PosPair currentSeqIdx{};
                         #pragma omp critical (finished_alignment)
                         {
                             // write results
@@ -352,29 +335,34 @@ public:
                             }
                             else
                             {
-                                // Reset scores.
-                                scores[aliIdx].reset(seqIdx);
-
-                                // Set new sequences.
-                                seq1[idx] = PrefixType(integerSeq, length(store[iter->first].sequence));
-                                seq2[idx] = PrefixType(integerSeq, length(store[iter->second].sequence));
-                                alignments[aliIdx].first[seqIdx] = GappedSeq(seq1[idx]);
-                                alignments[aliIdx].second[seqIdx] = GappedSeq(seq2[idx]);
-
-                                // Set new score matrix.
-                                SetScoreFunction set_score = std::bind(&RnaScoreType::set,
-                                                                       &(scores[aliIdx]),
-                                                                       seqIdx,
-                                                                       std::placeholders::_1,
-                                                                       std::placeholders::_2,
-                                                                       std::placeholders::_3);
-
-                                solvers[idx] = SubgradientSolver(*iter, store, set_score, params);
-                                _LOG(2, "Add solver " << iter->first << "/" << iter->second << std::endl);
+                                currentSeqIdx = *iter;
                                 ++iter;
+                                _LOG(2, "Solver " << currentSeqIdx.first << "/" << currentSeqIdx.second << std::endl);
                             }
-                            scores[aliIdx].updateLongestSeq(maxLenIdx(seq1, interval), maxLenIdx(seq2, interval));
                         } // end critical region
+
+                        if (at_work[seqIdx])
+                        {
+                            // Reset scores.
+                            scores[aliIdx].reset(seqIdx);
+
+                            // Set new sequences.
+                            seq1[idx] = PrefixType(integerSeq, length(store[currentSeqIdx.first].sequence));
+                            seq2[idx] = PrefixType(integerSeq, length(store[currentSeqIdx.second].sequence));
+                            alignments[aliIdx].first[seqIdx] = GappedSeq(seq1[idx]);
+                            alignments[aliIdx].second[seqIdx] = GappedSeq(seq2[idx]);
+
+                            // Set new score matrix.
+                            SetScoreFunction set_score = std::bind(&RnaScoreType::set,
+                                                                   &(scores[aliIdx]),
+                                                                   seqIdx,
+                                                                   std::placeholders::_1,
+                                                                   std::placeholders::_2,
+                                                                   std::placeholders::_3);
+
+                            solvers[idx] = SubgradientSolver(currentSeqIdx, store, set_score, params);
+                            scores[aliIdx].updateLongestSeq(seq1, seq2, interval);
+                        }
                     }
                     else
                     {

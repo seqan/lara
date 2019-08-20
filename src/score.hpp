@@ -83,7 +83,9 @@ public:
         std::fill(begin(matrix), end(matrix), INITVALUE);
     }
 
-    void updateLongestSeq(uint8_t /* unused */, uint8_t /* unused */) {}
+    void updateLongestSeq(StringSet<String<unsigned>> const & /* unused */,
+                          StringSet<String<unsigned>> const & /* unused */,
+                          std::pair<size_t, size_t> /* unused */) {}
 };
 
 template <typename TScore>
@@ -140,10 +142,20 @@ public:
             score[seq] = INITVALUE;
     }
 
-    void updateLongestSeq(uint8_t idx1, uint8_t idx2)
+    void updateLongestSeq(StringSet<String<unsigned>> const & seqs1,
+                          StringSet<String<unsigned>> const & seqs2,
+                          std::pair<size_t, size_t> interval)
     {
-        longestSeqIdx1 = idx1;
-        longestSeqIdx2 = idx2;
+        // Comparison function: Returns true if the first sequence is shorter than the second.
+        auto lengthCmp = [] (auto const & a, auto const & b) { return length(a) < length(b); };
+
+        // Store the index of the longest sequence in the first set.
+        auto maxE = std::max_element(begin(seqs1) + interval.first, begin(seqs1) + interval.second, lengthCmp);
+        longestSeqIdx1 = static_cast<uint8_t>(std::distance(begin(seqs1) + interval.first, maxE));
+
+        // Store the index of the longest sequence in the second set.
+        maxE = std::max_element(begin(seqs2) + interval.first, begin(seqs2) + interval.second, lengthCmp);
+        longestSeqIdx2 = static_cast<uint8_t>(std::distance(begin(seqs2) + interval.first, maxE));
     }
 };
 

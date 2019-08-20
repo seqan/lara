@@ -85,13 +85,6 @@ typedef std::set<InteractionIterator>                       InteractionSet;
 typedef int32_t                                             ScoreType;
 typedef std::function<void(size_t, size_t, ScoreType)>      SetScoreFunction;
 
-#ifdef SEQAN_SIMD_ENABLED
-typedef typename seqan::SimdVector<ScoreType>::Type         SimdScoreType;
-size_t const simd_len = seqan::LENGTH<SimdScoreType>::VALUE;
-#else
-size_t const simd_len = 1ul;
-#endif
-
 float const negInfinity = std::numeric_limits<float>::lowest();
 float const posInfinity = std::numeric_limits<float>::max();
 float const factor2int = 8192.f;
