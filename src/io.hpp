@@ -50,6 +50,7 @@
 #include <seqan/seq_io.h>
 #include <seqan/sequence.h>
 
+#include "data_types.hpp"
 #include "lagrange.hpp"
 #include "parameters.hpp"
 
@@ -70,34 +71,39 @@ class InputStorage : public std::vector<seqan::RnaRecord>
 public:
     explicit InputStorage(Parameters const & params)
     {
+        _LOG(1, "2) Read input files..." << std::endl);
+        Clock::time_point timeRead = Clock::now();
         readRnaFile(params.inFile);
         readRnaFile(params.refFile);
+        _LOG(1, "   * sequence/structure files -> " << timeDiff(timeRead) << "ms" << std::endl);
 
         // If not present, compute the weighted interaction edges using ViennaRNA functions.
+        Clock::time_point timeRnaFold = Clock::now();
         bool const logScoring = params.structureScoring == ScoringMode::LOGARITHMIC;
         bool usedVienna = false;
         for (seqan::RnaRecord & record : *this)
             computeStructure(record, usedVienna, logScoring);
         if (usedVienna)
-            _LOG(2, "Computed missing base pair probabilities with ViennaRNA library." << std::endl);
+        {
+            _LOG(1, "   * compute missing base pair probabilities with RNAfold -> " << timeDiff(timeRnaFold) << "ms"
+                    << std::endl);
+        }
 
         if (!params.dotplotFiles.empty())
         {
             // Load base pair probabilities from dot plot file.
+            Clock::time_point timeDotplot = Clock::now();
             for (std::string const & filename : params.dotplotFiles)
             {
                 seqan::RnaRecord rec;
                 extractBppFromDotplot(rec, filename);
                 push_back(rec);
             }
-            _LOG(2, "Successfully extracted base pair probabilities from given dotplot files." << std::endl);
+            _LOG(1, "   * dotplot files -> " << timeDiff(timeDotplot) << "ms" << std::endl);
         }
 
         if (size() <= 1)
             throw std::runtime_error("ERROR: The given file(s) must contain at least two sequences.");
-
-        for (seqan::RnaRecord & record : *this)
-            _LOG(3, record.bppMatrGraphs[0].inter << std::endl);
     }
 
 private:
@@ -371,9 +377,12 @@ public:
 
     void print(std::string const & filename)
     {
+        _LOG(1, "4) Write results..." << std::endl);
+        Clock::time_point timePrint = Clock::now();
         if (filename.empty())
         {
             std::cout << *this;
+            _LOG(1, "   * to stdout -> " << timeDiff(timePrint) << "ms" << std::endl);
         }
         else
         {
@@ -383,14 +392,14 @@ public:
             {
                 tcLibFile << *this;
                 tcLibFile.close();
+                _LOG(1, "   * to file " << filename << " -> " << timeDiff(timePrint) << "ms" << std::endl);
             }
             else
             {
-                std::cerr << "Unable to open the specified output file for writing: " << filename << std::endl;
+                std::cerr << "Error: Unable to open the file for writing: " << filename << std::endl;
             }
         }
     }
-
 };
 
 std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)

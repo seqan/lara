@@ -41,6 +41,7 @@
 #include <omp.h>
 #endif
 
+#include <chrono>
 #include <iostream>
 #include <iterator>
 #include <list>
@@ -163,20 +164,18 @@ public:
 
     void solve(lara::OutputTCoffeeLibrary & results)
     {
+        _LOG(1, "3) Solve " << inputPairs.size() << " structural alignments..." << std::endl);
         if (inputPairs.empty())
             return;
 
-        _LOG(1, "Attempting to solve " << inputPairs.size() << " structural alignments with " << params.threads
-                << " parallel threads." << std::endl);
-
 #ifdef SEQAN_SIMD_ENABLED
         size_t const simd_len = seqan::LENGTH<typename seqan::SimdVector<ScoreType>::Type>::VALUE;
-        _LOG(1, "SIMD is enabled: Computing " << simd_len << " alignments per thread in parallel." << std::endl);
 #else
         size_t const simd_len = 1ul;
 #endif
 
         // Determine number of parallel alignments.
+        Clock::time_point timeInit = Clock::now();
         size_t const num_parallel = std::min(simd_len * params.threads, inputPairs.size());
         size_t const num_threads = (num_parallel - 1) / simd_len + 1;
 
@@ -222,7 +221,7 @@ public:
 
                 // Initialise the scores.
                 scores[aliIdx].init(len.first, std::min(max_2nd_length, len.first), go, ge);
-                _LOG(3, "Resize matrix: " << len.first << " * " << std::min(max_2nd_length, len.first) << std::endl);
+                _LOG(2, "     Resize matrix: " << len.first << "*" << std::min(max_2nd_length, len.first) << std::endl);
             }
 
             // Fill the alignments.
@@ -237,17 +236,28 @@ public:
 
             // Fill the solvers.
             solvers.emplace_back(*iter, store, set_score, params);
-            _LOG(2, "Add solver " << iter->first << "/" << iter->second << std::endl);
         }
         SEQAN_ASSERT_EQ(num_parallel, solvers.size());
         SEQAN_ASSERT_EQ(num_parallel, seqan::length(seq1));
         SEQAN_ASSERT_EQ(num_parallel, seqan::length(seq2));
         SEQAN_ASSERT_EQ(num_threads, seqan::length(alignments));
+        _LOG(1, "   * set up initial " << num_parallel << " structural alignments -> " << timeDiff(timeInit) << "ms"
+                << std::endl);
+
+        Clock::duration durationAlign{};
+        Clock::duration durationMatching{};
+        Clock::duration durationUpdate{};
+        Clock::duration durationSerial{};
+        Clock::time_point timeIter = Clock::now();
 
         // in parallel for each (SIMD) alignment
         #pragma omp parallel for num_threads(params.threads)
         for (size_t aliIdx = 0ul; aliIdx < num_threads; ++aliIdx)
         {
+            Clock::duration durationThreadAlign{};
+            Clock::duration durationThreadMatching{};
+            Clock::duration durationThreadUpdate{};
+            Clock::time_point timeThreadSerial = Clock::now();
             size_t num_at_work = seqan::length(alignments[aliIdx].first);
             std::vector<bool> at_work(num_at_work, true);
             auto const interval = std::make_pair(aliIdx * simd_len, std::min((aliIdx + 1) * simd_len, num_parallel));
@@ -257,9 +267,11 @@ public:
             while (num_at_work > 0ul)
             {
                 // Performs the structural alignment. Returns the dual value (upper bound, solution of relaxed problem).
+                Clock::time_point timeCurrent = Clock::now();
                 seqan::String<ScoreType> res = seqan::globalAlignment(alignments[aliIdx].first,
                                                                       alignments[aliIdx].second,
                                                                       scores[aliIdx]);
+                durationThreadAlign += Clock::now() - timeCurrent;
 
                 // Evaluate each alignment result and adapt multipliers.
                 for (size_t idx = interval.first; idx < interval.second; ++idx)
@@ -271,10 +283,12 @@ public:
                     SubgradientSolver & ss = solvers[idx];
                     ss.currentUpperBound = res[seqIdx] / factor2int; // global alignment result
 
+                    timeCurrent = Clock::now();
                     ss.currentLowerBound = ss.lagrange.valid_solution(ss.subgradient, ss.subgradientIndices,
                                                                       std::make_pair(alignments[aliIdx].first[seqIdx],
                                                                                      alignments[aliIdx].second[seqIdx]),
                                                                       params.matching);
+                    durationThreadMatching += Clock::now() - timeCurrent;
 
                     // compare upper and lower bound
                     if (ss.currentUpperBound < ss.bestUpperBound)
@@ -325,7 +339,7 @@ public:
                         {
                             // write results
                             results.addAlignment(ss.lagrange, ss.sequenceIndices);
-                            _LOG(2, "Thread " << aliIdx << "." << seqIdx << " finished alignment "
+                            _LOG(2, "     Thread " << aliIdx << "." << seqIdx << " finished alignment "
                                     << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
 
                             if (iter == inputPairs.cend())
@@ -337,7 +351,6 @@ public:
                             {
                                 currentSeqIdx = *iter;
                                 ++iter;
-                                _LOG(2, "Solver " << currentSeqIdx.first << "/" << currentSeqIdx.second << std::endl);
                             }
                         } // end critical region
 
@@ -366,11 +379,30 @@ public:
                     }
                     else
                     {
+                        timeCurrent = Clock::now();
                         ss.lagrange.updateScores(ss.dual, ss.subgradientIndices);
+                        durationThreadUpdate += Clock::now() - timeCurrent;
                     }
                 }
             }
-        } // end while
+
+            #pragma omp critical (update_time)
+            {
+                durationAlign += durationThreadAlign;
+                durationMatching += durationThreadMatching;
+                durationUpdate += durationThreadUpdate;
+                durationSerial += Clock::now() - timeThreadSerial;
+            }
+        } // end parallel for
+
+        auto durationToSeconds = [] (Clock::duration duration)
+            { return std::chrono::duration_cast<std::chrono::seconds>(duration).count(); };
+
+        _LOG(1, "   * parallel iterations -> " << timeDiff<std::chrono::seconds>(timeIter) << "s" << std::endl
+                << "     (serial: " << durationToSeconds(durationSerial)
+                << "s, ali: " << durationToSeconds(durationAlign)
+                << "s, match: " << durationToSeconds(durationMatching)
+                << "s, update: " << durationToSeconds(durationUpdate) << "s)" << std::endl);
     }
 };
 

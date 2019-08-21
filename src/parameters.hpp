@@ -43,6 +43,7 @@
 
 #include <seqan/arg_parse.h>
 #include <seqan/score.h>
+#include <seqan/simd.h>
 
 #include "data_types.hpp"
 #include "rna_score_matrices.hpp"
@@ -119,8 +120,8 @@ private:
         addUsageLine(parser, R"( -d \fIdpFile\fP -d \fIdpFile\fP [-d ...] [\fIparameters\fP])");
 
         addOption(parser, ArgParseOption("v", "verbose",
-                                         "0: no additional outputs, 1: global statistics, "
-                                         "2: extensive statistics for each batch of reads, 3: Debug output.",
+                                         "0: no additional outputs, 1: program steps with run time, "
+                                         "2: developer infos, 3: additional non-thread-safe output.",
                                          ArgParseArgument::INTEGER, "INT"));
         setMinValue(parser, "v", "0");
         setMaxValue(parser, "v", "3");
@@ -252,6 +253,12 @@ private:
             unsigned nthreads = std::thread::hardware_concurrency();
             threads = nthreads != 0 ? nthreads : 1u;
         }
+        _LOG(1, "1) Parse parameters..." << std::endl);
+        _LOG(1, "   * number of threads: " << threads << std::endl);
+#ifdef SEQAN_SIMD_ENABLED
+        _LOG(1, "   * SIMD is enabled, vector size: "
+                << seqan::LENGTH<typename seqan::SimdVector<ScoreType>::Type>::VALUE << std::endl);
+#endif
 
         // INPUT OPTIONS
         getOptionValue(inFile, parser, "infile");
@@ -268,11 +275,6 @@ private:
 
         // OUTPUT OPTIONS
         getOptionValue(outFile, parser, "write");
-        if (isSet(parser, "write"))
-        {
-            _LOG(1, "The specified output file is " << outFile << std::endl);
-        }
-
         getOptionValue(libraryScoreMin, parser, "libscore", 0);
         getOptionValue(libraryScoreMax, parser, "libscore", 1);
         libraryScoreIsLinear = isSet(parser, "libscore");
@@ -297,21 +299,20 @@ private:
         getOptionValue(scoreMatrixFile, parser, "scorematrix");
         if (scoreMatrixFile.empty())
         {
-            _LOG(2, "Predefined Ribosum65 matrix will be used." << std::endl);
+            _LOG(1, "   * score matrix: Ribosum65" << std::endl);
             setRnaScoreMatrix(rnaScore, Ribosum65N());
         }
         else if (loadScoreMatrix(rnaScore, scoreMatrixFile.c_str()))
         {
-            _LOG(2, "Provided scoring matrix will be used: " << scoreMatrixFile << std::endl);
+            _LOG(1, "   * score matrix from file: " << scoreMatrixFile << std::endl);
         }
         else
         {
-            std::cerr << "Matrix file could not be opened: " << scoreMatrixFile
-                      << "). Predefined Ribosum65 matrix will be used." << std::endl;
-            setRnaScoreMatrix(rnaScore, Ribosum65N());
+            std::cerr << "Error: Matrix file could not be opened: " << scoreMatrixFile << std::endl;
+            return EXIT_ERROR;
         }
 
-        return Status::CONTINUE;
+        return CONTINUE;
     }
 };
 

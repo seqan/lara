@@ -37,6 +37,7 @@
  * \brief This file contains data structures and macros for LaRA.
  */
 
+#include <chrono>
 #include <iostream>
 #include <functional>
 #include <limits>
@@ -85,9 +86,18 @@ typedef std::set<InteractionIterator>                       InteractionSet;
 typedef int32_t                                             ScoreType;
 typedef std::function<void(size_t, size_t, ScoreType)>      SetScoreFunction;
 
+typedef std::chrono::steady_clock                           Clock;
+
 float const negInfinity = std::numeric_limits<float>::lowest();
 float const posInfinity = std::numeric_limits<float>::max();
 float const factor2int = 8192.f;
+
+// Time helper functions.
+template <typename duration_unit = std::chrono::milliseconds>
+inline typename duration_unit::rep timeDiff(Clock::time_point start)
+{
+    return std::chrono::duration_cast<duration_unit>(Clock::now() - start).count();
+}
 
 } // namespace lara
 

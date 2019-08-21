@@ -31,12 +31,14 @@
 // OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
 
+#include "data_types.hpp"
 #include "io.hpp"
 #include "parameters.hpp"
 #include "subgradient_solver.hpp"
 
 int main (int argc, char const ** argv)
 {
+    lara::Clock::time_point timeLara = lara::Clock::now();
     // Parse arguments and options.
     lara::Parameters params(argc, argv);
     if (params.status != lara::Parameters::Status::CONTINUE)
@@ -49,4 +51,5 @@ int main (int argc, char const ** argv)
     solverMulti.solve(tcLib);
 
     tcLib.print(params.outFile);
+    _LOG(1, "LaRA has run for " << lara::timeDiff<std::chrono::seconds>(timeLara) << " seconds." << std::endl);
 }
