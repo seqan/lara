@@ -55,6 +55,7 @@
 #include "data_types.hpp"
 #include "lagrange.hpp"
 #include "parameters.hpp"
+#include "score.hpp"
 
 namespace lara
 {
@@ -78,9 +79,10 @@ public:
 
     SubgradientSolver(PosPair indices,
                       InputStorage const & store,
-                      SetScoreFunction const & func,
-                      Parameters & params):
-        lagrange(store[indices.first], store[indices.second], func, params),
+                      Parameters & params,
+                      RnaScoreType * score,
+                      size_t seqIdx):
+        lagrange(store[indices.first], store[indices.second], params, score, seqIdx),
         stepSizeFactor{params.stepSizeFactor},
         bestLowerBound{negInfinity},
         bestUpperBound{posInfinity},
@@ -127,12 +129,6 @@ private:
 
     std::set<PosPair, longer_seq> inputPairs;
     std::vector<SubgradientSolver> solvers;
-
-#ifdef SEQAN_SIMD_ENABLED
-    using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScoreSimd>;
-#else
-    using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScore>;
-#endif
 
 public:
     explicit SubgradientSolverMulti(InputStorage const & _store, Parameters & _params)
@@ -230,12 +226,8 @@ public:
             appendValue(alignments[aliIdx].first, GappedSeq(seqan::back(seq1)));
             appendValue(alignments[aliIdx].second, GappedSeq(seqan::back(seq2)));
 
-            // Fill the scores.
-            SetScoreFunction set_score = std::bind(&RnaScoreType::set, &(scores[aliIdx]), seqIdx,
-                                                   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-
             // Fill the solvers.
-            solvers.emplace_back(*iter, store, set_score, params);
+            solvers.emplace_back(*iter, store, params, &(scores[aliIdx]), seqIdx);
         }
         SEQAN_ASSERT_EQ(num_parallel, solvers.size());
         SEQAN_ASSERT_EQ(num_parallel, seqan::length(seq1));
@@ -366,14 +358,7 @@ public:
                             alignments[aliIdx].second[seqIdx] = GappedSeq(seq2[idx]);
 
                             // Set new score matrix.
-                            SetScoreFunction set_score = std::bind(&RnaScoreType::set,
-                                                                   &(scores[aliIdx]),
-                                                                   seqIdx,
-                                                                   std::placeholders::_1,
-                                                                   std::placeholders::_2,
-                                                                   std::placeholders::_3);
-
-                            solvers[idx] = SubgradientSolver(currentSeqIdx, store, set_score, params);
+                            solvers[idx] = SubgradientSolver(currentSeqIdx, store, params, &(scores[aliIdx]), seqIdx);
                             scores[aliIdx].updateLongestSeq(seq1, seq2, interval);
                         }
                     }

@@ -131,7 +131,7 @@ public:
         longestSeqIdx2 = 0;
     }
 
-    void set(size_t seq, size_t idx1, size_t idx2, TScore value)
+    inline void set(size_t seq, size_t idx1, size_t idx2, TScore value)
     {
         matrix[dim * idx1 + idx2][seq] = value;
     }
@@ -215,3 +215,14 @@ TValue score(Score<TValue, ScoreSimdWrapper<Score<int32_t, PositionSpecificScore
 #endif
 
 } // namespace seqan
+
+namespace lara
+{
+
+#ifdef SEQAN_SIMD_ENABLED
+    using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScoreSimd>;
+#else
+    using RnaScoreType = seqan::Score<ScoreType, seqan::PositionSpecificScore>;
+#endif
+
+} // namespace lara

@@ -132,7 +132,8 @@ private:
     float gap_open;
     float gap_extend;
 
-    SetScoreFunction set_score;
+    RnaScoreType * pssm;
+    size_t seqIdx;
 
     static void extractContacts(std::vector<Contact> & contacts, seqan::RnaStructureGraph const & graph, size_t origin)
     {
@@ -235,8 +236,8 @@ private:
     }
 
 public:
-    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB, SetScoreFunction func,
-             Parameters const & params) : set_score(std::move(func))
+    Lagrange(seqan::RnaRecord const & recordA, seqan::RnaRecord const & recordB,
+             Parameters const & params, RnaScoreType * score, size_t sidx) : pssm(score), seqIdx(sidx)
     {
         _LOG(3, "     " << recordA.sequence << "\n     " << recordB.sequence << std::endl);
         sequenceA = seqan::Rna5String{recordA.sequence};
@@ -374,7 +375,10 @@ public:
         gap_open = params.rnaScore.data_gap_open;
         gap_extend = params.rnaScore.data_gap_extend;
         for (size_t edgeIdx = 0ul; edgeIdx < maxProfit.size(); ++edgeIdx)
-            set_score(sourceNode[edgeIdx], targetNode[edgeIdx], static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
+        {
+            pssm->set(seqIdx, sourceNode[edgeIdx], targetNode[edgeIdx],
+                      static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
+        }
     }
 
     void updateScores(std::vector<float> & dual, std::list<size_t> const & dualIndices)
@@ -390,7 +394,10 @@ public:
         }
 
         for (size_t edgeIdx = 0ul; edgeIdx < maxProfit.size(); ++edgeIdx)
-            set_score(sourceNode[edgeIdx], targetNode[edgeIdx], static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
+        {
+            pssm->set(seqIdx, sourceNode[edgeIdx], targetNode[edgeIdx],
+                      static_cast<int32_t>(maxProfit[edgeIdx] * factor2int));
+        }
     }
 
     float valid_solution(std::vector<float> & subgradient, std::list<size_t> & subgradientIndices,
