@@ -265,7 +265,7 @@ private:
         getOptionValue(refFile, parser, "reffile");
         dotplotFiles.resize(getOptionValueCount(parser, "dotplot"));
         for (size_t idx = 0ul; idx < dotplotFiles.size(); ++idx)
-            getOptionValue(dotplotFiles[idx], parser, "dotplots", idx);
+            getOptionValue(dotplotFiles[idx], parser, "dotplot", idx);
 
         if (inFile.empty() && dotplotFiles.empty())
         {
