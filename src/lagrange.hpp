@@ -78,9 +78,38 @@ private:
     float bestStructuralAlignmentScore;
     //Alignment bestAlignment;
 
-    std::vector<size_t> sourceNode;
-    std::vector<size_t> targetNode;
-    std::map<PosPair, size_t> getEdgeIdx;
+//    std::vector<size_t> sourceNode;
+//    std::vector<size_t> targetNode;
+//    std::map<PosPair, size_t> getEdgeIdx;
+
+    struct
+    {
+        std::vector<bool> active;
+        size_t size;
+        size_t dim;
+
+        size_t index(size_t source, size_t target) const
+        {
+            return dim * source + target;
+        }
+
+        size_t source(size_t edgeId) const
+        {
+            return edgeId / dim;
+        }
+
+        size_t target(size_t edgeId) const
+        {
+            return edgeId % dim;
+        }
+
+        bool nonCrossing (size_t idA, size_t idB) const
+        {
+            bool const smallerA = source(idA) < source(idB) && target(idA) < target(idB);
+            bool const smallerB = source(idB) < source(idA) && target(idB) < target(idA);
+            return smallerA || smallerB;
+        }
+    } edges;
 
     std::pair<seqan::RnaStructureGraph, seqan::RnaStructureGraph> bppGraphs;
 
@@ -117,13 +146,6 @@ private:
             float probability = seqan::cargo(seqan::findEdge(graph.inter, origin, partner));
             contacts.emplace_back(probability, partner);
         }
-    }
-
-    bool nonCrossingEdges (size_t edgeA, size_t edgeB)
-    {
-        bool smallerA = sourceNode[edgeA] < sourceNode[edgeB] && targetNode[edgeA] < targetNode[edgeB];
-        bool smallerB = sourceNode[edgeB] < sourceNode[edgeA] && targetNode[edgeB] < targetNode[edgeA];
-        return smallerA || smallerB;
     }
 
     void adaptPriorityQ(PosPair pair, float value)
@@ -209,9 +231,9 @@ private:
         return gapScore;
     }
 
-    inline float getSeqScore(RnaScoreMatrix const & mat, size_t edgeIdx)
+    inline float getSeqScore(RnaScoreMatrix const & mat, size_t idx)
     {
-        return sequenceScaleFactor * seqan::score(mat, sequenceA[sourceNode[edgeIdx]], sequenceB[targetNode[edgeIdx]]);
+        return sequenceScaleFactor * seqan::score(mat, sequenceA[edges.source(idx)], sequenceB[edges.target(idx)]);
     }
 
 public:
@@ -233,21 +255,23 @@ public:
         // - provide a mapping between indices (indexing the dual variables
         //   and the actual pair of alignment edges
 
-        float const avSeqId = generateEdges(getEdgeIdx, sequenceA, sequenceB, params.rnaScore,
+        edges.active.resize(seqLen.first * seqLen.second);
+        edges.size = edges.active.size();
+        edges.dim = seqLen.second;
+        float const avSeqId = generateEdges(edges.active, sequenceA, sequenceB, params.rnaScore,
                                             params.suboptimalDiff);
         sequenceScaleFactor = params.balance * avSeqId + params.sequenceScale;
-        size_t numEdges = getEdgeIdx.size();
 
-        sourceNode.reserve(numEdges);
-        targetNode.reserve(numEdges);
-        priorityQ.resize(numEdges);
-        dualToPairedEdges.reserve(numEdges);
+//        sourceNode.reserve(edges.active.size());
+//        targetNode.reserve(edges.active.size());
+        priorityQ.resize(edges.active.size());
+        dualToPairedEdges.reserve(edges.active.size());
 
-        for (std::pair<PosPair const, size_t> const & edge : getEdgeIdx)
-        {
-            sourceNode.push_back(edge.first.first);
-            targetNode.push_back(edge.first.second);
-        }
+//        for (std::pair<PosPair const, size_t> const & edge : getEdgeIdx)
+//        {
+//            sourceNode.push_back(edge.first.first);
+//            targetNode.push_back(edge.first.second);
+//        }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
         libraryScore = std::make_pair(params.libraryScoreMin, params.libraryScoreMax);
         libraryScoreIsLinear = params.libraryScoreIsLinear;
@@ -255,14 +279,15 @@ public:
         // start
 
         dimension = 0ul;
-        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
+        for (size_t edgeIdx = 0ul; edgeIdx < edges.size; ++edgeIdx)
         {
-            size_t headNode = sourceNode[edgeIdx];
-            size_t tailNode = targetNode[edgeIdx];
+            if (!edges.active[edgeIdx])
+                continue;
+
             std::vector<Contact> headContact;
             std::vector<Contact> tailContact;
-            extractContacts(headContact, bppGraphs.first, headNode);
-            extractContacts(tailContact, bppGraphs.second, tailNode);
+            extractContacts(headContact, bppGraphs.first, edges.source(edgeIdx));
+            extractContacts(tailContact, bppGraphs.second, edges.target(edgeIdx));
 
             float alignScore = getSeqScore(params.rnaScore, edgeIdx);
 
@@ -275,10 +300,9 @@ public:
                 {
                     for (Contact & tail : tailContact)
                     {
-                        auto partnerIter = getEdgeIdx.find(std::make_pair(head.second, tail.second));
-                        if (partnerIter != getEdgeIdx.end() && nonCrossingEdges(edgeIdx, partnerIter->second))
+                        size_t partnerIdx = edges.index(head.second, tail.second);
+                        if (edges.active[partnerIdx] && edges.nonCrossing(edgeIdx, partnerIdx))
                         {
-                            size_t partnerIdx = partnerIter->second;
                             PosPair interaction{edgeIdx, partnerIdx};
                             float structScore = 0.5f * (head.first + tail.first);
                             structureScore[interaction] = structScore;
@@ -286,9 +310,9 @@ public:
                             // insert element into the priority queue
                             auto res = priorityQ[edgeIdx].emplace(-(structScore + alignScore), partnerIdx);
                             edgeToPriorityQ[interaction] = res.first;
-                            _LOG(3, "     dual idx " << dimension << " = (" << sourceNode[edgeIdx]
-                                                     << "-" << targetNode[edgeIdx] << ") -> (" << sourceNode[partnerIdx]
-                                                     << "-" << targetNode[partnerIdx] << ")" << std::endl);
+                            _LOG(3, "     dual idx " << dimension << " = (" << edges.source(edgeIdx)
+                                                     << "-" << edges.target(edgeIdx) << ") -> (" << edges.source(partnerIdx)
+                                                     << "-" << edges.target(partnerIdx) << ")" << std::endl);
                             pairedEdgesToDual[interaction] = dimension++;
                             dualToPairedEdges.emplace_back(edgeIdx, partnerIdx);
                         }
@@ -302,10 +326,11 @@ public:
         // l or m edge
         gap_open = params.rnaScore.data_gap_open;
         gap_extend = params.rnaScore.data_gap_extend;
-        for (size_t edgeIdx = 0ul; edgeIdx < sourceNode.size(); ++edgeIdx)
+        for (size_t edgeIdx = 0ul; edgeIdx < edges.size; ++edgeIdx)
         {
-            pssm->set(seqIdx, sourceNode[edgeIdx], targetNode[edgeIdx],
-                      static_cast<int32_t>(-priorityQ[edgeIdx].begin()->first * factor2int));
+            if (edges.active[edgeIdx])
+                pssm->set(seqIdx, edges.source(edgeIdx), edges.target(edgeIdx),
+                          static_cast<int32_t>(-priorityQ[edgeIdx].begin()->first * factor2int));
         }
     }
 
@@ -316,7 +341,7 @@ public:
             PosPair pair = dualToPairedEdges[dualIdx]; // (l,m)
             adaptPriorityQ(pair, getSeqScore(mat, pair.first) + structureScore[pair] + dual[dualIdx]);
             assert(!priorityQ.empty());
-            pssm->set(seqIdx, sourceNode[pair.first], targetNode[pair.first],
+            pssm->set(seqIdx, edges.source(pair.first), edges.target(pair.first),
                       static_cast<int32_t>(-priorityQ[pair.first].begin()->first * factor2int));
         }
     }
@@ -329,14 +354,12 @@ public:
 
         std::vector<size_t> currentStructuralAlignment;
         std::vector<bool> inSolution;
-        inSolution.resize(sourceNode.size(), false);
+        inSolution.resize(edges.size, false);
 
         for (PosPair line : lines)
         {
-            auto edgeIdxIt = getEdgeIdx.find(line);
-            SEQAN_ASSERT_MSG(edgeIdxIt != getEdgeIdx.end(), "Alignment match where no alignment edge is defined!");
-
-            size_t edgeIdx = edgeIdxIt->second;
+            size_t edgeIdx = edges.index(line.first, line.second);
+            SEQAN_ASSERT_MSG(edges.active[edgeIdx], "Alignment match where no alignment edge is defined!");
             currentStructuralAlignment.push_back(edgeIdx);
             inSolution[edgeIdx] = true;
         }
@@ -414,8 +437,8 @@ public:
         for (size_t idx : currentStructuralAlignment)
         {
             size_t const & maxPE = priorityQ[idx].begin()->second;
-            _LOG(3, "     Alignment[" << idx << "; " << sourceNode[idx] << "," << targetNode[idx] << "] maxProfitEdge ["
-                                      << maxPE << "; " << sourceNode[maxPE] << "," << targetNode[maxPE] << "] score "
+            _LOG(3, "     Alignment[" << idx << "; " << edges.source(idx) << "," << edges.target(idx) << "] maxProfitEdge ["
+                                      << maxPE << "; " << edges.source(maxPE) << "," << edges.target(maxPE) << "] score "
                                       << -priorityQ[idx].begin()->first << " inSolution " << inSolution[maxPE]
                                       << " rec " << (priorityQ[maxPE].begin()->second == idx) << std::endl);
         }
@@ -460,13 +483,13 @@ public:
             {
                 auto val = static_cast<unsigned>(edgeMatching.count(idx) * (-priorityQ[idx].begin()->first - minScore)
                                                                          * div);
-                structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1, libraryScore.first + val);
+                structureLines.emplace_back(edges.source(idx) + 1, edges.target(idx) + 1, libraryScore.first + val);
             }
         }
         else
         {
             for (size_t idx : bestStructuralAlignment)
-                structureLines.emplace_back(sourceNode[idx] + 1, targetNode[idx] + 1,
+                structureLines.emplace_back(edges.source(idx) + 1, edges.target(idx) + 1,
                                             edgeMatching.count(idx) * 500u + 500u);
         }
         return structureLines;

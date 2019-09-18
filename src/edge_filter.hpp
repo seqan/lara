@@ -128,7 +128,7 @@ public:
     }
 };
 
-float generateEdges(std::map<PosPair, size_t> & edges,  // OUT
+float generateEdges(std::vector<bool> & edges,          // OUT
                     seqan::Rna5String const & seqA,     // IN
                     seqan::Rna5String const & seqB,     // IN
                     RnaScoreMatrix const & scoreMatrix, // IN
@@ -143,7 +143,6 @@ float generateEdges(std::map<PosPair, size_t> & edges,  // OUT
     size_t const lenA = seqan::length(seqA);
     size_t const lenB = seqan::length(seqB);
 
-    size_t edgeIdx = 0ul;
     for (size_t a = 0ul; a < lenA; ++a)
         for (size_t b = 0ul; b < lenB; ++b)
             if (forward.getPrefixScore(a, b)
@@ -151,7 +150,7 @@ float generateEdges(std::map<PosPair, size_t> & edges,  // OUT
                 + backward.getPrefixScore(lenA - a - 1, lenB - b - 1)
                 >= threshold)
             {
-                edges.emplace_hint(edges.end(), std::make_pair(a, b), edgeIdx++);
+                edges[lenB * a + b] = true;
             }
 
     // Return a measure of sequence identity: average score per alignment column.
