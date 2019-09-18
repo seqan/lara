@@ -53,7 +53,29 @@
 #include <lemon/concepts/graph.h>
 #endif
 
-#include "data_types.hpp"
+namespace lara
+{
+
+typedef std::tuple<float, size_t, size_t> Interaction;    // probability, lineL, lineR
+typedef std::set<Interaction>::iterator InteractionIterator;
+typedef std::pair<InteractionIterator, InteractionIterator> EdgeConflict;
+typedef std::set<InteractionIterator> InteractionSet;
+
+} // namespace lara
+
+namespace std
+{
+
+template <>
+struct less<lara::InteractionIterator>
+{
+    bool operator()(const lara::InteractionIterator & lhs, const lara::InteractionIterator & rhs) const
+    {
+        return make_pair(get<1>(*lhs), get<2>(*lhs)) < make_pair(get<1>(*rhs), get<2>(*rhs));
+    }
+};
+
+} // namespace std
 
 namespace lara
 {
@@ -62,7 +84,6 @@ class Matching
 {
 private:
     std::map<size_t, size_t> contacts;
-    std::vector<float> const & sequencesScore;
     std::vector<std::vector<Contact>> const & possiblePartners;
     size_t const algorithm;
 
@@ -120,25 +141,15 @@ private:
     }
 
     float computeGreedyMatching(std::vector<size_t> const & currentAlignment,
-                                std::vector<bool> const & inSolution,
                                 size_t lookahead = 5ul)
     {
         // fill the priority queue with interaction edges
         float score = 0.0f;
         std::set<Interaction> queue;
-        for (size_t const & line : currentAlignment)
-        {
-            score += sequencesScore[line];
-            for (Contact const & contact : possiblePartners[line])
-            {
-                if (line != contact.first && inSolution[contact.first])
-                {
-                    float sc = 2 * contact.second;
-                    // sc = structureScore[PosPair(line, pp)] + structureScore[PosPair(pp, line)];
-                    queue.emplace(-sc, std::min(line, contact.first), std::max(line, contact.first));
-                }
-            }
-        }
+        for (size_t idx = 0ul; idx < currentAlignment.size(); ++idx)
+            for (Contact const & contact : possiblePartners[idx])
+                queue.emplace(-2 * contact.first, currentAlignment[idx], contact.second);
+
         if (lookahead > queue.size())
             lookahead = queue.size();
         else if (lookahead == 0)
@@ -185,13 +196,10 @@ private:
      * \brief Computes a maximum weighted matching using LEMON.
      * \param[out] contacts         The pairing result of the matching.
      * \param[in]  currentAlignment The active lines, which build the alignment.
-     * \param[in]  inSolution       Boolean vector that is true at position x, iff x is an active line.
      * \returns The score of the matching.
      */
-    float computeLemonMatching(std::vector<size_t> const & currentAlignment,
-                               std::vector<bool> const & inSolution)
+    float computeLemonMatching(std::vector<size_t> const & currentAlignment)
     {
-        float score = 0.0f;
         contacts.clear();
 
         lemon::SmartGraph lemonG;
@@ -207,19 +215,19 @@ private:
         EdgeMap weight(lemonG);
         lemon::SmartGraph::EdgeMap<PosPair> interactions(lemonG);
         std::map<PosPair, bool> computed{};
-        for (size_t const & line : currentAlignment)
+        for (size_t idx = 0ul; idx < currentAlignment.size(); ++idx)
         {
-            score += sequencesScore[line];
-            for (Contact const & contact : possiblePartners[line])
+            for (Contact const & contact : possiblePartners[idx])
             {
-                PosPair interaction{line, contact.first};
+                size_t const line = currentAlignment[idx];
+                PosPair interaction{line, contact.second};
                 auto res = computed.find(interaction);
                 // if not yet computed && contact is part of alignment && not contact with itself
-                if (res == computed.end() && inSolution[contact.first] && line != contact.first)
+                if (res == computed.end())
                 {
-                    PosPair revInteraction = std::make_pair(contact.first, line);
-                    auto newEdge = lemonG.addEdge(nodes[line], nodes[contact.first]);
-                    weight[newEdge] = 2 * contact.second;
+                    PosPair revInteraction = std::make_pair(contact.second, line);
+                    auto newEdge = lemonG.addEdge(nodes[line], nodes[contact.second]);
+                    weight[newEdge] = 2 * contact.first;
                     interactions[newEdge] = interaction;
                     computed[interaction] = true;
                     computed[revInteraction] = true;
@@ -228,7 +236,6 @@ private:
         }
         lemon::MaxWeightedMatching<lemon::SmartGraph, EdgeMap> mwm(lemonG, weight);
         mwm.run();
-        float lemonweight = mwm.matchingWeight();
         for (lemon::SmartGraph::EdgeIt edgeIt(lemonG); edgeIt!=lemon::INVALID; ++edgeIt)
         {
             PosPair inter = interactions[edgeIt];
@@ -238,15 +245,15 @@ private:
                 contacts[inter.second] = inter.first;
             }
         }
-        return score + lemonweight;
+        return mwm.matchingWeight();
     }
 #endif
 
 public:
-    Matching(std::vector<float> const & sequencesScore_,
-             std::vector<std::vector<Contact>> const & possiblePartners_,
-             size_t algorithm_)
-        : contacts(), sequencesScore(sequencesScore_), possiblePartners(possiblePartners_), algorithm(algorithm_)
+    Matching(std::vector<std::vector<Contact>> const & possiblePartners_, size_t algorithm_) :
+        contacts(),
+        possiblePartners(possiblePartners_),
+        algorithm(algorithm_)
     {}
 
     std::map<size_t, size_t> getContacts()
@@ -254,16 +261,15 @@ public:
         return contacts;
     }
 
-    float computeScore(std::vector<size_t> const & currentAlignment, std::vector<bool> const & inSolution)
+    float computeScore(std::vector<size_t> const & currentAlignment)
     {
 #ifdef LEMON_FOUND
         if (algorithm == 0)
-            return computeLemonMatching(currentAlignment, inSolution);
+            return computeLemonMatching(currentAlignment);
         else
 #endif
-            return computeGreedyMatching(currentAlignment, inSolution, algorithm);
+            return computeGreedyMatching(currentAlignment, algorithm);
     }
 };
 
 } // namespace lara
-

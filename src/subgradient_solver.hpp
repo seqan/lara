@@ -92,7 +92,7 @@ public:
         remainingIterations{params.numIterations},
         sequenceIndices{indices}
     {
-        subgradient.resize(lagrange.getDimension().second);
+        subgradient.resize(lagrange.getDimension());
         dual.resize(subgradient.size());
     }
 
@@ -279,7 +279,8 @@ public:
                     ss.currentLowerBound = ss.lagrange.valid_solution(ss.subgradient, ss.subgradientIndices,
                                                                       std::make_pair(alignments[aliIdx].first[seqIdx],
                                                                                      alignments[aliIdx].second[seqIdx]),
-                                                                      params.matching);
+                                                                      params.matching,
+                                                                      params.rnaScore);
                     durationThreadMatching += Clock::now() - timeCurrent;
 
                     // compare upper and lower bound
@@ -365,7 +366,7 @@ public:
                     else
                     {
                         timeCurrent = Clock::now();
-                        ss.lagrange.updateScores(ss.dual, ss.subgradientIndices);
+                        ss.lagrange.updateScores(ss.dual, ss.subgradientIndices, params.rnaScore);
                         durationThreadUpdate += Clock::now() - timeCurrent;
                     }
                 }

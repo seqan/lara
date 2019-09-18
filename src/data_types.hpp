@@ -70,23 +70,15 @@ enum ScoringMode
 //    FIXEDINTER
 //};
 
-//! \brief Score Matrix type used in LaRA.
-typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> RnaScoreMatrix;
-
 //! \brief Pair of positions (usually in first and second sequence)
-typedef std::pair<size_t, size_t>                           PosPair;
-typedef std::pair<size_t, float>                            Contact;
-typedef std::set<std::pair<float, size_t>>                  PriorityQueue;
+typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>>   RnaScoreMatrix;
+typedef std::pair<size_t, size_t>                              PosPair;
+typedef std::pair<float, size_t>                               Contact;
+typedef std::set<Contact>                                      PriorityQueue;
 typedef seqan::Gaps<seqan::String<unsigned>, seqan::ArrayGaps> GappedSeq;
-typedef std::pair<GappedSeq, GappedSeq>                     Alignment;
-typedef std::tuple<float, size_t, size_t>                   Interaction;    // probability, lineL, lineR
-typedef std::set<Interaction>::iterator                     InteractionIterator;
-typedef std::pair<InteractionIterator, InteractionIterator> EdgeConflict;
-typedef std::set<InteractionIterator>                       InteractionSet;
-typedef int32_t                                             ScoreType;
-typedef std::function<void(size_t, size_t, ScoreType)>      SetScoreFunction;
-
-typedef std::chrono::steady_clock                           Clock;
+typedef std::pair<GappedSeq, GappedSeq>                        Alignment;
+typedef int32_t                                                ScoreType;
+typedef std::chrono::steady_clock                              Clock;
 
 float const negInfinity = std::numeric_limits<float>::lowest();
 float const posInfinity = std::numeric_limits<float>::max();
@@ -100,17 +92,3 @@ inline typename duration_unit::rep timeDiff(Clock::time_point start)
 }
 
 } // namespace lara
-
-namespace std
-{
-
-template <>
-struct less<lara::InteractionIterator>
-{
-    bool operator()(const lara::InteractionIterator & lhs, const lara::InteractionIterator & rhs) const
-    {
-        return make_pair(get<1>(*lhs), get<2>(*lhs)) < make_pair(get<1>(*rhs), get<2>(*rhs));
-    }
-};
-
-} // namespace std
