@@ -39,9 +39,9 @@
 
 #include <cstdint>
 #include <iostream>
-#include <map>
 #include <set>
 #include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -83,7 +83,7 @@ namespace lara
 class Matching
 {
 private:
-    std::map<size_t, size_t> contacts;
+    std::unordered_map<size_t, size_t> contacts;
     std::vector<std::vector<Contact>> const & possiblePartners;
     size_t const algorithm;
 
@@ -203,7 +203,7 @@ private:
         contacts.clear();
 
         lemon::SmartGraph lemonG;
-        std::map<size_t, lemon::SmartGraph::Node> nodes{};
+        std::unordered_map<size_t, lemon::SmartGraph::Node> nodes{};
 
         for (size_t const & line : currentAlignment)
         {
@@ -214,24 +214,13 @@ private:
         typedef lemon::SmartGraph::EdgeMap<float> EdgeMap;
         EdgeMap weight(lemonG);
         lemon::SmartGraph::EdgeMap<PosPair> interactions(lemonG);
-        std::map<PosPair, bool> computed{};
         for (size_t idx = 0ul; idx < currentAlignment.size(); ++idx)
         {
             for (Contact const & contact : possiblePartners[idx])
             {
-                size_t const line = currentAlignment[idx];
-                PosPair interaction{line, contact.second};
-                auto res = computed.find(interaction);
-                // if not yet computed && contact is part of alignment && not contact with itself
-                if (res == computed.end())
-                {
-                    PosPair revInteraction = std::make_pair(contact.second, line);
-                    auto newEdge = lemonG.addEdge(nodes[line], nodes[contact.second]);
-                    weight[newEdge] = 2 * contact.first;
-                    interactions[newEdge] = interaction;
-                    computed[interaction] = true;
-                    computed[revInteraction] = true;
-                }
+                auto newEdge = lemonG.addEdge(nodes[currentAlignment[idx]], nodes[contact.second]);
+                weight[newEdge] = 2 * contact.first;
+                interactions[newEdge] = std::make_pair(currentAlignment[idx], contact.second);
             }
         }
         lemon::MaxWeightedMatching<lemon::SmartGraph, EdgeMap> mwm(lemonG, weight);
@@ -250,13 +239,13 @@ private:
 #endif
 
 public:
-    Matching(std::vector<std::vector<Contact>> const & possiblePartners_, size_t algorithm_) :
+    explicit Matching(std::vector<std::vector<Contact>> const & possiblePartners_, size_t algorithm_) :
         contacts(),
         possiblePartners(possiblePartners_),
         algorithm(algorithm_)
     {}
 
-    std::map<size_t, size_t> getContacts()
+    std::unordered_map<size_t, size_t> getContacts()
     {
         return contacts;
     }

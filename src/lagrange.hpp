@@ -40,9 +40,9 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
-#include <map>
 #include <set>
 #include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -68,7 +68,7 @@ private:
     size_t dimension;
 
     std::vector<size_t> bestStructuralAlignment;
-    std::map<size_t, size_t> edgeMatching;
+    std::unordered_map<size_t, size_t> edgeMatching;
     std::vector<PosPair> lines;
 
     seqan::Rna5String sequenceA;
@@ -76,17 +76,12 @@ private:
 
     // the best structural alignment score found so far
     float bestStructuralAlignmentScore;
-    //Alignment bestAlignment;
 
-//    std::vector<size_t> sourceNode;
-//    std::vector<size_t> targetNode;
-//    std::map<PosPair, size_t> getEdgeIdx;
-
-    struct
+    struct EdgeManager
     {
-        std::vector<bool> active;
-        size_t size;
-        size_t dim;
+        std::vector<bool> active{};
+        size_t size{};
+        size_t dim{};
 
         size_t index(size_t source, size_t target) const
         {
@@ -114,16 +109,16 @@ private:
     std::pair<seqan::RnaStructureGraph, seqan::RnaStructureGraph> bppGraphs;
 
     // scores
-    std::map<PosPair, float> structureScore;
+    std::vector<std::unordered_map<size_t, float>> structureScore;
 
     // every alignment edge holds a priority queue that handles the possible partner edges
     // - the second argument denotes the index of the alignment edges
     // - the first argument holds the actual profit between this pair of alignment edges
     std::vector<PriorityQueue> priorityQ;
-    std::map<PosPair, PriorityQueue::iterator> edgeToPriorityQ;
+    std::vector<std::unordered_map<size_t, PriorityQueue::iterator>> edgeToPriorityQ;
 
     // mapping from pair of edge indices to corresponding dual variable
-    std::map<PosPair, size_t> pairedEdgesToDual; // former _IndexToY
+    std::vector<std::unordered_map<size_t, size_t>> pairedEdgesToDual; // former _IndexToY
 
     // mapping from the index of the dual variable to the pair of alignment edge indices
     std::vector<PosPair> dualToPairedEdges; // former _YToIndex
@@ -150,8 +145,8 @@ private:
 
     void adaptPriorityQ(PosPair pair, float value)
     {
-        priorityQ[pair.first].erase(edgeToPriorityQ[pair]);
-        edgeToPriorityQ[pair] = priorityQ[pair.first].emplace(-value, pair.second).first;
+        priorityQ[pair.first].erase(edgeToPriorityQ[pair.first][pair.second]);
+        edgeToPriorityQ[pair.first][pair.second] = priorityQ[pair.first].emplace(-value, pair.second).first;
     }
 
     // return gap score
@@ -262,16 +257,12 @@ public:
                                             params.suboptimalDiff);
         sequenceScaleFactor = params.balance * avSeqId + params.sequenceScale;
 
-//        sourceNode.reserve(edges.active.size());
-//        targetNode.reserve(edges.active.size());
         priorityQ.resize(edges.active.size());
+        edgeToPriorityQ.resize(edges.active.size());
+        structureScore.resize(edges.active.size());
+        pairedEdgesToDual.resize(edges.active.size());
         dualToPairedEdges.reserve(edges.active.size());
 
-//        for (std::pair<PosPair const, size_t> const & edge : getEdgeIdx)
-//        {
-//            sourceNode.push_back(edge.first.first);
-//            targetNode.push_back(edge.first.second);
-//        }
         bppGraphs = std::make_pair(seqan::front(recordA.bppMatrGraphs), seqan::front(recordB.bppMatrGraphs));
         libraryScore = std::make_pair(params.libraryScoreMin, params.libraryScoreMax);
         libraryScoreIsLinear = params.libraryScoreIsLinear;
@@ -291,7 +282,7 @@ public:
 
             float alignScore = getSeqScore(params.rnaScore, edgeIdx);
 
-            structureScore[std::make_pair(edgeIdx, edgeIdx)] = negInfinity;
+            structureScore[edgeIdx][edgeIdx] = negInfinity;
             priorityQ[edgeIdx].emplace(-alignScore, edgeIdx);
 
             if (!headContact.empty() && !tailContact.empty()) // there are interactions
@@ -303,17 +294,15 @@ public:
                         size_t partnerIdx = edges.index(head.second, tail.second);
                         if (edges.active[partnerIdx] && edges.nonCrossing(edgeIdx, partnerIdx))
                         {
-                            PosPair interaction{edgeIdx, partnerIdx};
                             float structScore = 0.5f * (head.first + tail.first);
-                            structureScore[interaction] = structScore;
+                            structureScore[edgeIdx][partnerIdx] = structScore;
 
                             // insert element into the priority queue
-                            auto res = priorityQ[edgeIdx].emplace(-(structScore + alignScore), partnerIdx);
-                            edgeToPriorityQ[interaction] = res.first;
+                            edgeToPriorityQ[edgeIdx][partnerIdx] = priorityQ[edgeIdx].emplace(-(structScore + alignScore), partnerIdx).first;
                             _LOG(3, "     dual idx " << dimension << " = (" << edges.source(edgeIdx)
                                                      << "-" << edges.target(edgeIdx) << ") -> (" << edges.source(partnerIdx)
                                                      << "-" << edges.target(partnerIdx) << ")" << std::endl);
-                            pairedEdgesToDual[interaction] = dimension++;
+                            pairedEdgesToDual[edgeIdx][partnerIdx] = dimension++;
                             dualToPairedEdges.emplace_back(edgeIdx, partnerIdx);
                         }
                     }
@@ -339,7 +328,7 @@ public:
         for (size_t dualIdx : dualIndices)
         {
             PosPair pair = dualToPairedEdges[dualIdx]; // (l,m)
-            adaptPriorityQ(pair, getSeqScore(mat, pair.first) + structureScore[pair] + dual[dualIdx]);
+            adaptPriorityQ(pair, getSeqScore(mat, pair.first) + structureScore[pair.first][pair.second] + dual[dualIdx]);
             assert(!priorityQ.empty());
             pssm->set(seqIdx, edges.source(pair.first), edges.target(pair.first),
                       static_cast<int32_t>(-priorityQ[pair.first].begin()->first * factor2int));
@@ -372,8 +361,8 @@ public:
             if (inSolution[maxPE] && priorityQ[maxPE].begin()->second == idx)
                 continue;
 
-            auto dualIt = pairedEdgesToDual.find(std::make_pair(idx, maxPE));
-            if (dualIt != pairedEdgesToDual.end())
+            auto dualIt = pairedEdgesToDual[idx].find(maxPE);
+            if (dualIt != pairedEdgesToDual[idx].end())
             {
                 subgradient[dualIt->second] = 1.0f;
                 subgradientIndices.push_back(dualIt->second);
@@ -385,8 +374,8 @@ public:
                 exit(1);
             }
 
-            dualIt = pairedEdgesToDual.find(std::make_pair(maxPE, idx));
-            if (dualIt != pairedEdgesToDual.end())
+            dualIt = pairedEdgesToDual[maxPE].find(idx);
+            if (dualIt != pairedEdgesToDual[maxPE].end())
             {
                 subgradient[dualIt->second] = -1.0f;
                 subgradientIndices.push_back(dualIt->second);
@@ -403,7 +392,7 @@ public:
         for (size_t idx : currentStructuralAlignment)
             lowerBound += getSeqScore(mat, idx);
 
-        std::map<size_t, size_t> contacts{};
+        std::unordered_map<size_t, size_t> contacts{};
         if (!subgradientIndices.empty())
         {
             std::vector<std::vector<Contact>> partners{};
@@ -413,7 +402,7 @@ public:
                 size_t line = currentStructuralAlignment[idx];
                 for (auto const & it : priorityQ[line])
                     if (inSolution[it.second] && line < it.second)
-                        partners[idx].emplace_back(structureScore[std::make_pair(line, it.second)], it.second);
+                        partners[idx].emplace_back(structureScore[line][it.second], it.second);
             }
 
             Matching mwm(partners, lookahead);
@@ -427,7 +416,7 @@ public:
                 size_t const & maxPE = priorityQ[idx].begin()->second;
                 if (idx != maxPE)
                 {
-                    lowerBound += structureScore[PosPair(idx, maxPE)];
+                    lowerBound += structureScore[idx][maxPE];
                     contacts[idx] = maxPE;
                     contacts[maxPE] = idx;
                 }
@@ -478,7 +467,7 @@ public:
                 [] (PriorityQueue const & a, PriorityQueue const & b) { return a.begin()->first > b.begin()->first; });
             float const minScore = -(mm.first)->begin()->first;
             float const maxScore = -(mm.second)->begin()->first;
-            float const div = 1. * (libraryScore.second - libraryScore.first) / (maxScore - minScore);
+            float const div = 1.f * (libraryScore.second - libraryScore.first) / (maxScore - minScore);
             for (size_t idx : bestStructuralAlignment)
             {
                 auto val = static_cast<unsigned>(edgeMatching.count(idx) * (-priorityQ[idx].begin()->first - minScore)
