@@ -352,19 +352,19 @@ public:
         }
     }
 
-    void addAlignment(Lagrange const & lagrange, PosPair const & seqIndices)
+    void addAlignment(Lagrange const & lagrange, PosPair const & seqIndices, Parameters const & params)
     {
         ++numAlignments;
         if (seqIndices.first < seqIndices.second)
         {
             sstream << "# " << (seqIndices.first + 1) << " " << (seqIndices.second + 1) << std::endl;
-            for (auto const & elem : lagrange.getStructureLines())
+            for (auto const & elem : lagrange.getStructureLines(params))
                 sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << std::get<2>(elem) << std::endl;
         }
         else if (seqIndices.first > seqIndices.second)
         {
             sstream << "# " << (seqIndices.second + 1) << " " << (seqIndices.first + 1) << std::endl;
-            for (auto const & elem : lagrange.getStructureLines())
+            for (auto const & elem : lagrange.getStructureLines(params))
                 sstream << std::get<1>(elem) << " " << std::get<0>(elem) << " " << std::get<2>(elem) << std::endl;
         }
         else

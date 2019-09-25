@@ -331,7 +331,7 @@ public:
                         #pragma omp critical (finished_alignment)
                         {
                             // write results
-                            results.addAlignment(ss.lagrange, ss.sequenceIndices);
+                            results.addAlignment(ss.lagrange, ss.sequenceIndices, params);
                             _LOG(2, "     Thread " << aliIdx << "." << seqIdx << " finished alignment "
                                     << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
 
