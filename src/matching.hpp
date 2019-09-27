@@ -56,7 +56,7 @@
 namespace lara
 {
 
-typedef std::tuple<float, size_t, size_t> Interaction;    // probability, lineL, lineR
+typedef std::tuple<ScoreType, size_t, size_t> Interaction;    // probability, lineL, lineR
 typedef std::set<Interaction>::iterator InteractionIterator;
 typedef std::pair<InteractionIterator, InteractionIterator> EdgeConflict;
 typedef std::set<InteractionIterator> InteractionSet;
@@ -96,7 +96,7 @@ private:
             || std::get<2>(a) == std::get<2>(b);
     }
 
-    InteractionSet solveConflicts(float & weight, std::vector<EdgeConflict> const & conflicts)
+    InteractionSet solveConflicts(ScoreType & weight, std::vector<EdgeConflict> const & conflicts)
     {
         if (conflicts.empty())
             return InteractionSet();
@@ -104,8 +104,8 @@ private:
         auto edge_cmp = [] (InteractionIterator const & a, InteractionIterator const & b) { return (*a) >= (*b); };
         InteractionIterator edgeS = std::min(conflicts.front().first, conflicts.front().second, edge_cmp);
         InteractionIterator edgeL = std::max(conflicts.front().first, conflicts.front().second, edge_cmp);
-        float weightS = -std::get<0>(*edgeS);
-        float weightL = -std::get<0>(*edgeL);
+        ScoreType weightS = -std::get<0>(*edgeS);
+        ScoreType weightL = -std::get<0>(*edgeL);
 
         if (conflicts.size() == 1)
         {
@@ -140,11 +140,11 @@ private:
         return eliminateS;
     }
 
-    float computeGreedyMatching(std::vector<size_t> const & currentAlignment,
+    ScoreType computeGreedyMatching(std::vector<size_t> const & currentAlignment,
                                 size_t lookahead = 5ul)
     {
         // fill the priority queue with interaction edges
-        float score = 0.0f;
+        ScoreType score = 0;
         std::set<Interaction> queue;
         for (size_t idx = 0ul; idx < currentAlignment.size(); ++idx)
             for (Contact const & contact : possiblePartners[idx])
@@ -174,7 +174,7 @@ private:
                         conflicts.emplace_back(*itA, *itB);
 
             // solve conflicts
-            float weight = 0.0f;
+            ScoreType weight = 0;
             InteractionSet eliminate = solveConflicts(weight, conflicts);
 
             // save MWM contacts and count score
@@ -198,7 +198,7 @@ private:
      * \param[in]  currentAlignment The active lines, which build the alignment.
      * \returns The score of the matching.
      */
-    float computeLemonMatching(std::vector<size_t> const & currentAlignment)
+    ScoreType computeLemonMatching(std::vector<size_t> const & currentAlignment)
     {
         contacts.clear();
 
@@ -211,7 +211,7 @@ private:
             nodes[line] = lemonG.addNode();
         }
 
-        typedef lemon::SmartGraph::EdgeMap<float> EdgeMap;
+        typedef lemon::SmartGraph::EdgeMap<ScoreType> EdgeMap;
         EdgeMap weight(lemonG);
         lemon::SmartGraph::EdgeMap<PosPair> interactions(lemonG);
         for (size_t idx = 0ul; idx < currentAlignment.size(); ++idx)
@@ -250,7 +250,7 @@ public:
         return contacts;
     }
 
-    float computeScore(std::vector<size_t> const & currentAlignment)
+    ScoreType computeScore(std::vector<size_t> const & currentAlignment)
     {
 #ifdef LEMON_FOUND
         if (algorithm == 0)

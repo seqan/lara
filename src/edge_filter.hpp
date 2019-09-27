@@ -55,37 +55,37 @@ private:
     size_t const lenA;
     size_t const lenB;
 
-    std::vector<float> matrixM;
-    std::vector<float> matrixH;
-    std::vector<float> matrixV;
+    std::vector<ScoreType> matrixM;
+    std::vector<ScoreType> matrixH;
+    std::vector<ScoreType> matrixV;
 
     //!\brief Shortcut for retrieving the specified matrix entry.
-    float & get(std::vector<float> & matrix, size_t posA, size_t posB) const
+    inline ScoreType & get(std::vector<ScoreType> & matrix, size_t posA, size_t posB) const
     {
         return matrix[(lenB + 1ul) * posA + posB];
     }
 
 public:
     explicit
-    PairwiseGotoh(seqan::Rna5String const & seqA, seqan::Rna5String const & seqB, RnaScoreMatrix const & score)
-        : lenA(seqan::length(seqA)), lenB(seqan::length(seqB))
+    PairwiseGotoh(seqan::Rna5String const & seqA, seqan::Rna5String const & seqB, SeqScoreMatrix const & score):
+        lenA(seqan::length(seqA)), lenB(seqan::length(seqB))
     {
         matrixM.resize((lenA + 1) * (lenB + 1));
         matrixH.resize((lenA + 1) * (lenB + 1));
         matrixV.resize((lenA + 1) * (lenB + 1));
-        float const go = score.data_gap_open;
-        float const ge = score.data_gap_extend;
+        ScoreType const go = score.data_gap_open;
+        ScoreType const ge = score.data_gap_extend;
 
         // initialise DP matrix
-        get(matrixM, 0, 0) = 0.0f;
-        get(matrixH, 0, 0) = negInfinity;
-        get(matrixV, 0, 0) = negInfinity;
+        get(matrixM, 0, 0) = 0;
+        get(matrixH, 0, 0) = -infinity;
+        get(matrixV, 0, 0) = -infinity;
 
 
         for (size_t a = 0ul; a < lenA; ++a)
         {
             get(matrixM, a + 1, 0) = go + ge * a;
-            get(matrixH, a + 1, 0) = negInfinity;
+            get(matrixH, a + 1, 0) = -infinity;
             get(matrixV, a + 1, 0) = go + ge * a;
         }
 
@@ -93,7 +93,7 @@ public:
         {
             get(matrixM, 0, b + 1) = go + ge * b;
             get(matrixH, 0, b + 1) = go + ge * b;
-            get(matrixV, 0, b + 1) = negInfinity;
+            get(matrixV, 0, b + 1) = -infinity;
         }
 
         // fill DP matrix
@@ -116,30 +116,30 @@ public:
         }
     }
 
-    float getPrefixScore(size_t posA, size_t posB)
+    ScoreType getPrefixScore(size_t posA, size_t posB)
     {
         assert(posA <= lenA && posB <= lenB);
         return std::max({get(matrixM, posA, posB), get(matrixH, posA, posB), get(matrixV, posA, posB)});
     }
 
-    float getOptimalScore()
+    ScoreType getOptimalScore()
     {
         return getPrefixScore(lenA, lenB);
     }
 };
 
 float generateEdges(std::vector<bool> & edges,          // OUT
-                    seqan::Rna5String const & seqA,     // IN
-                    seqan::Rna5String const & seqB,     // IN
-                    RnaScoreMatrix const & scoreMatrix, // IN
-                    float suboptimalDiff)               // IN
+                        seqan::Rna5String const & seqA,     // IN
+                        seqan::Rna5String const & seqB,     // IN
+                        SeqScoreMatrix const & scoreMatrix, // IN
+                        ScoreType suboptimalDiff)           // IN
 {
     seqan::ModifiedString<seqan::Rna5String const, seqan::ModReverse> reverseA(seqA);
     seqan::ModifiedString<seqan::Rna5String const, seqan::ModReverse> reverseB(seqB);
     PairwiseGotoh forward(seqA, seqB, scoreMatrix);
     PairwiseGotoh backward(reverseA, reverseB, scoreMatrix);
-    assert(std::abs(forward.getOptimalScore() - backward.getOptimalScore()) < 1.e-3);
-    float const threshold = forward.getOptimalScore() - suboptimalDiff;
+    SEQAN_ASSERT_EQ(forward.getOptimalScore(), backward.getOptimalScore());
+    ScoreType const threshold = forward.getOptimalScore() - suboptimalDiff;
     size_t const lenA = seqan::length(seqA);
     size_t const lenB = seqan::length(seqB);
 
@@ -154,7 +154,7 @@ float generateEdges(std::vector<bool> & edges,          // OUT
             }
 
     // Return a measure of sequence identity: average score per alignment column.
-    return forward.getOptimalScore() / std::max(lenA, lenB);
+    return forward.getOptimalScore() / factor2int / std::max(lenA, lenB);
 }
 
 } // namespace lara

@@ -51,13 +51,6 @@
 namespace lara
 {
 
-template<typename TSequenceValue, typename TTag>
-inline void setRnaScoreMatrix(seqan::Score<float, seqan::ScoreMatrix<TSequenceValue>> & matrix, TTag)
-{
-    float const * tab = RnaScoringMatrixData_<float, TSequenceValue, TTag>::getData();
-    seqan::arrayCopy(tab, tab + RnaScoringMatrixData_<float, TSequenceValue, TTag>::TAB_SIZE, matrix.data_tab);
-}
-
 class Parameters
 {
 public:
@@ -95,7 +88,7 @@ public:
     float                    balance{};
     float                    sequenceScale{};        // scaling factor for the scores of the alignment edges
     unsigned                 structureScoring{};     // scoring mode for structures, either LOGARITHMIC or SCALE
-    RnaScoreMatrix           rnaScore{};             // scoring matrix for scoring alignment edges (sequence score)
+    SeqScoreMatrix           rnaScore{};             // scoring matrix for scoring alignment edges (sequence score)
 
     // Constructor.
     Parameters(int argc, char const ** argv) noexcept
@@ -288,22 +281,34 @@ private:
         getOptionValue(suboptimalDiff, parser, "subopt");
 
         // SCORING OPTIONS
+        seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>> mat;
         getOptionValue(balance, parser, "balance");
         getOptionValue(sequenceScale, parser, "seqscale");
         getOptionValue(structureScoring, parser, "probscoremode");
-        getOptionValue(rnaScore.data_gap_open, parser, "gapopen");
-        getOptionValue(rnaScore.data_gap_extend, parser, "gapextend");
+        getOptionValue(mat.data_gap_open, parser, "gapopen");
+        getOptionValue(mat.data_gap_extend, parser, "gapextend");
 
-        // set score matrix
+        // set integer score matrix
+        rnaScore.data_gap_open = mat.data_gap_open * factor2int;
+        rnaScore.data_gap_extend = mat.data_gap_extend * factor2int;
+
         std::string scoreMatrixFile{};
         getOptionValue(scoreMatrixFile, parser, "scorematrix");
         if (scoreMatrixFile.empty())
         {
+            using Matrix = RnaScoringMatrixData_<float, seqan::Rna5, Ribosum65N>;
+            std::transform(Matrix::getData(),
+                           Matrix::getData() + Matrix::TAB_SIZE,
+                           rnaScore.data_tab,
+                           [] (float val) { return val * factor2int; });
             _LOG(1, "   * score matrix: Ribosum65" << std::endl);
-            setRnaScoreMatrix(rnaScore, Ribosum65N());
         }
-        else if (loadScoreMatrix(rnaScore, scoreMatrixFile.c_str()))
+        else if (loadScoreMatrix(mat, scoreMatrixFile.c_str()))
         {
+            std::transform(mat.data_tab,
+                           mat.data_tab + seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>>::TAB_SIZE,
+                           rnaScore.data_tab,
+                           [] (float val) { return val * factor2int; });
             _LOG(1, "   * score matrix from file: " << scoreMatrixFile << std::endl);
         }
         else

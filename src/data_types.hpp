@@ -71,17 +71,16 @@ enum ScoringMode
 //};
 
 //! \brief Pair of positions (usually in first and second sequence)
-typedef seqan::Score<float, seqan::ScoreMatrix<seqan::Rna5>>   RnaScoreMatrix;
-typedef std::pair<size_t, size_t>                              PosPair;
-typedef std::pair<float, size_t>                               Contact;
-typedef std::set<Contact>                                      PriorityQueue;
-typedef seqan::Gaps<seqan::String<unsigned>, seqan::ArrayGaps> GappedSeq;
-typedef std::pair<GappedSeq, GappedSeq>                        Alignment;
-typedef int32_t                                                ScoreType;
-typedef std::chrono::steady_clock                              Clock;
+typedef int32_t                                                  ScoreType;
+typedef seqan::Score<ScoreType, seqan::ScoreMatrix<seqan::Rna5>> SeqScoreMatrix;
+typedef std::pair<size_t, size_t>                                PosPair;
+typedef std::pair<ScoreType, size_t>                             Contact;
+typedef std::set<Contact>                                        PriorityQueue;
+typedef seqan::Gaps<seqan::String<unsigned>, seqan::ArrayGaps>   GappedSeq;
+typedef std::pair<GappedSeq, GappedSeq>                          Alignment;
+typedef std::chrono::steady_clock                                Clock;
 
-float const negInfinity = std::numeric_limits<float>::lowest();
-float const posInfinity = std::numeric_limits<float>::max();
+ScoreType const infinity = std::numeric_limits<ScoreType>::max() / 3 * 2;
 float const factor2int = 8192.f;
 
 // Time helper functions.

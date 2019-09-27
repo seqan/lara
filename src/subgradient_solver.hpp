@@ -65,16 +65,16 @@ class SubgradientSolver
 public:
     Lagrange lagrange;
     float stepSizeFactor;
-    float bestLowerBound;
-    float bestUpperBound;
-    float currentLowerBound;
-    float currentUpperBound;
+    ScoreType bestLowerBound;
+    ScoreType bestUpperBound;
+    ScoreType currentLowerBound;
+    ScoreType currentUpperBound;
     size_t nondecreasingRounds;
     unsigned remainingIterations;
     PosPair sequenceIndices;
 
     std::vector<float> subgradient{};
-    std::vector<float> dual{};
+    std::vector<ScoreType> dual{};
     std::list<size_t> subgradientIndices{};
 
     SubgradientSolver(PosPair indices,
@@ -84,10 +84,10 @@ public:
                       size_t seqIdx):
         lagrange(store[indices.first], store[indices.second], params, score, seqIdx),
         stepSizeFactor{params.stepSizeFactor},
-        bestLowerBound{negInfinity},
-        bestUpperBound{posInfinity},
-        currentLowerBound{negInfinity},
-        currentUpperBound{posInfinity},
+        bestLowerBound{-infinity},
+        bestUpperBound{infinity},
+        currentLowerBound{-infinity},
+        currentUpperBound{infinity},
         nondecreasingRounds{0ul},
         remainingIterations{params.numIterations},
         sequenceIndices{indices}
@@ -143,21 +143,6 @@ public:
                     inputPairs.emplace(idxB, idxA);
     }
 
-    float calcStepsize(SubgradientSolver const & slv) const
-    {
-        return slv.stepSizeFactor * (slv.bestUpperBound - slv.bestLowerBound) / slv.subgradientIndices.size();
-    }
-
-    float getLowerBound(uint8_t sIdx)
-    {
-        return solvers[sIdx].bestLowerBound;
-    }
-
-    float getUpperBound(uint8_t sIdx)
-    {
-        return solvers[sIdx].bestUpperBound;
-    }
-
     void solve(lara::OutputTCoffeeLibrary & results)
     {
         _LOG(1, "3) Solve " << inputPairs.size() << " structural alignments..." << std::endl);
@@ -196,8 +181,8 @@ public:
         // Initialise the scores.
         std::vector<RnaScoreType> scores(num_threads);
         size_t const max_2nd_length = seqan::length(store[iter->second].sequence);
-        auto const go = static_cast<ScoreType>(params.rnaScore.data_gap_open * factor2int);
-        auto const ge = static_cast<ScoreType>(params.rnaScore.data_gap_extend * factor2int);
+        auto const go = static_cast<ScoreType>(params.rnaScore.data_gap_open);
+        auto const ge = static_cast<ScoreType>(params.rnaScore.data_gap_extend);
 
         // Initialise the solvers.
         solvers.reserve(num_parallel);
@@ -273,7 +258,7 @@ public:
                         continue;
 
                     SubgradientSolver & ss = solvers[idx];
-                    ss.currentUpperBound = res[seqIdx] / factor2int; // global alignment result
+                    ss.currentUpperBound = res[seqIdx]; // global alignment result
 
                     timeCurrent = Clock::now();
                     ss.currentLowerBound = ss.lagrange.valid_solution(ss.subgradient, ss.subgradientIndices,
@@ -303,7 +288,8 @@ public:
                         ss.nondecreasingRounds = 0;
                     }
 
-                    float stepSize = calcStepsize(ss);
+                    float stepSize = ss.stepSizeFactor * static_cast<float>(ss.bestUpperBound - ss.bestLowerBound) /
+                                     ss.subgradientIndices.size();
                     for (size_t si : ss.subgradientIndices)
                     {
                         ss.dual[si] -= stepSize * ss.subgradient[si];
@@ -311,21 +297,19 @@ public:
                     }
                     --ss.remainingIterations;
 
-                    SEQAN_ASSERT_MSG(!ss.subgradientIndices.empty() ||
-                                     ss.currentUpperBound - ss.currentLowerBound < 0.1f,
+                    SEQAN_ASSERT_MSG(!ss.subgradientIndices.empty() || ss.currentUpperBound == ss.currentLowerBound,
                                      (std::string{"The bounds differ, although there are no subgradients. "} +
                                          "Problem in aligning sequences " +
                                          seqan::toCString(store[ss.sequenceIndices.first].name) + " and " +
                                          seqan::toCString(store[ss.sequenceIndices.second].name)).c_str());
-                    SEQAN_ASSERT_GT_MSG(ss.bestUpperBound + params.epsilon,
-                                        ss.bestLowerBound,
-                                        (std::string{"The lower boundary exceeds the upper boundary. "} +
-                                            "Problem in aligning sequences " +
-                                            seqan::toCString(store[ss.sequenceIndices.first].name) + " and " +
-                                            seqan::toCString(store[ss.sequenceIndices.second].name)).c_str());
+                    SEQAN_ASSERT_GEQ_MSG(ss.bestUpperBound, ss.bestLowerBound,
+                                         (std::string{"The lower boundary exceeds the upper boundary. "} +
+                                             "Problem in aligning sequences " +
+                                             seqan::toCString(store[ss.sequenceIndices.first].name) + " and " +
+                                             seqan::toCString(store[ss.sequenceIndices.second].name)).c_str());
 
                     // The alignment is finished.
-                    if (ss.bestUpperBound - ss.bestLowerBound < params.epsilon || ss.remainingIterations == 0u)
+                    if (ss.bestUpperBound == ss.bestLowerBound || ss.remainingIterations == 0u)
                     {
                         PosPair currentSeqIdx{};
                         #pragma omp critical (finished_alignment)
