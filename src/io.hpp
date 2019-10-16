@@ -297,6 +297,22 @@ std::ostream & operator<<(std::ostream & stream, InputStorage & store)
     return stream;
 }
 
+// sort alignment order for the first sequence length
+struct CompareSeqLength
+{
+    InputStorage const & store;
+
+    bool operator()(PosPair lhs, PosPair rhs) const
+    {
+        if (seqan::length(store[lhs.first].sequence) > seqan::length(store[rhs.first].sequence))
+            return true;
+        else if (seqan::length(store[lhs.first].sequence) == seqan::length(store[rhs.first].sequence))
+            return seqan::length(store[lhs.second].sequence) >= seqan::length(store[rhs.second].sequence);
+        else
+            return false;
+    }
+};
+
 // FASTA output
 
 inline void printAlignment(std::ostream & stream,

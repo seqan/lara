@@ -47,8 +47,7 @@ int main (int argc, char const ** argv)
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
     lara::OutputTCoffeeLibrary tcLib(store);
-    lara::SubgradientSolverMulti solverMulti(store, params);
-    solverMulti.solve(tcLib);
+    solve(tcLib, store, params);
 
     tcLib.print(params.outFile);
     _LOG(1, "LaRA has run for " << lara::timeDiff<std::chrono::seconds>(timeLara) << " seconds." << std::endl);

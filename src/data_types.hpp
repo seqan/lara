@@ -72,6 +72,7 @@ enum ScoringMode
 
 //! \brief Pair of positions (usually in first and second sequence)
 typedef int32_t                                                  ScoreType;
+typedef uint32_t                                                 UnsignedType;
 typedef seqan::Score<ScoreType, seqan::ScoreMatrix<seqan::Rna5>> SeqScoreMatrix;
 typedef std::pair<size_t, size_t>                                PosPair;
 typedef std::pair<ScoreType, size_t>                             Contact;
