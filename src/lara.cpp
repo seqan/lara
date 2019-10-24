@@ -34,7 +34,12 @@
 #include "data_types.hpp"
 #include "io.hpp"
 #include "parameters.hpp"
+
+#ifdef SEQAN_SIMD_ENABLED
+#include "subgradient_solver_simd.hpp"
+#else
 #include "subgradient_solver.hpp"
+#endif
 
 int main (int argc, char const ** argv)
 {

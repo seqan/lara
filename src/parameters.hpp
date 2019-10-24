@@ -72,22 +72,22 @@ public:
 
     // OUTPUT OPTIONS
     std::string              outFile{};              // Name of output file (default: stdout)
-    unsigned                 libraryScoreMin{};      // specify the minimum score for the T-Coffee library
-    unsigned                 libraryScoreMax{};      // specify the maximum score for the T-Coffee library
+    UnsignedType             libraryScoreMin{};      // specify the minimum score for the T-Coffee library
+    UnsignedType             libraryScoreMax{};      // specify the maximum score for the T-Coffee library
     bool                     libraryScoreIsLinear{}; // whether T-Coffee scores are binary or linearly scaled
 
     // RUNTIME/QUALITY OPTIONS
-    unsigned                 numIterations{};        // number of iterations
-    unsigned                 maxNondecrIterations{}; // number of non-decreasing iterations
+    UnsignedType             numIterations{};        // number of iterations
+    UnsignedType             maxNondecrIterations{}; // number of non-decreasing iterations
     float                    stepSizeFactor{};       // my, necessary for computing appropriate step sizes
     float                    epsilon{};              // max distance that means equality of upper and lower bound
-    unsigned                 matching{};             // select matching algorithm
+    UnsignedType             matching{};             // select matching algorithm
     float                    suboptimalDiff{};       // Gap open and extend costs for generating the alignment edges
 
     // SCORING OPTIONS
-    float                    balance{};
+    float                    balance{};              // how much the sequence identity influences sequenceScale
     float                    sequenceScale{};        // scaling factor for the scores of the alignment edges
-    unsigned                 structureScoring{};     // scoring mode for structures, either LOGARITHMIC or SCALE
+    UnsignedType             structureScoring{};     // scoring mode for structures, either LOGARITHMIC or SCALE
     SeqScoreMatrix           rnaScore{};             // scoring matrix for scoring alignment edges (sequence score)
 
     // Constructor.
