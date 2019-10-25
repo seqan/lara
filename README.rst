@@ -41,6 +41,10 @@ Optionally, LaRA can predict the RNA structures for you if you provide
 
 * `ViennaRNA 2 <https://www.tbi.univie.ac.at/RNA/>`__
 
+To process the output for multiple alignments (3 or more sequences), you need
+
+* `T-Coffee 13 <https://github.com/cbcrg/tcoffee>`__
+
 
 Build instructions
 ------------------
@@ -72,7 +76,7 @@ Instead, you can pass at least two dot plot files, which contain the base pair p
 
 % bin/lara -d seq1_dp.ps -d seq2_dp.ps
 
-The pairwise structural alignments are printed to stdout in the T-Coffee Library format.
+The pairwise structural alignments are printed to stdout in the T-Coffee Library format (see below).
 If you want to store the result in a file, please use the `-w` option or redirect the output.
 
 ::
@@ -93,6 +97,20 @@ For a list of options, please see the help message:
 
 % bin/lara --help
 
+
+Output format
+-------------
+
+The result of LaRA is a T-Coffee library file and its format is documented
+`here <http://www.tcoffee.org/Projects/tcoffee/documentation/index.html#t-coffee-lib-format-01>`__.
+It contains the structural scores for each residue pair of each computed sequence pair.
+This file is the input for T-Coffee, which computes the multiple alignment based on the scores:
+
+::
+
+% bin/t_coffee -lib results.lib
+
+::
 
 Authorship & Copyright
 ----------------------
