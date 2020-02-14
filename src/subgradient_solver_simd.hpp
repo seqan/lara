@@ -71,7 +71,7 @@ typedef struct
     ScoreVectorType currentLower;
     ScoreVectorType currentUpper;
     UnsignedVectorType nondecreasing;
-    UnsignedVectorType stepFactor;
+    ScoreVectorType stepFactor;
     UnsignedVectorType remainingIterations;
 } BoundInfoSimd;
 
@@ -150,11 +150,11 @@ void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Par
     size_t const max_2nd_length = seqan::length(store[iter->second].sequence);
     auto const go = static_cast<ScoreType>(params.rnaScore.data_gap_open);
     auto const ge = static_cast<ScoreType>(params.rnaScore.data_gap_extend);
-    auto const stepFactor = static_cast<UnsignedType>(params.stepSizeFactor * factor2int);
+    auto const stepFactor = static_cast<ScoreType>(params.stepSizeFactor * factor2int);
 
     UnsignedVectorType const zeros = seqan::createVector<UnsignedVectorType>(0u);
     UnsignedVectorType const ones = seqan::createVector<UnsignedVectorType>(1u);
-    UnsignedVectorType const twos = seqan::createVector<UnsignedVectorType>(2u);
+    ScoreVectorType const twos = seqan::createVector<ScoreVectorType>(2);
     UnsignedVectorType const maxiter = seqan::createVector<UnsignedVectorType>(params.maxNondecrIterations);
 
     // Initialise the solvers.
@@ -218,7 +218,7 @@ void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Par
                             seqan::createVector<ScoreVectorType>(-infinity),
                             seqan::createVector<ScoreVectorType>(infinity),
                             seqan::createVector<UnsignedVectorType>(0u),
-                            seqan::createVector<UnsignedVectorType>(stepFactor),
+                            seqan::createVector<ScoreVectorType>(stepFactor),
                             seqan::createVector<UnsignedVectorType>(params.numIterations)};
 
         // prepare the dependent StringSet for the SIMD alignment
@@ -304,8 +304,17 @@ void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Par
             // decrement remaining iterations
             bound.remainingIterations -= ones;
 
-            // vector for the new step size
-            UnsignedVectorType stepSizeVec = bound.stepFactor * (bound.bestUpper - bound.bestLower);
+            // array for the new step size
+            std::array<ScoreType, simd_len> stepSizeArray;
+            seqan::storeu(stepSizeArray.data(), bound.stepFactor * (bound.bestUpper - bound.bestLower));
+
+            // array for equal bounds
+            std::array<ScoreType, simd_len> equalBounds;
+            seqan::storeu(equalBounds.data(), seqan::cmpEq(bound.bestUpper, bound.bestLower));
+
+            // array for remaining iterations
+            std::array<UnsignedType, simd_len> remainingIter;
+            seqan::storeu(remainingIter.data(), bound.remainingIterations);
 
             for (size_t idx = interval.first; idx < interval.second; ++idx)
             {
@@ -314,7 +323,7 @@ void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Par
                     continue;
                 SubgradientSolver & ss = solvers[idx];
 
-                float stepSize = static_cast<float>(stepSizeVec[seqIdx]) / factor2int / ss.subgradientIndices.size();
+                float stepSize = static_cast<float>(stepSizeArray[seqIdx]) / factor2int / ss.subgradientIndices.size();
                 for (size_t si : ss.subgradientIndices)
                 {
                     ss.dual[si] -= stepSize * ss.subgradient[si];
@@ -333,7 +342,7 @@ void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Par
                                          seqan::toCString(store[ss.sequenceIndices.second].name)).c_str());
 
                 // The alignment is finished.
-                if (bound.bestUpper[seqIdx] == bound.bestLower[seqIdx] || bound.remainingIterations[seqIdx] == 0u)
+                if (equalBounds[seqIdx] || remainingIter[seqIdx] == 0)
                 {
                     PosPair currentSeqIdx{};
                     #pragma omp critical (finished_alignment)
