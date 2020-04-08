@@ -39,7 +39,9 @@
 
 #include <algorithm>
 #include <cctype>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <ostream>
 #include <sstream>
 #include <vector>
@@ -113,6 +115,7 @@ private:
             return;
 
         seqan::RnaStructFileIn rnaStructFile;
+        seqan::SeqFileIn seqFileIn;
         if (seqan::open(rnaStructFile, filename.c_str(), seqan::OPEN_RDONLY))
         {
             seqan::RnaHeader header;                   // dummy, just for Ebpseq files
@@ -125,10 +128,9 @@ private:
             }
             seqan::close(rnaStructFile);
         }
-        else
+        else if (seqan::open(seqFileIn, filename.c_str(), seqan::OPEN_RDONLY))
         {
             // Read the file.
-            seqan::SeqFileIn seqFileIn(filename.c_str());
             seqan::StringSet<seqan::CharString>  ids;
             seqan::StringSet<seqan::IupacString> seqs;
             seqan::StringSet<seqan::CharString>  quals;
@@ -147,6 +149,20 @@ private:
                 // For FastQ files: add quality annotation.
                 if (seqan::length(quals) == seqan::length(ids))
                     rec.quality = quals[idx];
+                push_back(rec);
+            }
+        }
+        else // try to read Fasta
+        {
+            uint32_t recCount = 0;
+            std::ifstream input(filename);
+            std::istreambuf_iterator<char> iter(input);
+            std::istreambuf_iterator<char> end_iter;
+            while (!iter.equal(end_iter))
+            {
+                seqan::RnaRecord rec{};
+                seqan::readRecord(rec.name, rec.sequence, iter, seqan::Fasta());
+                rec.recordID = recCount++;
                 push_back(rec);
             }
         }
