@@ -72,6 +72,7 @@ public:
 
     // OUTPUT OPTIONS
     std::string              outFile{};              // Name of output file (default: stdout)
+    std::string              outFormat{};            // Format of output (fasta, lib)
     UnsignedType             libraryScoreMin{};      // specify the minimum score for the T-Coffee library
     UnsignedType             libraryScoreMax{};      // specify the maximum score for the T-Coffee library
     bool                     libraryScoreIsLinear{}; // whether T-Coffee scores are binary or linearly scaled
@@ -154,6 +155,12 @@ private:
                                          "Default: 500 1000 (binary).",
                                          ArgParseArgument::INTEGER, "MIN MAX",
                                          false, 2));
+
+        addOption(parser, ArgParseOption("o", "outformat",
+                                         "The output format.",
+                                         ArgParseOption::STRING));
+        setDefaultValue(parser, "o", "lib");
+        setValidValues(parser, "o", "lib pairs");
 
         // Runtime/Quality options
         addSection(parser, "Runtime/Quality Options");
@@ -271,6 +278,7 @@ private:
         getOptionValue(libraryScoreMin, parser, "libscore", 0);
         getOptionValue(libraryScoreMax, parser, "libscore", 1);
         libraryScoreIsLinear = isSet(parser, "libscore");
+        getOptionValue(outFormat, parser, "outformat");
 
         // RUNTIME/QUALITY OPTIONS
         getOptionValue(numIterations, parser, "numiter");

@@ -105,7 +105,7 @@ public:
     ~SubgradientSolver()                                     = default;
 };
 
-void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Parameters & params)
+void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters & params)
 {
     // Add the sequence index pairs to the set of alignments, longer sequence first.
     std::set<PosPair, CompareSeqLength> inputPairs(CompareSeqLength{store});
@@ -348,7 +348,7 @@ void solve(lara::OutputTCoffeeLibrary & results, InputStorage const & store, Par
                     #pragma omp critical (finished_alignment)
                     {
                         // write results
-                        results.addAlignment(ss.lagrange, ss.sequenceIndices, params);
+                        results.addAlignment(ss.lagrange.getStructureLines(params, ss.sequenceIndices));
                         _LOG(2, "     Thread " << aliIdx << "." << seqIdx << " finished alignment "
                                 << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
 

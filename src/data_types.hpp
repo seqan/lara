@@ -79,6 +79,7 @@ typedef std::pair<ScoreType, size_t>                             Contact;
 typedef std::set<Contact>                                        PriorityQueue;
 typedef seqan::Gaps<seqan::String<unsigned>, seqan::ArrayGaps>   GappedSeq;
 typedef std::pair<GappedSeq, GappedSeq>                          Alignment;
+typedef std::pair<PosPair, std::vector<std::tuple<size_t, size_t, unsigned>>> WeightedAlignedColumns;
 typedef std::chrono::steady_clock                                Clock;
 
 ScoreType const infinity = std::numeric_limits<ScoreType>::max() / 3 * 2;

@@ -439,9 +439,12 @@ public:
      * The score is normalised to [l_min..l_max] if the pair is included in the matching
      * and equals l_min otherwise. The pair {l-min, l_max} is the libscore parameter of LaRA.
      */
-    std::vector<std::tuple<size_t, size_t, unsigned>> getStructureLines(Parameters const & params) const
+    WeightedAlignedColumns getStructureLines(Parameters const & params, PosPair const & seqIndices) const
     {
-        std::vector<std::tuple<size_t, size_t, unsigned>> structureLines{};
+        bool swapIdx = seqIndices.first > seqIndices.second;
+        WeightedAlignedColumns structureLines{};
+        structureLines.first = swapIdx ? PosPair{seqIndices.second, seqIndices.first} : seqIndices;
+
         if (params.libraryScoreIsLinear)
         {
             auto const mm = std::minmax_element(priorityQ.begin(), priorityQ.end(),
@@ -449,17 +452,41 @@ public:
             ScoreType const minScore = -(mm.first)->begin()->first;
             ScoreType const maxScore = -(mm.second)->begin()->first;
             float const div = 1.f * (params.libraryScoreMax - params.libraryScoreMin) / (maxScore - minScore);
-            for (size_t idx : bestStructuralAlignment)
+
+            if (swapIdx)
             {
-                ScoreType val = edgeMatching.count(idx) * (-priorityQ[idx].begin()->first - minScore) * div;
-                structureLines.emplace_back(edges.source(idx) + 1, edges.target(idx) + 1, params.libraryScoreMin + val);
+                for (size_t idx : bestStructuralAlignment)
+                {
+                    ScoreType val = edgeMatching.count(idx) * (-priorityQ[idx].begin()->first - minScore) * div;
+                    structureLines.second.emplace_back(edges.target(idx),
+                                                       edges.source(idx),
+                                                       params.libraryScoreMin + val);
+                }
             }
+            else
+            {
+                for (size_t idx : bestStructuralAlignment)
+                {
+                    ScoreType val = edgeMatching.count(idx) * (-priorityQ[idx].begin()->first - minScore) * div;
+                    structureLines.second.emplace_back(edges.source(idx),
+                                                       edges.target(idx),
+                                                       params.libraryScoreMin + val);
+                }
+            }
+        }
+        else if (swapIdx)
+        {
+            for (size_t idx : bestStructuralAlignment)
+                structureLines.second.emplace_back(edges.target(idx),
+                                                   edges.source(idx),
+                                                   edgeMatching.count(idx) * 500u + 500u);
         }
         else
         {
             for (size_t idx : bestStructuralAlignment)
-                structureLines.emplace_back(edges.source(idx) + 1, edges.target(idx) + 1,
-                                            edgeMatching.count(idx) * 500u + 500u);
+                structureLines.second.emplace_back(edges.source(idx),
+                                                   edges.target(idx),
+                                                   edgeMatching.count(idx) * 500u + 500u);
         }
         return structureLines;
     }

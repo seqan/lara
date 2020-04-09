@@ -161,8 +161,10 @@ private:
             while (!iter.equal(end_iter))
             {
                 seqan::RnaRecord rec{};
-                seqan::readRecord(rec.name, rec.sequence, iter, seqan::Fasta());
+                seqan::IupacString sequence;
+                seqan::readRecord(rec.name, sequence, iter, seqan::Fasta());
                 rec.recordID = recCount++;
+                rec.sequence = seqan::convert<seqan::Rna5String>(sequence);
                 push_back(rec);
             }
         }
@@ -329,92 +331,98 @@ struct CompareSeqLength
     }
 };
 
-// FASTA output
-
-inline void printAlignment(std::ostream & stream,
-                           Alignment const & alignment,
-                           std::string const & nameA,
-                           std::string const & nameB)
-{
-    stream << ">" << nameA << std::endl << alignment.first << std::endl;
-    stream << ">" << nameB << std::endl << alignment.second << std::endl;
-}
-
-inline void printAlignment(std::string const & filename,
-                           Alignment const & alignment,
-                           std::string const & nameA,
-                           std::string const & nameB)
-{
-    if (filename.empty())
-    {
-        printAlignment(std::cout, alignment, nameA, nameB);
-    }
-    else
-    {
-        std::ofstream fastaFile;
-        fastaFile.open(filename.c_str(), std::ios::out);
-        if (fastaFile.is_open())
-        {
-            printAlignment(fastaFile, alignment, nameA, nameB);
-            fastaFile.close();
-        }
-        else
-        {
-            std::cerr << "Unable to open the specified output file for writing: " << filename << std::endl;
-        }
-    }
-}
-
-// T-COFFEE output
-
-class OutputTCoffeeLibrary
+// T-COFFEE or pairwise gapped sequence output
+class OutputLibrary
 {
 private:
-    std::ostringstream sstream;
-    size_t numAlignments;
+    InputStorage const & data;
+    std::set<WeightedAlignedColumns> alignments{};
+    bool libFormat = true;
 
 public:
-    explicit OutputTCoffeeLibrary(InputStorage const & data) : numAlignments(0ul)
+    explicit OutputLibrary(InputStorage const & input, std::string const & format) : data(input)
     {
-        sstream << "! T-COFFEE_LIB_FORMAT_01" << std::endl;
-        sstream << data.size() << std::endl;
+        libFormat = format.compare("lib") == 0;
+    }
+
+    void addAlignment(WeightedAlignedColumns const & structureLines)
+    {
+        alignments.insert(structureLines);
+    }
+
+    friend std::ostream & operator<<(std::ostream & stream, OutputLibrary & library);
+
+    void printLib(std::ostream & stream)
+    {
+        stream << "! T-COFFEE_LIB_FORMAT_01\n" << data.size() << '\n';
         for (seqan::RnaRecord const & rec : data)
         {
-            sstream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << std::endl;
+            stream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << '\n';
         }
+
+        for (WeightedAlignedColumns const & structureLines : alignments)
+        {
+            stream << "# " << (structureLines.first.first + 1) << " " << (structureLines.first.second + 1) << '\n';
+            for (std::tuple<size_t, size_t, unsigned> const & elem : structureLines.second)
+                stream << std::get<0>(elem) + 1 << " " << std::get<1>(elem) + 1 << " " << std::get<2>(elem) << '\n';
+        }
+
+        stream << "! SEQ_1_TO_N\n";
     }
 
-    void addAlignment(Lagrange const & lagrange, PosPair const & seqIndices, Parameters const & params)
+    void printPairs(std::ostream & stream)
     {
-        ++numAlignments;
-        if (seqIndices.first < seqIndices.second)
+        for (WeightedAlignedColumns const & structureLines : alignments)
         {
-            sstream << "# " << (seqIndices.first + 1) << " " << (seqIndices.second + 1) << std::endl;
-            for (auto const & elem : lagrange.getStructureLines(params))
-                sstream << std::get<0>(elem) << " " << std::get<1>(elem) << " " << std::get<2>(elem) << std::endl;
-        }
-        else if (seqIndices.first > seqIndices.second)
-        {
-            sstream << "# " << (seqIndices.second + 1) << " " << (seqIndices.first + 1) << std::endl;
-            for (auto const & elem : lagrange.getStructureLines(params))
-                sstream << std::get<1>(elem) << " " << std::get<0>(elem) << " " << std::get<2>(elem) << std::endl;
-        }
-        else
-        {
-            SEQAN_ASSERT_MSG(false, "LOGICAL ERROR: Sequence indices must not be equal!");
+            seqan::RnaRecord const & rec1 = data[structureLines.first.first];
+            seqan::RnaRecord const & rec2 = data[structureLines.first.second];
+            stream << '>' << rec1.name << " && " << rec2.name << '\n';
+            std::pair<std::ostringstream, std::ostringstream> gapped{};
+            PosPair curr{0, 0};
+
+            for (auto iter = structureLines.second.cbegin(); iter != structureLines.second.cend(); ++iter)
+            {
+                while (curr.first < std::get<0>(*iter))
+                {
+                    gapped.first << rec1.sequence[curr.first++];
+                    gapped.second << '-';
+                }
+
+                while (curr.second < std::get<1>(*iter))
+                {
+                    gapped.first << '-';
+                    gapped.second << rec2.sequence[curr.second++];
+                }
+
+                gapped.first << rec1.sequence[curr.first++];
+                gapped.second << rec2.sequence[curr.second++];
+            }
+            while (curr.first < seqan::length(rec1.sequence))
+            {
+                gapped.first << rec1.sequence[curr.first++];
+                gapped.second << '-';
+            }
+            while (curr.second < seqan::length(rec2.sequence))
+            {
+                gapped.first << '-';
+                gapped.second << rec2.sequence[curr.second++];
+            }
+
+            stream << gapped.first.str() << '\n' << gapped.second.str() << '\n';
         }
     }
-
-    friend std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library);
 
     void print(std::string const & filename)
     {
-        _LOG(1, "4) Write results..." << std::endl);
+        _LOG(1, "4) Write results...\n");
         Clock::time_point timePrint = Clock::now();
         if (filename.empty())
         {
-            std::cout << *this;
-            _LOG(1, "   * to stdout -> " << timeDiff(timePrint) << "ms" << std::endl);
+            if (libFormat)
+                printLib(std::cout);
+            else
+                printPairs(std::cout);
+            _LOG(1, "   * to stdout -> " << timeDiff(timePrint) << "ms\n");
         }
         else
         {
@@ -422,24 +430,28 @@ public:
             tcLibFile.open(filename.c_str(), std::ios::out);
             if (tcLibFile.is_open())
             {
-                tcLibFile << *this;
+                if (libFormat)
+                    printLib(tcLibFile);
+                else
+                    printPairs(tcLibFile);
                 tcLibFile.close();
-                _LOG(1, "   * to file " << filename << " -> " << timeDiff(timePrint) << "ms" << std::endl);
+                _LOG(1, "   * to file " << filename << " -> " << timeDiff(timePrint) << "ms\n");
             }
             else
             {
-                std::cerr << "Error: Unable to open the file for writing: " << filename << std::endl;
+                std::cerr << "Error: Unable to open the file for writing: " << filename << '\n';
             }
         }
     }
 };
 
-std::ostream & operator<<(std::ostream & stream, OutputTCoffeeLibrary & library)
+std::ostream & operator<<(std::ostream & stream, OutputLibrary & library)
 {
-    if (library.numAlignments > 0ul)
-        return stream << library.sstream.str() << "! SEQ_1_TO_N" << std::endl;
+    if (library.libFormat)
+        library.printLib(stream);
     else
-        return stream;
+        library.printPairs(stream);
+    return stream;
 }
 
 } // namespace lara
