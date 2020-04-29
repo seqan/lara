@@ -71,13 +71,22 @@ namespace lara
 class InputStorage : public std::vector<seqan::RnaRecord>
 {
 public:
-    explicit InputStorage(Parameters const & params)
+    explicit InputStorage(Parameters const & params) : err(false)
     {
-        _LOG(1, "2) Read input files..." << std::endl);
+        _LOG(1, "2) Read input files...\n");
         Clock::time_point timeRead = Clock::now();
-        readRnaFile(params.inFile);
-        readRnaFile(params.refFile);
-        _LOG(1, "   * sequence/structure files -> " << timeDiff(timeRead) << "ms" << std::endl);
+        try
+        {
+            readRnaFile(params.inFile);
+            readRnaFile(params.refFile);
+        }
+        catch (std::exception const & e)
+        {
+            std::cerr << e.what() << std::endl;
+            err = true;
+            return;
+        }
+        _LOG(1, "   * sequence/structure files -> " << timeDiff(timeRead) << "ms\n");
 
         // If not present, compute the weighted interaction edges using ViennaRNA functions.
         Clock::time_point timeRnaFold = Clock::now();
@@ -86,10 +95,7 @@ public:
         for (seqan::RnaRecord & record : *this)
             computeStructure(record, usedVienna, logScoring);
         if (usedVienna)
-        {
-            _LOG(1, "   * compute missing base pair probabilities with RNAfold -> " << timeDiff(timeRnaFold) << "ms"
-                    << std::endl);
-        }
+            _LOG(1, "   * compute missing base pair probabilities with RNAfold -> " << timeDiff(timeRnaFold) << "ms\n");
 
         if (!params.dotplotFiles.empty())
         {
@@ -101,14 +107,24 @@ public:
                 extractBppFromDotplot(rec, filename);
                 push_back(rec);
             }
-            _LOG(1, "   * dotplot files -> " << timeDiff(timeDotplot) << "ms" << std::endl);
+            _LOG(1, "   * dotplot files -> " << timeDiff(timeDotplot) << "ms\n");
         }
 
         if (size() <= 1)
-            throw std::runtime_error("ERROR: The given file(s) must contain at least two sequences.");
+        {
+            std::cerr << "ERROR: The given file(s) must contain at least two sequences.\n";
+            err = true;
+        }
+    }
+
+    bool had_err() const
+    {
+        return err;
     }
 
 private:
+    bool err;
+
     void readRnaFile(std::string const & filename)
     {
         if (filename.empty())
@@ -156,6 +172,8 @@ private:
         {
             uint32_t recCount = 0;
             std::ifstream input(filename);
+            if (!input.is_open())
+                throw std::runtime_error("ERROR: The file " + filename + " cannot be opened.");
             std::istreambuf_iterator<char> iter(input);
             std::istreambuf_iterator<char> end_iter;
             while (!iter.equal(end_iter))
@@ -178,9 +196,10 @@ private:
 
         // open dotplot file and read lines
         std::ifstream file(filename);
-        std::string   line;
-        unsigned      iPos, jPos;
-        float         prob;
+        std::string line;
+        unsigned iPos{};
+        unsigned jPos{};
+        float prob{};
 
         if (!file.is_open())
             throw std::runtime_error("ERROR: Cannot open file " + filename);
@@ -342,7 +361,7 @@ private:
 public:
     explicit OutputLibrary(InputStorage const & input, std::string const & format) : data(input)
     {
-        libFormat = format.compare("lib") == 0;
+        libFormat = (format == "lib");
     }
 
     void addAlignment(WeightedAlignedColumns const & structureLines)
@@ -380,15 +399,15 @@ public:
             std::pair<std::ostringstream, std::ostringstream> gapped{};
             PosPair curr{0, 0};
 
-            for (auto iter = structureLines.second.cbegin(); iter != structureLines.second.cend(); ++iter)
+            for (auto const & column : structureLines.second)
             {
-                while (curr.first < std::get<0>(*iter))
+                while (curr.first < std::get<0>(column))
                 {
                     gapped.first << rec1.sequence[curr.first++];
                     gapped.second << '-';
                 }
 
-                while (curr.second < std::get<1>(*iter))
+                while (curr.second < std::get<1>(column))
                 {
                     gapped.first << '-';
                     gapped.second << rec2.sequence[curr.second++];

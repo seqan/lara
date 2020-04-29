@@ -46,7 +46,7 @@
 #include <seqan/rna_io.h>
 #include <seqan/score.h>
 
-#define _LOG(_level, _str)   { if (lara::_VERBOSE_LEVEL >= (_level)) std::cerr << _str; }
+#define _LOG(vlevel, lstr)   { if (lara::verbose_level >= (vlevel)) std::cerr << lstr; }
 
 namespace lara
 {
@@ -54,21 +54,13 @@ namespace lara
 /*!
  * \brief Define verbosity levels.
  */
-int _VERBOSE_LEVEL = 0;
+int verbose_level = 0;
 
 enum ScoringMode
 {
     LOGARITHMIC,
     SCALE
 };
-
-//enum TCoffeeMode
-//{
-//    PROPORTIONAL,
-//    SWITCH,
-//    ALLINTER,
-//    FIXEDINTER
-//};
 
 //! \brief Pair of positions (usually in first and second sequence)
 typedef int32_t                                                  ScoreType;

@@ -246,7 +246,7 @@ private:
         // Fill the parameters and check validity.
 
         // GENERAL OPTIONS
-        getOptionValue(_VERBOSE_LEVEL, parser, "verbose");
+        getOptionValue(verbose_level, parser, "verbose");
         getOptionValue(threads, parser, "threads");
         if (threads == 0u)
         {

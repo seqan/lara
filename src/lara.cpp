@@ -51,9 +51,11 @@ int main (int argc, char const ** argv)
 
     // Read input files and prepare structured sequences.
     lara::InputStorage store(params);
+    if (store.had_err())
+        return 1;
     lara::OutputLibrary outlib(store, params.outFormat);
     solve(outlib, store, params);
 
     outlib.print(params.outFile);
-    _LOG(1, "LaRA has run for " << lara::timeDiff<std::chrono::seconds>(timeLara) << " seconds." << std::endl);
+    _LOG(1, "LaRA has run for " << lara::timeDiff<std::chrono::seconds>(timeLara) << " seconds.\n");
 }
