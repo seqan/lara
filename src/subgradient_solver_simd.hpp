@@ -261,8 +261,9 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
                                                TAlignConfig2(),
                                                seqan::AffineGaps());
 
-            for (size_t idx = 0; idx < simd_len; ++idx)
-                seqan::_adaptTraceSegmentsTo(alignments[aliIdx].first[idx], alignments[aliIdx].second[idx], trace[idx]);
+            for (size_t idx = 0; idx < at_work.size(); ++idx)
+                if (at_work[idx])
+                    seqan::_adaptTraceSegmentsTo(alignments[aliIdx].first[idx], alignments[aliIdx].second[idx], trace[idx]);
 
             durationThreadAlign += Clock::now() - timeCurrent;
 
@@ -305,15 +306,15 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
             bound.remainingIterations -= ones;
 
             // array for the new step size
-            std::array<ScoreType, simd_len> stepSizeArray;
+            std::array<ScoreType, simd_len> stepSizeArray{};
             seqan::storeu(stepSizeArray.data(), bound.stepFactor * (bound.bestUpper - bound.bestLower));
 
             // array for equal bounds
-            std::array<ScoreType, simd_len> equalBounds;
+            std::array<ScoreType, simd_len> equalBounds{};
             seqan::storeu(equalBounds.data(), seqan::cmpEq(bound.bestUpper, bound.bestLower));
 
             // array for remaining iterations
-            std::array<UnsignedType, simd_len> remainingIter;
+            std::array<UnsignedType, simd_len> remainingIter{};
             seqan::storeu(remainingIter.data(), bound.remainingIterations);
 
             for (size_t idx = interval.first; idx < interval.second; ++idx)
