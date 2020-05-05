@@ -115,6 +115,11 @@ public:
             std::cerr << "ERROR: The given file(s) must contain at least two sequences.\n";
             err = true;
         }
+        else if (size() > 2 && params.outFormat == "fasta")
+        {
+            std::cerr << "WARNING: We are computing more than one pairwise alignment "
+                         "and you have selected fasta output.\n";
+        }
     }
 
     bool had_err() const
@@ -356,22 +361,21 @@ class OutputLibrary
 private:
     InputStorage const & data;
     std::set<WeightedAlignedColumns> alignments{};
-    bool libFormat = true;
+    std::string const format;
 
 public:
-    explicit OutputLibrary(InputStorage const & input, std::string const & format) : data(input)
-    {
-        libFormat = (format == "lib");
-    }
+    explicit OutputLibrary(InputStorage const & input, std::string outputFormat) :
+        data(input), format(std::move(outputFormat))
+    {}
 
     void addAlignment(WeightedAlignedColumns const & structureLines)
     {
         alignments.insert(structureLines);
     }
 
-    friend std::ostream & operator<<(std::ostream & stream, OutputLibrary & library);
+    friend std::ostream & operator<<(std::ostream & stream, OutputLibrary const & library);
 
-    void printLib(std::ostream & stream)
+    void printLib(std::ostream & stream) const
     {
         stream << "! T-COFFEE_LIB_FORMAT_01\n" << data.size() << '\n';
         for (seqan::RnaRecord const & rec : data)
@@ -389,13 +393,12 @@ public:
         stream << "! SEQ_1_TO_N\n";
     }
 
-    void printPairs(std::ostream & stream)
+    void printAlignments(std::ostream & stream) const
     {
         for (WeightedAlignedColumns const & structureLines : alignments)
         {
             seqan::RnaRecord const & rec1 = data[structureLines.first.first];
             seqan::RnaRecord const & rec2 = data[structureLines.first.second];
-            stream << '>' << rec1.name << " && " << rec2.name << '\n';
             std::pair<std::ostringstream, std::ostringstream> gapped{};
             PosPair curr{0, 0};
 
@@ -427,33 +430,44 @@ public:
                 gapped.second << rec2.sequence[curr.second++];
             }
 
-            stream << gapped.first.str() << '\n' << gapped.second.str() << '\n';
+            if (format == "pairs")
+            {
+                stream << '>' << rec1.name << " && " << rec2.name << '\n';
+                stream << gapped.first.str() << '\n' << gapped.second.str() << '\n';
+            }
+            else // format == "fasta"
+            {
+                stream << '>' << rec1.name << '\n' << gapped.first.str() << '\n';
+                stream << '>' << rec2.name << '\n' << gapped.second.str() << '\n';
+            }
         }
     }
 
-    void print(std::string const & filename)
+    void print(std::ostream & stream) const
+    {
+        if (format == "lib")
+            printLib(stream);
+        else
+            printAlignments(stream);
+    }
+
+    void print(std::string const & filename) const
     {
         _LOG(1, "4) Write results...\n");
         Clock::time_point timePrint = Clock::now();
         if (filename.empty())
         {
-            if (libFormat)
-                printLib(std::cout);
-            else
-                printPairs(std::cout);
+            print(std::cout);
             _LOG(1, "   * to stdout -> " << timeDiff(timePrint) << "ms\n");
         }
         else
         {
-            std::ofstream tcLibFile;
-            tcLibFile.open(filename.c_str(), std::ios::out);
-            if (tcLibFile.is_open())
+            std::ofstream file;
+            file.open(filename.c_str(), std::ios::out);
+            if (file.is_open())
             {
-                if (libFormat)
-                    printLib(tcLibFile);
-                else
-                    printPairs(tcLibFile);
-                tcLibFile.close();
+                print(file);
+                file.close();
                 _LOG(1, "   * to file " << filename << " -> " << timeDiff(timePrint) << "ms\n");
             }
             else
@@ -464,12 +478,9 @@ public:
     }
 };
 
-std::ostream & operator<<(std::ostream & stream, OutputLibrary & library)
+std::ostream & operator<<(std::ostream & stream, OutputLibrary const & library)
 {
-    if (library.libFormat)
-        library.printLib(stream);
-    else
-        library.printPairs(stream);
+    library.print(stream);
     return stream;
 }
 

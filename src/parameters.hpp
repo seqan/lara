@@ -160,7 +160,7 @@ private:
                                          "The output format.",
                                          ArgParseOption::STRING));
         setDefaultValue(parser, "o", "lib");
-        setValidValues(parser, "o", "lib pairs");
+        setValidValues(parser, "o", "lib pairs fasta");
 
         // Runtime/Quality options
         addSection(parser, "Runtime/Quality Options");
