@@ -112,6 +112,10 @@ build/lara --help
 Output format
 -------------
 
+Each output format is sorted primarily by the first and subsequently by the second sequence index.
+
+### for multiple alignments with T-Coffee
+
 The result of LaRA is a T-Coffee library file and its format is documented
 [here](http://www.tcoffee.org/Projects/tcoffee/documentation/index.html#t-coffee-lib-format-01).
 It contains the structural scores for each residue pair of each computed sequence pair.
@@ -120,6 +124,42 @@ This file is the input for T-Coffee, which computes the multiple alignment based
 ```commandline
 t_coffee -lib results.lib
 ```
+
+### for multiple alignments with MAFFT
+
+LaRA has an additional output format that can be read by the MAFFT framework.
+Each pairwise alignment produces three lines:
+a description line composed of the two sequence ids and the two gapped sequences of the alignment:
+
+```
+> first id && second id
+AACCG-UU
+-ACCGGUU
+> first id && third id
+AA-CCGUU
+AAGCCGUU
+```
+
+MAFFT invokes LaRA with the option *-o pairs* for receiving this output format.
+
+### for pairwise alignments
+LaRA can produce the aligned FastA format, which is recommended for a single pairwise alignment.
+It looks like a normal FastA file with gap symbols in the sequences:
+
+```
+> first id
+AACCG-UU
+> second id
+-ACCGGUU
+```
+
+You need to pass the option *-o fasta* to the LaRA call for getting this output format.
+
+LaRA prints a warning if you use this format with more than two sequences.
+Using this format with 3 or more sequences is possible but not recommended, because additional pairwise alignments
+will simply be appended to the file, and it may be hard to distinguish the pairs later.
+In addition, this can confuse other programs, which expect a single multiple sequence alignment
+as produced by MAFFT or T-Coffee.
 
 
 Authorship & Copyright
