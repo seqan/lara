@@ -10,7 +10,7 @@ LaRA 2 is an improved version of LaRA, a tool for sequence-structure alignment o
 * is implemented to use multiple threads on your machine and runs therefore very fast
 * has a vectorized alignment kernel, which computes the results even faster
 * is based on the SeqAn library, currently version 2
-* is well-documented and easy to use
+* is well-`documented <https://seqan.github.io/lara/>`__ and easy to use
 
 
 Download instructions
@@ -38,15 +38,26 @@ LaRA is dependent on the following libraries:
 * `SeqAn 2.4 <https://github.com/seqan/seqan.git>`__
 * `Lemon 1.3.1 <https://github.com/seqan/lemon.git>`__
 
-Optionally, LaRA can predict the RNA structures for you if you provide
-
-* `ViennaRNA 2 <https://www.tbi.univie.ac.at/RNA/>`__
-
 To process the output for multiple alignments (3 or more sequences), you need either
 
 * `T-Coffee 13 <https://github.com/cbcrg/tcoffee>`__ or
 * `MAFFT 7.453 for LaRA <https://github.com/bioinformatics-polito/LaRA2-mafft>`__
 
+Optionally, LaRA can predict the RNA structures for you if you provide
+
+* `ViennaRNA 2 <https://www.tbi.univie.ac.at/RNA/>`__
+
+*Note:* Users reported problems with installing ViennaRNA, so we provide some hints here.
+
+1. Install the `GNU MPFR Library <https://www.mpfr.org/>`__ first.
+2. Exclude unnecessary components of ViennaRNA:
+   ``./configure --without-swig --without-kinfold --without-forester --without-rnalocmin --without-gsl``
+3. If you have linker issues use
+   ``./configure --disable-lto``
+4. If your system supports SSE4.1 instructions then we recommend
+   ``./configure --enable-sse``
+
+If you have further suggestions, we are happy to add them here.
 
 
 Build instructions

@@ -122,4 +122,4 @@ _site
 
 # Jupyter notebook
 .ipynb_checkpoints
-benchmark
+benchmark/results
