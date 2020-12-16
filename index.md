@@ -47,14 +47,24 @@ git submodule update --init --recursive
 cd ..
 ```
 
-Optionally, LaRA can predict the RNA structures for you if you provide
-
-* [ViennaRNA 2](https://www.tbi.univie.ac.at/RNA/)
-
 To process the output for multiple alignments (3 or more sequences), you need either
 
 * [T-Coffee 13](https://github.com/cbcrg/tcoffee) or
 * [MAFFT 7.453 for LaRA](https://github.com/bioinformatics-polito/LaRA2-mafft)
+
+Optionally, LaRA can predict the RNA structures for you if you provide
+
+* [ViennaRNA 2](https://www.tbi.univie.ac.at/RNA/)
+
+*Note:* Users reported problems with installing ViennaRNA, so we provide some hints here.
+
+1. Install the [GNU MPFR Library](https://www.mpfr.org/) first.
+2. Exclude unnecessary components of ViennaRNA: 
+   `./configure --without-swig --without-kinfold --without-forester --without-rnalocmin --without-gsl`
+3. If you have linker issues use `./configure --disable-lto`
+4. If your system supports SSE4.1 instructions then we recommend `./configure --enable-sse`
+
+If you have further suggestions, we are happy to add them here.
 
 
 Build instructions
