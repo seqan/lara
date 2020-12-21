@@ -80,6 +80,12 @@ make
 cd ..
 ```
 
+*Note:* In order to use the SIMD vectorization, you need to tell the compiler what kind of hardware you have.
+This can be done by appending `-DCMAKE_CXX_FLAGS="-march=X"` to the cmake command, where X denotes your CPU type.
+If you want to run the code only on the machine you are compiling, you can set `-march=native` to use the current
+CPU type. You can find detailed information and valid parameters in your compiler manual, 
+e.g. [gcc-9.3 documentation](https://gcc.gnu.org/onlinedocs/gcc-9.3.0/gcc/x86-Options.html) or `g++-9 --help=target`.
+
 
 First steps to use LaRA 2
 =========================
