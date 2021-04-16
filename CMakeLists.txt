@@ -94,12 +94,23 @@ else()
     message (STATUS "Cannot find header files of the LEMON library, which is required to compute matchings.")
 endif ()
 
+# Include MPFR in case ViennaRNA is compiled with it.
+find_library (MPFR mpfr)
+if (MPFR)
+    target_link_libraries (lara PUBLIC ${MPFR})
+endif ()
+
 #ViennaRNA
 set (VIENNA_FOUND "FALSE")
-find_library(VIENNA_RNA_LIB libRNA.a)
+find_library (VIENNA_RNA_LIB libRNA.a)
 if (VIENNA_RNA_LIB)
-    add_definitions(-DVIENNA_RNA_FOUND)
+    add_definitions (-DVIENNA_RNA_FOUND)
     set (VIENNA_FOUND "TRUE")
+    target_link_libraries (lara PUBLIC ${VIENNA_RNA_LIB})
+endif ()
+find_path (VIENNA_RNA_PATH NAMES ViennaRNA/part_func.h)
+if (VIENNA_RNA_PATH)
+    target_include_directories (lara SYSTEM PUBLIC ${VIENNA_RNA_PATH})
 endif ()
 
 # others
@@ -112,7 +123,7 @@ message(   "     SEQAN       ${SEQAN_FOUND}   \t${SEQAN_VERSION_STRING}")
 message(   "     ZLIB        ${ZLIB_FOUND}   \t${ZLIB_VERSION_STRING}")
 message(   "     BZIP2       ${BZIP2_FOUND}   \t${BZIP2_VERSION_STRING}")
 message(   "     OPENMP      ${OPENMP_FOUND}   \t${OpenMP_CXX_FLAGS}")
-message(   "     ViennaRNA   ${VIENNA_FOUND}   \t${VIENNA_RNA_LIB}")
+message(   "     ViennaRNA   ${VIENNA_FOUND}   \t${VIENNA_RNA_PATH}")
 message(   "     Lemon       ${LEMON_FOUND}   \t${LEMON_PATH}")
 
 # Warn if OpenMP was not found.
@@ -170,7 +181,7 @@ set (SEQAN_APP_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set (SEQAN_APP_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set (SEQAN_APP_VERSION "${PROJECT_VERSION}")
 
-target_link_libraries (lara ${SEQAN_LIBRARIES} ${VIENNA_RNA_LIB})
+target_link_libraries (lara PUBLIC ${SEQAN_LIBRARIES})
 message(STATUS "The requirements where met.")
 
 # ----------------------------------------------------------------------------
@@ -181,7 +192,7 @@ message(STATUS "The requirements where met.")
 set (SEQAN_DEFINITIONS ${SEQAN_DEFINITIONS} -DSEQAN_GLOBAL_EXCEPTION_HANDLER=1)
 
 # Add include directories.
-include_directories (${SEQAN_INCLUDE_DIRS} ${LEMON_PATH})
+include_directories (SYSTEM ${SEQAN_INCLUDE_DIRS} ${LEMON_PATH})
 
 # Add definitions set by find_package (SeqAn).
 add_definitions (${SEQAN_DEFINITIONS})
