@@ -83,8 +83,24 @@ After building the program binary, running LaRA is as simple as
 
   % bin/lara -i sequences.fasta
 
-Note that for passing sequence files you need the ViennaRNA dependency, as the program must predict structures.
+With the *-i* parameter you can pass one of the following formats to LaRA.
+The filename must end with one of the specified suffixes, because the suffix determines the correct format parser.
+
+* FASTA sequence format (``.fa``, ``.fasta``, ``.faa``, ``.ffn``, ``.fna``, ``.frn``)
+* FASTQ sequence with quality annotation (``.fq``, ``.fastq``)
+* Raw sequence format (``.raw``)
+* EMBL sequence format (``.embl``)
+* Genbank sequence format (``.gbk``)
+* `Dot-bracket notation <https://rna.urmc.rochester.edu/Text/File_Formats.html#DotBracket>`__, with support for various bracket types (``.dbn``)
+* `Vienna format <https://www.ibi.vu.nl/programs/k2nwww/static/data_formats.html>`__, dot-bracket without pseudoknot (``.dbv``)
+* `Stockholm format <https://en.wikipedia.org/wiki/Stockholm_format>`__ (``.sth``)
+* `Connectivity Table <https://rna.urmc.rochester.edu/Text/File_Formats.html#CT>`__ (``.ct``)
+* `Bpseq format <https://www.ibi.vu.nl/programs/k2nwww/static/data_formats.html>`__ (``.bpseq``)
+* Extended Bpseq, with support for base pair probabilities (``.ebpseq``)
+
+Note that for some formats you need the ViennaRNA dependency, as the program must predict base pair probabilities.
 Instead, you can pass at least two dot plot files, which contain the base pair probabilities for a single sequence each.
+Important: RNAfold must be executed with ``-p`` in order to retrieve a ``_dp.ps`` dot plot file!
 
 ::
 

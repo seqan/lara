@@ -75,17 +75,10 @@ public:
     {
         _LOG(1, "2) Read input files...\n");
         Clock::time_point timeRead = Clock::now();
-        try
-        {
-            readRnaFile(params.inFile);
-            readRnaFile(params.refFile);
-        }
-        catch (std::exception const & e)
-        {
-            std::cerr << e.what() << std::endl;
-            err = true;
+        readRnaFile(params.inFile);
+        readRnaFile(params.refFile);
+        if (err)
             return;
-        }
         _LOG(1, "   * sequence/structure files -> " << timeDiff(timeRead) << "ms\n");
 
         // If not present, compute the weighted interaction edges using ViennaRNA functions.
@@ -104,7 +97,16 @@ public:
             for (std::string const & filename : params.dotplotFiles)
             {
                 seqan::RnaRecord rec;
-                extractBppFromDotplot(rec, filename);
+                err = extractBppFromDotplot(rec, filename);
+                if (!err && seqan::empty(rec.bppMatrGraphs))
+                {
+                    std::cerr << "ERROR: The dotplot file " << filename << " does not contain any base pair "
+                                 "probabilities. Please make sure that you execute RNAfold with -p option and specify "
+                                 "the resulting _dp.ps file!\n";
+                    err = true;
+                }
+                if (err)
+                    return;
                 push_back(rec);
             }
             _LOG(1, "   * dotplot files -> " << timeDiff(timeDotplot) << "ms\n");
@@ -178,7 +180,11 @@ private:
             uint32_t recCount = 0;
             std::ifstream input(filename);
             if (!input.is_open())
-                throw std::runtime_error("ERROR: The file " + filename + " cannot be opened.");
+            {
+                std::cerr << "ERROR: The file " + filename + " cannot be opened.\n";
+                err = true;
+                return;
+            }
             std::istreambuf_iterator<char> iter(input);
             std::istreambuf_iterator<char> end_iter;
             while (!iter.equal(end_iter))
@@ -193,7 +199,7 @@ private:
         }
     }
 
-    static void extractBppFromDotplot(seqan::RnaRecord & rnaRecord, std::string const & filename)
+    static bool extractBppFromDotplot(seqan::RnaRecord & rnaRecord, std::string const & filename)
     {
         using namespace seqan;
 
@@ -207,7 +213,10 @@ private:
         float prob{};
 
         if (!file.is_open())
-            throw std::runtime_error("ERROR: Cannot open file " + filename);
+        {
+            std::cerr << "ERROR: Cannot open dotplot file " << filename << std::endl;
+            return true;
+        }
 
         while (std::getline(file, line))
         {
@@ -261,16 +270,17 @@ private:
                 }
             }
         }
-        if (seqan::numEdges(bppMatrGraph.inter) == 0)
-            throw std::runtime_error("WARNING: No structure information found in file " + filename);
 
         bppMatrGraph.specs = CharString{"ViennaRNA dot plot from file " + filename};
         fixedGraph.specs   = CharString{"ViennaRNA dot plot from file " + filename};
 
         std::string name = filename.substr(filename.find_last_of("/\\") + 1);
         rnaRecord.name = name.substr(0, name.rfind(".ps")).substr(0, name.rfind("_dp"));
-        append(rnaRecord.bppMatrGraphs, bppMatrGraph);
-        append(rnaRecord.fixedGraphs, fixedGraph);
+        if (seqan::numEdges(bppMatrGraph.inter) > 0)
+            append(rnaRecord.bppMatrGraphs, bppMatrGraph);
+        if (seqan::numEdges(fixedGraph.inter) > 0)
+            append(rnaRecord.fixedGraphs, fixedGraph);
+        return false;
     }
 
     static void computeStructure(seqan::RnaRecord & rnaRecord, bool & usedVienna, bool logStructureScoring)
