@@ -132,15 +132,16 @@ private:
         addSection(parser, "Input Options");
 
         addOption(parser, ArgParseOption("i", "infile",
-                                         "Path to the input file.",
+                                         "Path to the input file. The format is inferred from the file extension.",
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
         addOption(parser, ArgParseOption("r", "reffile",
-                                         "Path to the reference input file.",
+                                         "Path to the reference input file. The format is inferred from the file "
+                                         "extension.",
                                          ArgParseArgument::INPUT_FILE, "IN"));
 
         addOption(parser, ArgParseOption("d", "dotplot",
-                                         "Use dotplot files from RNAfold (*_dp.ps) as sequence and structure input.",
+                                         "Use dotplot files from RNAfold -p (*_dp.ps) as sequence and structure input.",
                                          ArgParseArgument::INPUT_FILE, "IN", true));
 
         // Output options
@@ -157,7 +158,8 @@ private:
                                          false, 2));
 
         addOption(parser, ArgParseOption("o", "outformat",
-                                         "The output format.",
+                                         "The output format: Either a t-coffee library, all pairwise alignments with "
+                                         "scores, or (for 2 sequences) a fasta alignment.",
                                          ArgParseOption::STRING));
         setDefaultValue(parser, "o", "lib");
         setValidValues(parser, "o", "lib pairs fasta");

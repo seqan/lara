@@ -360,7 +360,7 @@ class OutputLibrary
 {
 private:
     InputStorage const & data;
-    std::set<WeightedAlignedColumns> alignments{};
+    std::set<std::pair<WeightedAlignedColumns, ScoreType>> alignments{};
     std::string const format;
 
 public:
@@ -368,9 +368,9 @@ public:
         data(input), format(std::move(outputFormat))
     {}
 
-    void addAlignment(WeightedAlignedColumns const & structureLines)
+    void addAlignment(WeightedAlignedColumns const & structureLines, ScoreType const alignmentScore)
     {
-        alignments.insert(structureLines);
+        alignments.emplace(structureLines, alignmentScore);
     }
 
     friend std::ostream & operator<<(std::ostream & stream, OutputLibrary const & library);
@@ -383,8 +383,9 @@ public:
             stream << rec.name << " " << seqan::length(rec.sequence) << " " << rec.sequence << '\n';
         }
 
-        for (WeightedAlignedColumns const & structureLines : alignments)
+        for (auto const & ali : alignments)
         {
+            WeightedAlignedColumns const & structureLines = ali.first;
             stream << "# " << (structureLines.first.first + 1) << " " << (structureLines.first.second + 1) << '\n';
             for (std::tuple<size_t, size_t, unsigned> const & elem : structureLines.second)
                 stream << std::get<0>(elem) + 1 << " " << std::get<1>(elem) + 1 << " " << std::get<2>(elem) << '\n';
@@ -395,8 +396,9 @@ public:
 
     void printAlignments(std::ostream & stream) const
     {
-        for (WeightedAlignedColumns const & structureLines : alignments)
+        for (auto const & ali : alignments)
         {
+            WeightedAlignedColumns const & structureLines = ali.first;
             seqan::RnaRecord const & rec1 = data[structureLines.first.first];
             seqan::RnaRecord const & rec2 = data[structureLines.first.second];
             std::pair<std::ostringstream, std::ostringstream> gapped{};
@@ -432,7 +434,7 @@ public:
 
             if (format == "pairs")
             {
-                stream << '>' << rec1.name << " && " << rec2.name << '\n';
+                stream << '>' << rec1.name << " && " << rec2.name << " (score " << ali.second / factor2int << ")\n";
                 stream << gapped.first.str() << '\n' << gapped.second.str() << '\n';
             }
             else // format == "fasta"
