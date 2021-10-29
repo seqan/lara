@@ -78,7 +78,6 @@ public:
     unsigned remainingIterations;
     PosPair sequenceIndices;
     BoundInfo bounds;
-    WeightedAlignedColumns bestAlignment;
 
     std::vector<float> subgradient{};
     std::vector<ScoreType> dual{};
@@ -94,8 +93,7 @@ public:
         nondecreasingRounds{0ul},
         remainingIterations{params.numIterations},
         sequenceIndices{indices},
-        bounds{-infinity, infinity, -infinity, infinity},
-        bestAlignment{}
+        bounds{-infinity, infinity, -infinity, infinity}
     {
         subgradient.resize(lagrange.getDimension());
         dual.resize(subgradient.size());
@@ -256,7 +254,6 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
                 {
                     ss.bounds.bestLower = ss.bounds.currentLower;
                     ss.nondecreasingRounds = 0ul;
-                    ss.bestAlignment = ss.lagrange.getStructureLines(params, ss.sequenceIndices);
                 }
 
                 if (ss.nondecreasingRounds++ >= params.maxNondecrIterations)
@@ -292,9 +289,11 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
                     #pragma omp critical (finished_alignment)
                     {
                         // write results
-                        results.addAlignment(ss.bestAlignment, ss.bounds.bestLower);
+                        results.addAlignment(ss.lagrange.getStructureLines(params, ss.sequenceIndices),
+                                             ss.bounds.bestLower);
                         _LOG(2, "     Thread " << aliIdx << "." << seqIdx << " finished alignment "
-                                << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
+                                << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << " after "
+                                << params.numIterations - ss.remainingIterations << " iterations.\n");
 
                         if (iter == inputPairs.cend())
                         {

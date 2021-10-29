@@ -235,7 +235,8 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
             typedef seqan::AlignConfig2<seqan::DPGlobal, seqan::DPBandConfig<seqan::BandOff>> TAlignConfig2;
             seqan::Score<ScoreVectorType, seqan::ScoreSimdWrapper<RnaScoreType>> simdScoringScheme(scores[aliIdx]);
 
-            typedef seqan::TraceSegment_<typename seqan::Position<GappedSeq>::Type, typename seqan::Size<GappedSeq>::Type> TraceSegmentType;
+            typedef seqan::TraceSegment_<typename seqan::Position<GappedSeq>::Type,
+                                         typename seqan::Size<GappedSeq>::Type> TraceSegmentType;
             seqan::StringSet<seqan::String<TraceSegmentType>> trace;
             seqan::resize(trace, simd_len, seqan::Exact());
 
@@ -263,7 +264,9 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
 
             for (size_t idx = 0; idx < at_work.size(); ++idx)
                 if (at_work[idx])
-                    seqan::_adaptTraceSegmentsTo(alignments[aliIdx].first[idx], alignments[aliIdx].second[idx], trace[idx]);
+                    seqan::_adaptTraceSegmentsTo(alignments[aliIdx].first[idx],
+                                                 alignments[aliIdx].second[idx],
+                                                 trace[idx]);
 
             durationThreadAlign += Clock::now() - timeCurrent;
 
@@ -331,7 +334,8 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
                     ss.subgradient[si] = 0.0f;
                 }
 
-                SEQAN_ASSERT_MSG(!ss.subgradientIndices.empty() || bound.currentUpper[seqIdx] == bound.currentLower[seqIdx],
+                SEQAN_ASSERT_MSG(!ss.subgradientIndices.empty() ||
+                                 bound.currentUpper[seqIdx] == bound.currentLower[seqIdx],
                                  (std::string{"The bounds differ, although there are no subgradients. "} +
                                      "Problem in aligning sequences " +
                                      seqan::toCString(store[ss.sequenceIndices.first].name) + " and " +
@@ -349,7 +353,8 @@ void solve(lara::OutputLibrary & results, InputStorage const & store, Parameters
                     #pragma omp critical (finished_alignment)
                     {
                         // write results
-                        results.addAlignment(ss.lagrange.getStructureLines(params, ss.sequenceIndices));
+                        results.addAlignment(ss.lagrange.getStructureLines(params, ss.sequenceIndices),
+                                             bound.bestLower[seqIdx]);
                         _LOG(2, "     Thread " << aliIdx << "." << seqIdx << " finished alignment "
                                 << ss.sequenceIndices.first << "/" << ss.sequenceIndices.second << std::endl);
 

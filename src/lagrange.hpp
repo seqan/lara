@@ -310,9 +310,11 @@ public:
         for (size_t dualIdx : dualIndices)
         {
             PosPair pair = dualToPairedEdges[dualIdx]; // (l,m)
-            ScoreType const newScore = getSeqScore(mat, pair.first) + interaction[pair.first][pair.second].score + dual[dualIdx];
+            ScoreType const newScore = getSeqScore(mat, pair.first) + interaction[pair.first][pair.second].score
+                + dual[dualIdx];
             adaptPriorityQ(pair, newScore);
-            pssm->set(seqIdx, edges.source(pair.first), edges.target(pair.first), -priorityQ[pair.first].begin()->first);
+            pssm->set(seqIdx, edges.source(pair.first), edges.target(pair.first),
+                      -priorityQ[pair.first].begin()->first);
         }
     }
 
@@ -337,35 +339,33 @@ public:
         subgradientIndices.clear();
         for (size_t idx : currentStructuralAlignment)
         {
-            size_t const & maxPE = priorityQ[idx].begin()->second;
+            // observe all elements with the highest score
+            auto fwdIt = priorityQ[idx].begin();
+            for (ScoreType const fwdScore = fwdIt->first; fwdScore == fwdIt->first; ++fwdIt)
+            {
+                // check if there is an interaction cycle: maxProfit(a) == b && maxProfit(b) == a
+                bool foundCycle = false;
+                size_t const maxPE = fwdIt->second;
+                if (inSolution[maxPE])
+                {
+                    auto revIt = priorityQ[maxPE].begin();
+                    for (ScoreType const revScore = revIt->first; !foundCycle && revScore == revIt->first; ++revIt)
+                        foundCycle = (revIt->second == idx);
+                }
 
-            if (inSolution[maxPE] && priorityQ[maxPE].begin()->second == idx)
-                continue;
+                if (!foundCycle)
+                {
+                    // adapt dual variables
+                    auto dualIt = interaction[idx].find(maxPE);
+                    SEQAN_ASSERT_MSG(dualIt != interaction[idx].end(), "Strange condition: undefined interaction.");
+                    subgradient[dualIt->second.dualIdx] = 1.0f;
+                    subgradientIndices.push_back(dualIt->second.dualIdx);
 
-            auto dualIt = interaction[idx].find(maxPE);
-            if (dualIt != interaction[idx].end())
-            {
-                subgradient[dualIt->second.dualIdx] = 1.0f;
-                subgradientIndices.push_back(dualIt->second.dualIdx);
-            }
-            else
-            {
-                std::cerr << "Strange condition: pairedEdgesToDual(" << idx << "," << maxPE
-                          << ") not defined!" << std::endl;
-                exit(1);
-            }
-
-            dualIt = interaction[maxPE].find(idx);
-            if (dualIt != interaction[maxPE].end())
-            {
-                subgradient[dualIt->second.dualIdx] = -1.0f;
-                subgradientIndices.push_back(dualIt->second.dualIdx);
-            }
-            else
-            {
-                std::cerr << "Strange condition: pairedEdgesToDual(" << maxPE << "," << idx
-                          << ") not defined!" << std::endl;
-                exit(1);
+                    dualIt = interaction[maxPE].find(idx);
+                    SEQAN_ASSERT_MSG(dualIt != interaction[maxPE].end(), "Strange condition: undefined interaction.");
+                    subgradient[dualIt->second.dualIdx] = -1.0f;
+                    subgradientIndices.push_back(dualIt->second.dualIdx);
+                }
             }
         }
 
@@ -402,15 +402,6 @@ public:
                     contacts[maxPE] = idx;
                 }
             }
-        }
-
-        for (size_t idx : currentStructuralAlignment)
-        {
-            size_t const & maxPE = priorityQ[idx].begin()->second;
-            _LOG(3, "     Alignment[" << idx << "; " << edges.source(idx) << "," << edges.target(idx) << "] maxProfitEdge ["
-                                      << maxPE << "; " << edges.source(maxPE) << "," << edges.target(maxPE) << "] score "
-                                      << -priorityQ[idx].begin()->first / factor2int << " inSolution " << inSolution[maxPE]
-                                      << " rec " << (priorityQ[maxPE].begin()->second == idx) << std::endl);
         }
 
         // we have to substract the gapcosts, otherwise the lower bound might be higher than the upper bound
