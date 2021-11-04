@@ -207,16 +207,17 @@ private:
         addSection(parser, "Scoring Options");
 
         addOption(parser, ArgParseOption("b", "balance",
-                                         "Factor of how much the sequence identity should influence the balance "
-                                         "of sequence and structure score.",
+                                         "Factor to change the impact of the structural score.",
                                          ArgParseArgument::DOUBLE, "FLOAT"));
-        setDefaultValue(parser, "b", "0.0");
+        setMinValue(parser, "b", "0.0");
+        setDefaultValue(parser, "b", "1.0");
 
         addOption(parser, ArgParseOption("c", "seqscale",
-                                         "Scaling factor for the sequence scores (below 1 gives more impact for "
-                                         "structure).",
+                                         "Increases the impact of the alignment score dependent on sequence "
+                                         "similarity.",
                                          ArgParseArgument::DOUBLE, "FLOAT"));
-        setDefaultValue(parser, "c", "1.0");
+        setMinValue(parser, "c", "0.0");
+        setDefaultValue(parser, "c", "0.0");
 
         addOption(parser, ArgParseOption("p", "probscoremode",
                                          "The base pair probability scoring mode, either LOGARITHMIC (0), SCALE (1).",

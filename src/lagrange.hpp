@@ -249,13 +249,17 @@ public:
         edges.dim = seqLen.second;
         float const avSeqId = generateEdges(edges.active, sequenceA, sequenceB, params.rnaScore,
                                             static_cast<ScoreType>(params.suboptimalDiff * factor2int));
-        sequenceScaleFactor = params.balance * avSeqId + params.sequenceScale;
+        sequenceScaleFactor = params.sequenceScale * avSeqId + 1;
 
         priorityQ.resize(edges.size);
         interaction.resize(edges.size);
         dualToPairedEdges.reserve(edges.size);
 
         // start
+        seqan::RnaStructureGraph const & graphA = seqan::front(seqan::empty(recordA.bppMatrGraphs) ? recordA.fixedGraphs
+            : recordA.bppMatrGraphs);
+        seqan::RnaStructureGraph const & graphB = seqan::front(seqan::empty(recordB.bppMatrGraphs) ? recordB.fixedGraphs
+            : recordB.bppMatrGraphs);
 
         dimension = 0ul;
         for (size_t edgeIdx = 0ul; edgeIdx < edges.size; ++edgeIdx)
@@ -268,8 +272,8 @@ public:
 
             std::vector<Contact> headContact;
             std::vector<Contact> tailContact;
-            extractContacts(headContact, seqan::front(recordA.bppMatrGraphs), edges.source(edgeIdx));
-            extractContacts(tailContact, seqan::front(recordB.bppMatrGraphs), edges.target(edgeIdx));
+            extractContacts(headContact, graphA, edges.source(edgeIdx));
+            extractContacts(tailContact, graphB, edges.target(edgeIdx));
 
             for (Contact & head : headContact)
             {
@@ -282,7 +286,7 @@ public:
                                                  << "-" << edges.target(edgeIdx) << ") -> (" << edges.source(partnerIdx)
                                                  << "-" << edges.target(partnerIdx) << ")" << std::endl);
 
-                        ScoreType const structScore = 0.5f * (head.first + tail.first) * factor2int;
+                        ScoreType const structScore = params.balance * (head.first + tail.first) / 2 * factor2int;
                         interaction[edgeIdx][partnerIdx] =
                         {
                             structScore,                                                              // score

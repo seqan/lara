@@ -272,13 +272,13 @@ private:
         }
 
         bppMatrGraph.specs = CharString{"ViennaRNA dot plot from file " + filename};
-        fixedGraph.specs   = CharString{"ViennaRNA dot plot from file " + filename};
+        fixedGraph.specs   = CharString{"ViennaRNA structure from file " + filename};
 
         std::string name = filename.substr(filename.find_last_of("/\\") + 1);
         rnaRecord.name = name.substr(0, name.rfind(".ps")).substr(0, name.rfind("_dp"));
         if (seqan::numEdges(bppMatrGraph.inter) > 0)
             append(rnaRecord.bppMatrGraphs, bppMatrGraph);
-        if (seqan::numEdges(fixedGraph.inter) > 0)
+        else
             append(rnaRecord.fixedGraphs, fixedGraph);
         return false;
     }
@@ -287,6 +287,14 @@ private:
     {
         if (!seqan::empty(rnaRecord.bppMatrGraphs))
             return;
+        if (!seqan::empty(rnaRecord.fixedGraphs))
+        {
+            // we only have a fixed graph: increase the importance of the edges
+            typedef typename seqan::Iterator<seqan::Graph<seqan::Undirected<double>>, seqan::EdgeIterator>::Type EdgeIt;
+            for (EdgeIt edgeIt(seqan::front(rnaRecord.fixedGraphs).inter); !seqan::atEnd(edgeIt); seqan::goNext(edgeIt))
+                seqan::cargo(*edgeIt) *= 10;
+            return;
+        }
 
 #ifdef VIENNA_RNA_FOUND
         usedVienna = true;
@@ -320,15 +328,6 @@ private:
             }
         }
         seqan::append(rnaRecord.bppMatrGraphs, bppMatrGraph);
-
-        // Compute the fixed structure with ViennaRNA.
-        auto * structure = new char[length + 1];
-        initialize_fold(static_cast<int>(length));
-        float energy = fold(seqan::toCString(sequence), structure);
-        seqan::bracket2graph(rnaRecord.fixedGraphs, seqan::CharString{structure}); // appends the graph
-        seqan::back(rnaRecord.fixedGraphs).energy = energy;
-        seqan::back(rnaRecord.fixedGraphs).specs = seqan::CharString{"ViennaRNA fold"};
-        delete[] structure;
 #else
         std::cerr << "Cannot compute a structure without the ViennaRNA library. Please install ViennaRNA and try again."
                   << std::endl;
